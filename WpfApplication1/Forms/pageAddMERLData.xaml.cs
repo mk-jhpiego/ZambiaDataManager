@@ -78,6 +78,7 @@ namespace ZambiaDataManager.Forms
 
         private void uploadSelectedFiles(object sender, RoutedEventArgs e)
         {
+            //fire up template reader and let it do the rest
 
         }
 

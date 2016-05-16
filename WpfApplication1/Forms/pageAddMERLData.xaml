@@ -27,6 +27,5 @@
         <Button x:Name="bSelectFile_Copy1" Content="Upload Selected Files" Height="35" Margin="25,0,0,10" 
         	VerticalAlignment="Bottom"                 
         	Click="uploadSelectedFiles" HorizontalAlignment="Left" Width="145"/>
-        <TextBox x:Name="tStatusWindow" HorizontalAlignment="Left" Margin="25,280,0,50" TextWrapping="Wrap" Text="TextBox" Width="455"/>
     </Grid>
 </Page>

@@ -6,21 +6,6 @@ using System.Threading.Tasks;
 
 namespace ZambiaDataManager
 {
-    //public class ControllerManager
-    //{
-    //    static ControllerManager _ControllerManager;
-    //    public static ControllerManager Instance
-    //    {
-    //        get
-    //        {
-    //            if (_ControllerManager == null)
-    //                _ControllerManager = new ControllerManager();
-    //            return _ControllerManager;
-    //        }
-    //    }
-    //    public PageController DefaultController { get; set; }
-    //}
-
     public class PageController
     {
         static PageController _ControllerManager;
