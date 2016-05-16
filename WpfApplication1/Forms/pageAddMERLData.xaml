@@ -1,0 +1,23 @@
+﻿<Page x:Class="WpfApplication1.Forms.pageAddMERLData"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApplication1.Forms"
+      mc:Ignorable="d" 
+      d:DesignHeight="485" d:DesignWidth="670"
+      Title="pageAddMERLData" Width="485" Height="670">
+
+    <Grid x:Name="tSelectedFileName" Width="485" Height="670">
+        <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="145,10,200,0" VerticalAlignment="Top" Click="selectFile"/>
+        <Button x:Name="bSelectFile_Copy" Content="Select File" Height="40" Margin="145,0,200,230" 
+                VerticalAlignment="Bottom"                 
+                Click="selectFile"/>
+        <DataGrid x:Name="gSelectedFiles" 
+                      AutoGenerateColumns="True"                      
+                      Margin="25,90,35,315"
+                       ItemsSource="{Binding Path=ListTest, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
+                      CanUserAddRows="False" CanUserSortColumns="False">
+        </DataGrid>
+    </Grid>
+</Page>

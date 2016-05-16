@@ -1,0 +1,52 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1366">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="485*"/>
+            <ColumnDefinition Width="70*" MaxWidth="70"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.518,1.504" StartPoint="0.505,-0.108">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBlock x:Name="tApplicationTitle" Height="40" TextWrapping="Wrap" Text="Zambia Data Manager" VerticalAlignment="Top" FontSize="22" Margin="10,3.527,-21,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin"/>
+
+
+        <StackPanel Margin="10,43.527,10,3.973">
+            <TextBlock x:Name="textBlock_Copy4" Height="27.5" TextWrapping="Wrap" Text="Reports and Summaries" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
+            <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" Click="showPepfarReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bViewAdminSummaryReport" Content="Admin Summary" Height="40" Click="showAdminSummaryReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bViewProgramIndicators" Content="Program Indicators" Height="40" Click="showProgramIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bViewAllIndicators" Content="View All Indicators" Height="40" Click="showAllIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bViewSitesReporting" Content="View Sites Reporting" Click="viewAllSitesReporting" d:LayoutOverrides="LeftPosition, RightPosition" Height="40" VerticalAlignment="Top"/>
+            <TextBlock x:Name="textBlock_Copy5" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
+            <Button x:Name="bShowMap" Content="GIS Map" Height="40" Click="showMap" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <TextBlock x:Name="textBlock" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
+            <TextBlock x:Name="textBlock_Copy1" Height="27.5" TextWrapping="Wrap" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"><Run Text="Technical "/><Run Text="Data Upload"/><LineBreak/><Run/></TextBlock>
+            <Button x:Name="bAddVmmcTechDaily" Content="Add Vmmc Daily Report" Height="40" Click="addVmmcTechnicalReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <TextBlock x:Name="textBlock_Copy2" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
+            <TextBlock x:Name="textBlock_Copy" Height="27.5" TextWrapping="Wrap" Text="MERL Data Upload" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
+            <Button x:Name="bAddVmmcMonthly" Content="Add Vmmc Monthly Data" Height="40" Click="addVmmcMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddVmmcMEDaily" Content="Add Vmmc Campaign Daily Data" Height="40" Click="addVmmcCampaignDailyData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bReviewUploadedData" Content="Review Uploaded Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddDodData" Content="Add DOD Monthly Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Margin="0,3.527,0,10">
+            <TextBlock x:Name="tLoggedInUser" Height="61.473" TextWrapping="Wrap" Margin="0,0,10,0" RenderTransformOrigin="0.494,0.636" Foreground="#FFF9F8F8" FlowDirection="RightToLeft"><Run Text="Not "/><Run Text="Logged In"/></TextBlock>
+            <Button x:Name="bManageAccount" Content="Manage &#xA;Account" Height="80" Click="manageAccount" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bMakeDataAvailableLocally" Content="Make data &#xA;available &#xA;Offline" Height="75" Click="updateLocalRepo" d:LayoutOverrides="LeftPosition, RightPosition"/>
+        </StackPanel>
+        <StackPanel x:Name="stackMain" Grid.Column="1" Margin="10,3.527,5,10">
+            <TextBlock Name="tSimple" Text="A simple text header" FontSize="16" Foreground="#FFF9F1F1" FontStretch="UltraExpanded"/>
+        </StackPanel>
+    </Grid>
+</Window>
