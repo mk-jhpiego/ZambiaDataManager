@@ -75,6 +75,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

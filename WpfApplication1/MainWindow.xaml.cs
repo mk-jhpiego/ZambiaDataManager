@@ -57,7 +57,8 @@ namespace WpfApplication1
 
         private void addVmmcMonthly(object sender, RoutedEventArgs e)
         {
-
+            var targetForm = new Forms.pageAddMERLData();
+            stackMain.Content = targetForm;
         }
 
         private void addVmmcCampaignDailyData(object sender, RoutedEventArgs e)
@@ -67,10 +68,7 @@ namespace WpfApplication1
 
         private void reviewUploadedData(object sender, RoutedEventArgs e)
         {
-            var form = new Forms.pageAddMERLData();
-            this.stackMain.Children.Clear();
-            this.stackMain.Children.Add(form);
-            //we create an instance of d:\my documents\visual studio 2015\Projects\WpfApplication1\WpfApplication1\Forms\pageAddMERLData.xaml
+
         }
 
         private void addVmmcTechnicalReport(object sender, RoutedEventArgs e)
@@ -84,6 +82,11 @@ namespace WpfApplication1
         }
 
         private void updateLocalRepo(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void bViewPepfarReport_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -25,9 +25,9 @@ namespace WpfApplication1.Forms
             InitializeComponent();
         }
 
-        List<string> _selectedFiles = new List<string>();
+        List<FileDetails> _selectedFiles = new List<FileDetails>();
 
-        public List<string> SelectedFiles
+        public List<FileDetails> SelectedFiles
         {
             get
             {
@@ -42,12 +42,48 @@ namespace WpfApplication1.Forms
 
         private void selectFile(object sender, RoutedEventArgs e)
         {
-            //using(var dialog = new FileSelectDialog())
-            //{
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                CheckFileExists = true,
+                Multiselect = true,
+                CheckPathExists = true,
+                Filter = "Excel (*.xlsx)|*.xlsx",
+                Title = "Please select the files to import"
+            };
+            var dialogResult = dialog.ShowDialog() ?? false;
+            if (dialogResult)
+            {
+                _selectedFiles.AddRange(
+                    (from file in dialog.FileNames
+                     select new FileDetails() { FileName = file }).ToList()
+                    );
+            }
 
-            //}
+            //we refresh the grid
+            refreshDataGrid();
         }
 
+        void refreshDataGrid()
+        {
+            if (gSelectedFiles.ItemsSource == null)
+            {
+                gSelectedFiles.ItemsSource = _selectedFiles;
+            }
+            else
+            {
+                gSelectedFiles.ItemsSource = "";
+                gSelectedFiles.ItemsSource = _selectedFiles;
+            }
+        }
 
+        private void uploadSelectedFiles(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void clearSelected(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

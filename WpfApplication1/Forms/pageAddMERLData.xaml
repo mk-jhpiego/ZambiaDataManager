@@ -5,19 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApplication1.Forms"
       mc:Ignorable="d" 
-      d:DesignHeight="485" d:DesignWidth="670"
-      Title="pageAddMERLData" Width="485" Height="670">
+      d:DesignHeight="1018" d:DesignWidth="585"
+      Title="pageAddMERLData" Width="1018" Height="585">
 
-    <Grid x:Name="tSelectedFileName" Width="485" Height="670">
-        <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="145,10,200,0" VerticalAlignment="Top" Click="selectFile"/>
-        <Button x:Name="bSelectFile_Copy" Content="Select File" Height="40" Margin="145,0,200,230" 
-                VerticalAlignment="Bottom"                 
-                Click="selectFile"/>
+    <Grid x:Name="tSelectedFileName" Width="1018" Height="585">
+        <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="25,10,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="145"/>
+        <Button x:Name="bSelectFile_Copy" Content="Upload Selected Files" Height="35" Margin="25,240,0,0" 
+                VerticalAlignment="Top"                 
+                Click="uploadSelectedFiles" HorizontalAlignment="Left" Width="145"/>
         <DataGrid x:Name="gSelectedFiles" 
-                      AutoGenerateColumns="True"                      
-                      Margin="25,90,35,315"
-                       ItemsSource="{Binding Path=ListTest, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
-                      CanUserAddRows="False" CanUserSortColumns="False">
+                      AutoGenerateColumns="False"                      
+                      Margin="25,55,10,350"
+                       ItemsSource="{Binding Path=SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
+                      CanUserAddRows="True" CanUserSortColumns="True">
+            <DataGrid.Columns >
+                <DataGridTextColumn x:Name="colFileName" Binding="{Binding FileName}" Header="File Name" Width="*"  />
+            </DataGrid.Columns>
         </DataGrid>
+
+        <Label x:Name="tProgressStatus" Content="Please wait: Processing 5 of 10" HorizontalAlignment="Left" Margin="25,280,0,280" Width="375"/>
+        <Button x:Name="bSelectFile_Copy1" Content="Upload Selected Files" Height="35" Margin="25,0,0,10" 
+        	VerticalAlignment="Bottom"                 
+        	Click="uploadSelectedFiles" HorizontalAlignment="Left" Width="145"/>
+        <TextBox x:Name="tStatusWindow" HorizontalAlignment="Left" Margin="25,280,0,50" TextWrapping="Wrap" Text="TextBox" Width="455"/>
     </Grid>
 </Page>

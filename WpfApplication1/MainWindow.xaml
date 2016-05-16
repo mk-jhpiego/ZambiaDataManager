@@ -23,7 +23,9 @@
 
         <StackPanel Margin="10,43.527,10,3.973">
             <TextBlock x:Name="textBlock_Copy4" Height="27.5" TextWrapping="Wrap" Text="Reports and Summaries" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
-            <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" Click="showPepfarReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" 
+                                 
+                    d:LayoutOverrides="LeftPosition, RightPosition" Click="bViewPepfarReport_Click"/>
             <Button x:Name="bViewAdminSummaryReport" Content="Admin Summary" Height="40" Click="showAdminSummaryReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bViewProgramIndicators" Content="Program Indicators" Height="40" Click="showProgramIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bViewAllIndicators" Content="View All Indicators" Height="40" Click="showAllIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
@@ -45,8 +47,7 @@
             <Button x:Name="bManageAccount" Content="Manage &#xA;Account" Height="80" Click="manageAccount" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bMakeDataAvailableLocally" Content="Make data &#xA;available &#xA;Offline" Height="75" Click="updateLocalRepo" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
-        <StackPanel x:Name="stackMain" Grid.Column="1" Margin="10,3.527,5,10">
-            <TextBlock Name="tSimple" Text="A simple text header" FontSize="16" Foreground="#FFF9F1F1" FontStretch="UltraExpanded"/>
-        </StackPanel>
+        <Label x:Name="label" Content="Main Content Area" Height="60" Grid.Column="1" Margin="10,10,10,0" VerticalAlignment="Top" FontSize="18" Foreground="#FFF9F8F8" HorizontalContentAlignment="Center" Width="1018" />
+        <Frame x:Name="stackMain" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Grid.Column="1" Margin="10,75,10,10"/>
     </Grid>
 </Window>
