@@ -18,5 +18,7 @@ namespace ZambiaDataManager
                 return _ControllerManager;
             }
         }
+
+        public ProjectName DefaultProjectName { get; set; }
     }
 }

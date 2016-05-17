@@ -1,0 +1,168 @@
+ProgramArea,IndicatorCode,Indicator
+STI,STI1,"Number of  clients diagnosed, treated and counselled  for STI (index plus partners)"
+STI,STI2,Number of STI partners treated
+STI,STI3,Number of clients referred for HIV Counseling and Testing
+STI,STI4,Number of clients tested for HIV
+STI,STI4a,Number of clients tested HIV positive
+STI,STI5,Number of clients referred for HIV care services
+STI,STI6,Number of partner notification slips issued
+STI,STI7,Number of partner notification slips received(of those issued by your facility)
+TB,TB1,Number of presumptive TB patients  with sputum sent
+TB,TB2,Number of registered new and relapse TB cases this month
+TB,TB3,Number of TB patients receiving Counselling and Testing services and had results recorded in the TB Register
+TB,TB4,Number of registered new and relapse TB patients with documented HIV-Negative status during TB treatment this month
+TB,TB5_1,Number of registered new and relapse TB patients with documented HIV-positive status during TB treatment this month- Newly diagnozed
+TB,TB5_2,Number of registered new and relapse TB patients with documented HIV-positive status during TB treatment this month- Known Positive at entry
+TB,TB5_3,Total number of registered new and relapse TB patients with documented HIV-positive status who are on ART during TB treatment during this month
+TB,TB5a,Number of registered new and relapse TB patients with documented HIV-positive status who are on ART this month
+TB,TB5b,ART initiation less than 8 weeks of start of TB treatment
+TB,TB5c,ART initiation greater than 8 weeks of start of TB treatment
+TB,TB6,Number of TB patients refered for HIV care  services
+TB,TB7,"Number of PLHIV newly enrolled in HIV clinical care who started IPT and receive at least one dose, during this month"
+TB,TB8,Number of patients current on TB treatment
+TB,TB9,Number of TB patients who had  follow up sputum smear at 2 months done in the reporting month
+TB,TB10,Number of TB patients expected to have final outcome this month
+TB,TB11,Number of patients who completed TB treatment this month
+TB,TB11_2,Number of TB patients cured
+TB,TB12,Number of TB patients successfully treated
+TB,TB13,Number of TB Patients who died
+TB,TB14,Number of TB patients who transferred out
+TB,TB15,Number of TB patients  transferred in
+TB,TB16,Number of TB patients who defaulted
+ART,ART1,Number of adults and children receiving antiretroviral therapy (ART) [current]
+ART,ART2,Number of adults and children newly enrolled on antiretroviral therapy (ART) (including pregnant  women on option B+)
+ART,ART2a,Number of pregnant women newly initiating ART (option B+)
+ART,ART3,No of NEW clients initiated on ART due to HIV DISCORDANT STATUS
+ART,ART4,Number of individuals who ever received antiretroviral therapy (TOTAL CLIENTS)
+ART,ART5,No. of pregnant women who have EVER received antiretroviral therapy (TOTAL CLIENTS)
+ART,ART6a,Number  of ART clients who are transferred in from another site
+ART,ART6b,Number of ART clients who stopped treatment due to loss to follow-up
+ART,ART6c,Number of ART clients Lost –to-follow up (LTFU) returned to the clinic.
+ART,ART6d,Number of ART clients who stopped treatment due to death
+ART,ART6e,Number of ART clients who restarted treatment
+ART,ART6f,Number of ART clients transferred out to another facility
+ART,ART7a,Number of adults and children initiated on ART 12 months ago (cohort month) including pregnant women on Option B+
+ART,ART7b,Number of adults and children known to be alive and on treatment 12 months after initiation of antiretroviral therapy
+ART,ART8,Number of clients on ART have bio-chemical investigations done this month
+ART,ART9,Number of adult and pediatric ART patients who had there sample collected and sent for viral load test this month.
+ART,ART10a,Number of adult and pediatric ART patients with a viral load result documented in the patient medical record this month.
+ART,ART10b,"Number of viral load tests from adult and pediatric ART patients conducted this month with a viral load <1,000 copies/ml"
+PMTCT,PMTCT1,No. of New ANC Attendances
+PMTCT,PMTCT1a,Number of pregnant women with known (positive) HIV infection attending ANC (known positives at entry)
+PMTCT,PMTCT2,"Number of pregnant women receiving PMTCT services (counseled, tested and received test results at this site during ANC and L&D  the reporting period)"
+PMTCT,PMTCT3,Number of ALL pregnant women who tested positive for HIV
+PMTCT,PMTCT4,Number of ALL pregnant women who tested positive for HIV and collected the test results
+PMTCT,PMTCT2a,No. of pregnant women receiving PMTCT services with partner
+PMTCT,PMTCT7,No. of HIV negative pregnant women who were re-tested for HIV and received their results within this current pregnancy
+PMTCT,PMTCT8,No. of HIV negative pregnant women who were re-tested for HIV and tested HIV positive within this current pregnancy
+PMTCT,PMTCT11,"Number of HIV positive pregnant women  on HAART (Lifelong ART, Including option B+)"
+PMTCT,PMTCT11a,Sub-Disag of Life-long ART: Newly initiated on treatment during the current pregnancy
+PMTCT,PMTCT11b,Sub-Disag of Life-long ART: Already on treatment at the beginning of the current pregnancy
+PMTCT,PMTCT9,Number of HIV positive pregnant women checked for CD4 as baseline
+PMTCT,PMTCT16,Total number of infants born at this site this month
+PMTCT,PMTCT17,Total number of infants born to HIV positive women at this site this month
+PMTCT,PMTCT18,Number of HIV Exposed Infants (HEI)  who received ARV prophylaxis for PMTCT (Niverapine - NVP)
+PMTCT,PMTCT19,Number of HEI who started cotrimoxazole prophylaxis (CTX) at 6 weeks
+PMTCT,PMTCT18_a,Number of infants born to HIV positive women who received HIV virological testing at 6 weeks  of birth
+PMTCT,PMTCT19_a,Number of infants born to HIV positive women who received HIV virological testing in the first 6 months of birth
+PMTCT,PMTCT20,Number of infants born to HIV positive women who received HIV virological testing in the first 12 months of birth
+PMTCT,PMTCT22,Number of infants born to HIV positive women who received HIV virological testing in the first 18 months of birth
+PMTCT,PMTCT23,Number of infants with a   positive virological test  within 12 months
+PMTCT,PMTCT24,Number of HIV-exposed infants registered in the birth cohort who are suppose to be discharge this (including transfer-ins) found in the mother baby tracking register.
+PMTCT,PMTCT24_a,Sub-Disagg - In care but no test Done
+PMTCT,PMTCT24_b,Sub-Disagg - Lost to follow-up
+PMTCT,PMTCT24_c,Sub-Disagg - Died
+PMTCT,PMTCT24_d,Sub-Disagg - Transferred out
+PMTCT,PMTCT25,Number of HIV-exposed infants registered in the birth cohort who have been discharged with HIV negative Final Outcome results (including transfer-ins) found in the mother baby tracking register.
+PMTCT,PMTCT25_a,Sub-Disaggregation of HIV negative infants - HIV Negative  not breastfeeding
+PMTCT,PMTCT25_b,Sub-Disaggregation of HIV negative infants - HIV Negative who are still breastfeeding
+PMTCT,PMTCT25_c,Sub-Disaggregation of HIV negative infants - HIV Negative breastfeeding status unknown
+PMTCT,PMTCT26,Number of HIV-exposed infants with a documented outcome by 18 months of age disaggregated by outcome type.
+PMTCT,PMTCT26_a,Sub-Disagg-HIV positive infants
+PMTCT,PMTCT26_b,Sub-Disagg-HIV positive infants linked to ART
+PMTCT,PMTCT26_c,Sub-Disagg-HIV negative infants
+PMTCT,PMTCT29,No. of HIV-exposed infants who were on exclusively breastfeeding (EBF) at or around 3 months
+PMTCT,PMTCT30,No. of HIV-exposed infants who were on replacement feeding (ERF)  at or around 3 months - (no breast milk at all)
+PMTCT,PMTCT31,No. of HIV-exposed infants who were on mixed feeding  at or around 3 months
+Family Planning,FP1,Number of new acceptors of modern contraception by method type (disaggregated by gender and age)
+Family Planning,FP1_a,Disagg. by Method Type-Male Condoms
+Family Planning,FP1_b,Disagg. by Method Type-Female Condoms
+Family Planning,FP1_c,Disagg. by Method Type-Combined oral contraceptives
+Family Planning,FP1_d,Disagg. by Method Type-Progesterone only pill
+Family Planning,FP1_e,Disagg. by Method Type-Depo-Provera
+Family Planning,FP1_f,Disagg. by Method Type-Intrauterine Devices (IUD)- Interval
+Family Planning,FP1_g,Disagg. by Method Type-Postpatum Intrauterine Devices (IUD) within 48 hours of delivery
+Family Planning,FP1_h,Disagg. by Method Type-Subderminal implants (jaddel)
+Family Planning,FP1_i,Disagg. by Method Type-Noristerat/Noresterat injection
+Family Planning,FP1_j,Disagg. by Method Type-Female sterilization
+Family Planning,FP1_k,Disagg. by Method Type-Male sterilization
+Family Planning,FP1_m,Disagg. by Method Type-TOTAL
+Family Planning,FP2,"Number of clients receiving or maintaining a modern FP method (disaggregated by age, gender and type of method)"
+Family Planning,FP2_a,Disagg. by method type-Male Condoms
+Family Planning,FP2_b,Disagg. by method type-Female Condoms
+Family Planning,FP2_c,Disagg. by method type-Combined oral contraceptives
+Family Planning,FP2_d,Disagg. by method type-Progesterone only pill
+Family Planning,FP2_e,Disagg. by method type-Depo-Provera
+Family Planning,FP2_f,Disagg. by method type-Intrauterine Devices (IUD)- Interval
+Family Planning,FP2_g,Disagg. by method type-Postpatum Intrauterine Devices (IUD) within 48 hours of delivery
+Family Planning,FP2_h,Disagg. by method type-Subderminal implants (jaddel)
+Family Planning,FP2_i,Disagg. by method type-Noristerat/Noresterat injection
+Family Planning,FP2_j,Disagg. by method type-Female sterilization
+Family Planning,FP2_k,Disagg. by method type-Male sterilization
+Family Planning,FP2_m,Disagg. by method type-TOTAL
+Family Planning,FP3a,Number of FP new acceptors of modern contraception who received HTC and received their HIV results from FP service delivery point (disaggregated by gender and age)
+Family Planning,FP3b,Number of  FP new acceptors of modern contraception who tested HIV+ from FP service delivery point (disaggregated by gender and age)
+Family Planning,FP4,Number of FP clients switching from short term to long term methods (disaggregated by method type: Jaddel or IUD)
+Family Planning,FP5,Number of postpartum women accessing Family Planning disaggregated by timing from birth to one year
+Family Planning,FP5_a,Disagg. By time from birth-48 hours
+Family Planning,FP5_b,Disagg. By time from birth-6 weeks
+Family Planning,FP5_c,Disagg. By time from birth-6 months
+Family Planning,FP5_d,Disagg. By time from birth-12 months
+Family Planning,FP5_e,Disagg. By time from birth-TOTAL
+Family Planning,FP6,Number of clients started on dual protection (disaggregated by HIV status)
+Family Planning,FP7,Number of women seeking FP who were already pregnant (disaggregated by HIV status)
+Family Planning,FP8,Number FP clients receiving FP services as a couple
+Family Planning,FP9,Number of clients referred from community to facility for FP
+Family Planning,FP10,Number of clients referred from FP to CECAP
+Prevention - PWP,PwP1,Number of People Living with HIV/AIDS (PLHIV) NEWLY reached with a minimum package of PWP interventions in a facility and community-based setting
+Prevention - PWP,PwP2,Total number of People Living with HIV/AIDS (PLHIV) EVER reached with a minimum package of PWP interventions in a facility and community-based setting
+Prevention - PWP,PwP2a,Number of PLHIV reached with PWP interventions in a facility setting this month
+Prevention - PWP,PwP2b,Number of PLHIV reached with PWP interventions in a community/home-based  care setting this month
+Clinical Care,CS1a,Number of HIV postive Individuals who received Pre-ART Care services (including Pregnant women) which are clinical assessment (WHO staging) OR CD4 count OR viral load - Newly enrolled to care services
+Clinical Care,CS1b,No of HIV positive pregnant women newly enrolled into HIV care and support services- Fraction of CS1a
+Clinical Care,CS2a,Number of HIV positive adults and children who received at least one of the following this month: clinical assessment (WHO staging) OR CD4 count OR viral load
+Clinical Care,CS2b,"Number of existing HIV-positive adults and children receiving a minimum of one clinical care service this month, (these are the total number of clients existing and active in a facility and receiving clinical care only)"
+Clinical Care,CS3,Number of HIV positive adults and children who had CD4 count done this month
+Clinical Care,CS5,"No. of HIV positive patients screened for chronic conditions this month: (Diabetes Mellitus, Hypertension, TB)"
+Clinical Care,CS6,"Number of community/home-based care givers trained in clinical, preventive and support care"
+Clinical Care,CS7,Number of active care givers in the palliative/home based care and OVC care program this month
+Clinical Care,CS8,Number of HIV-positive persons receiving cotrimoxazole prophylaxis this month
+Clinical Care,CS9a,Number of HIV-positive patients  who were nutritionally assessed and found to be clinically malnourished during the reporting period.
+Clinical Care,CS9b,Number of HIV-positive clinically malnourisheds adult  and children who received therapeutic or supplementary food this month
+Clinical Care,CS9c,Number of PLHIV who were nutritionally assessed via anthropometric measurement
+Clinical Care,CS9d,Number of PLHIV provided with home based care services.
+Clinical Care,CS10,Number of HIV-positive patients who were screened for TB this month
+Clinical Care,CS10a,Number of HIV-positive patients who were screened for TB at the health facility this month
+Clinical Care,CS10b,Number of HIV-positive patients who were screened for TB in a  community setting this month
+Clinical Care,CS11,Number of HIV-positive patients who were screened for TB in HIV care or treatment setting
+Clinical Care,CS11a,Number of HIV-positive patients who were diagonised with active TB disease
+Clinical Care,CS11b,Number of PLHIV newly enrolled in HIV clinical care who start isoniazid preventative therapy (IPT)
+Prevention-MC,MC1,Total number of males circumcised as part of the minimum package of MC for HIV prevention services (MC1 = MC1a + MC1b)
+Prevention-MC,MC1a,Number of males circumcised as part of the minimum package of MC for HIV prevention services (Static MC site)
+Prevention-MC,MC1b,Number of males circumcised as part of the minimum package of MC for HIV prevention services (Mobile Site)
+Prevention-MC,MC1c,"Number circumcised by surgical technique (forceps guided, dorsal slit, sleeve resection)"
+Prevention-MC,MC2,"Number of circumcised clients experiencing at least one moderate or severe adverse event (AE) during or following surgery, within the reporting period (MC2 = MC2a + MC2b)"
+Prevention-MC,MC2a,Number of VMMC clients with one or more moderate or severe surgical intra-operative AE(s)
+Prevention-MC,MC2b,Number of VMMC clients with one or more moderate or severe surgical post-operative AE(s)
+Prevention-MC,MC2c,"Number of clients with one or more moderate surgical post-operative AE(s), but no severe surgical post-operative AE(s)"
+Prevention-MC,MC2d,Number of clients with one or more severe surgical intra-operative AE(s)
+Prevention-MC,MC2e,Number of surgically circumcised clients who returned at least once for follow-up care within 14 days of their circumcision surgery
+Prevention-MC,MC2f,Number of surgically circumcised clients who did NOT return for follow-up care within 14 days of their circumcision surgery
+Prevention-MC,MC3,"Number of MC clients pre-test counseled, tested and collected HIV test results at MC centers"
+Prevention-MC,MC3a,Number of HIV negative clients (tested HIV negative at VMMC site)
+Prevention-MC,MC3b,Number of clients with undocumented/indeterminate HIV status or not tested for HIV at VMMC site.
+Prevention-MC,MC4,Number of MC clients testing positive for HIV and collecting results at MC centers
+Prevention-MC,MC4a,"Number of MC clients testing positive for HIV, collecting results and referred for clinical care beyond MC"
+Prevention-MC,MC4b,"Number of VMMC clients who reached the the referral service (ART, STI)"
+Prevention-MC,MC7,Number of HIV-positive men circumcised (tested at MC site) who were referred for HIV care
+Prevention-MC,MC12,Number of males circumcised within the reporting period who return at least once for post-operative follow-up care (routine or emergent) within 48hours of surgery

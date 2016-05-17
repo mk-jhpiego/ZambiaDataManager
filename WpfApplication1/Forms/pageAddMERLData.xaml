@@ -8,24 +8,58 @@
       d:DesignHeight="1018" d:DesignWidth="585"
       Title="pageAddMERLData" Width="1018" Height="585">
 
-    <Grid x:Name="tSelectedFileName" Width="1018" Height="585">
-        <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="25,10,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="145"/>
-        <Button x:Name="bSelectFile_Copy" Content="Upload Selected Files" Height="35" Margin="25,240,0,0" 
-                VerticalAlignment="Top"                 
-                Click="uploadSelectedFiles" HorizontalAlignment="Left" Width="145"/>
-        <DataGrid x:Name="gSelectedFiles" 
-                      AutoGenerateColumns="False"                      
-                      Margin="25,55,10,350"
-                       ItemsSource="{Binding Path=SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
-                      CanUserAddRows="True" CanUserSortColumns="True">
-            <DataGrid.Columns >
-                <DataGridTextColumn x:Name="colFileName" Binding="{Binding FileName}" Header="File Name" Width="*"  />
-            </DataGrid.Columns>
-        </DataGrid>
+    <StackPanel Margin="0,0,0,0">
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <Image x:Name="img3"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
+            <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="145" FontWeight="Bold"/>
+            <Image x:Name="img1"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
+            <Button x:Name="bSelectFile_Copy" Content="Review Selected Files" Margin="0,0,0,0"                 
+        	Click="reviewSelectedFiles" HorizontalAlignment="Left" Width="145" Height="40" FontWeight="Bold"/>
+            <Image x:Name="img2"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
+            <Button x:Name="bSelectFile_Copy1" Content="Save to Server" Height="40" Margin="0,0,0,0" 
+            	VerticalAlignment="Bottom"                 
+            	Click="saveToServer" HorizontalAlignment="Left" Width="145" FontWeight="Bold"/>
+            <Button x:Name="bSaveToAlternate" Content="Save to Alt Server" Height="40" Margin="0,0,0,0" 
+            	VerticalAlignment="Bottom"                 
+            	Click="saveToAltServer" HorizontalAlignment="Left" Width="145" FontWeight="Bold" Visibility="Hidden"/>
 
-        <Label x:Name="tProgressStatus" Content="Please wait: Processing 5 of 10" HorizontalAlignment="Left" Margin="25,280,0,280" Width="375"/>
-        <Button x:Name="bSelectFile_Copy1" Content="Upload Selected Files" Height="35" Margin="25,0,0,10" 
-        	VerticalAlignment="Bottom"                 
-        	Click="uploadSelectedFiles" HorizontalAlignment="Left" Width="145"/>
-    </Grid>
+        </StackPanel>
+        <StackPanel RenderTransformOrigin="0.5,0.5" Height="545" Margin="0,0,3,0">
+            <StackPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0.51"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="2.491"/>
+                </TransformGroup>
+            </StackPanel.RenderTransform>
+
+            <Label x:Name="tHelpfulTip" Content="Select Files to Import" HorizontalAlignment="Left" Margin="0,0,0,0" Height="25" Width="375" Foreground="White" FontWeight="Bold"/>
+            <DataGrid x:Name="gSelectedFiles" Height="500"
+        	AutoGenerateColumns="False"                      
+        	Margin="25,5,10,0"
+        	ItemsSource="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
+        	CanUserAddRows="True" CanUserSortColumns="True">
+                <DataGrid.Columns >
+                    <DataGridTextColumn x:Name="colFileName" Binding="{Binding FileName}" Header="File Name" Width="*"  />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid x:Name="gIntermediateData" Height="0"
+        	AutoGenerateColumns="False"                      
+        	Margin="25,5,10,0"
+        	ItemsSource="{Binding ExcelDataValues, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"        
+        	CanUserAddRows="True" CanUserSortColumns="True">
+                <DataGrid.Columns >
+                    <DataGridTextColumn x:Name="colFacilityName" Binding="{Binding FacilityName}" Header="Facility Name" Width="*"  />
+                    <DataGridTextColumn x:Name="colReportYear" Binding="{Binding ReportYear}" Header="Report Year" Width="*"  />
+                    <DataGridTextColumn x:Name="colReportMonth" Binding="{Binding ReportMonth}" Header="Report Month" Width="*"  />
+                    <DataGridTextColumn x:Name="colProgramArea" Binding="{Binding ProgramArea}" Header="Program Area" Width="*"  />
+                    <DataGridTextColumn x:Name="colIndicatorId" Binding="{Binding IndicatorId}" Header="Indicator Id" Width="*"  />
+                    <DataGridTextColumn x:Name="colIndicatorValue" Binding="{Binding IndicatorValue}" Header="Indicator Value" Width="*"  />
+                    <DataGridTextColumn x:Name="colAgeGroup" Binding="{Binding AgeGroup}" Header="Age Group" Width="*"  />
+                    <DataGridTextColumn x:Name="colSex" Binding="{Binding Sex}" Header="Sex" Width="*"  />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </StackPanel>
 </Page>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ZambiaDataManager.Popups;
 
 namespace ZambiaDataManager
 {
@@ -68,7 +69,8 @@ namespace ZambiaDataManager
 
         private void reviewUploadedData(object sender, RoutedEventArgs e)
         {
-
+            var targetForm = new Forms.pageReviewData();
+            stackMain.Content = targetForm;
         }
 
         private void addVmmcTechnicalReport(object sender, RoutedEventArgs e)
@@ -89,6 +91,23 @@ namespace ZambiaDataManager
         private void bViewPepfarReport_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //we prompt for the default database
+            var dialog = new ProjectedSelector();
+            if (dialog.ShowDialog() != null && dialog.SelectedProjectName != ProjectName.None)
+            {
+                PageController.Instance.DefaultProjectName = dialog.SelectedProjectName;
+                Title = "Jhpiego Zambia Data Manager: Default project selected is " + dialog.SelectedProjectName.ToString();
+            }
+            else
+            {
+                //means they canceled
+                //we disable everything
+                Application.Current.Shutdown();
+            }
         }
     }
 }
