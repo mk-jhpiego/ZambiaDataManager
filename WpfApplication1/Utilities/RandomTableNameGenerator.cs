@@ -9,6 +9,8 @@ namespace ZambiaDataManager.Utilities
 {
     class RandomTableNameGenerator : IQueryHelper<string>
     {
+
+        public Action<string> Alert { get; set; }
         public IDisplayProgress progressDisplayHelper { get; set; }
 
         public string Execute()

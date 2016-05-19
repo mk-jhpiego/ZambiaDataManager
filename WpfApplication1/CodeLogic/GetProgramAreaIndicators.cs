@@ -175,6 +175,14 @@ namespace ZambiaDataManager.CodeLogic
                     )
                     .ToList();
         }
+
+        public List<ProgramAreaDefinition> GetFinanceDataElements()
+        {
+            //we get the avilable indicators by program area
+            var progAreas = File.ReadAllText("staticdata//finance.json");
+            var res = Newtonsoft.Json.JsonConvert.DeserializeObject<ProgramAreaDefinition>(progAreas);
+            return new List<ProgramAreaDefinition>() { res};
+        }
     }
 
 }

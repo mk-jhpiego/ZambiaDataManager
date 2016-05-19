@@ -51,6 +51,8 @@ namespace ZambiaDataManager
     {
         T Execute();
         IDisplayProgress progressDisplayHelper { get; set; }
+
+        Action<string> Alert { get; set; }
     }
 
     public interface IDisplayProgress
@@ -149,17 +151,21 @@ namespace ZambiaDataManager
         public List<ProgramIndicator> Indicators { get; set; }
     }
 
-    public struct FirstAgeGroupOccurence
+    public class RowColmnPair
     {
-        public FirstAgeGroupOccurence(int rowId, int colmn1, int colmn2)
+        public RowColmnPair(int rowId, int colmn1, int colmn2)
         {
-            RowId = rowId;
-            ColumnId1 = colmn1;
-            ColumnId2 = colmn2;
+            Row = rowId;
+            Column = colmn1;
+            Column2 = colmn2;
         }
-        public int RowId;
-        public int ColumnId1;
-        public int ColumnId2;
+
+        public RowColmnPair()
+        {
+        }
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int Column2 { get; set; }
     }
 
     public class Constants

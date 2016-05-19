@@ -34,7 +34,9 @@
             <Button x:Name="bShowMap" Content="GIS Map" Height="40" Click="showMap" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <TextBlock x:Name="textBlock" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
             <TextBlock x:Name="textBlock_Copy1" Height="27.5" TextWrapping="Wrap" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"><Run Text="Technical "/><Run Text="Data Upload"/><LineBreak/><Run/></TextBlock>
-            <Button x:Name="bAddVmmcTechDaily" Content="Add Vmmc Daily Report" Height="40" Click="addVmmcTechnicalReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddVmmcTechDaily" Content="Add Vmmc Daily Report" Height="30" Click="addVmmcTechnicalReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddQuickBooksData" Content="Add QB" Height="30" Click="addQuickBooksData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+
             <TextBlock x:Name="textBlock_Copy2" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
             <TextBlock x:Name="textBlock_Copy" Height="27.5" TextWrapping="Wrap" Text="MERL Data Upload" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
             <Button x:Name="bAddVmmcMonthly" Content="Add Vmmc Monthly Data" Height="40" Click="addVmmcMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>

@@ -9,6 +9,7 @@ namespace ZambiaDataManager.Storage
 {
     public class DataMergeCommand : IQueryHelper<IEnumerable<string>>
     {
+        public Action<string> Alert { get; set; }
         public DbHelper Db { get; set; }
 
         public bool IsInError { get; set; }

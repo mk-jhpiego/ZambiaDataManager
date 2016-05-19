@@ -1,0 +1,167 @@
+﻿{
+  "ProgramArea": "total_expenditure",
+  "Indicators": [
+    {
+      "IndicatorId": "616112",
+      "Indicator": "616112 · Overseas Salaries"
+    },
+    {
+      "IndicatorId": "620112",
+      "Indicator": "620112 · Overseas Fringe Benefits"
+    },
+    {
+      "IndicatorId": "631001",
+      "Indicator": "631001 · Furniture"
+    },
+    {
+      "IndicatorId": "633028",
+      "Indicator": "633028 · Cleaning Supplies"
+    },
+    {
+      "IndicatorId": "633032",
+      "Indicator": "633032 · Office Supplies"
+    },
+    {
+      "IndicatorId": "633037",
+      "Indicator": "633037 · Publications/Journals/Subscript"
+    },
+    {
+      "IndicatorId": "635001",
+      "Indicator": "635001 · Utilities Electricity"
+    },
+    {
+      "IndicatorId": "635010",
+      "Indicator": "635010 · Utilities Water"
+    },
+    {
+      "IndicatorId": "637001",
+      "Indicator": "637001 · SVCS Repairs & Maintenance"
+    },
+    {
+      "IndicatorId": "640101",
+      "Indicator": "640101 · Rental Short-Term"
+    },
+    {
+      "IndicatorId": "640102",
+      "Indicator": "640102 · Leased Facilities"
+    },
+    {
+      "IndicatorId": "640202",
+      "Indicator": "640202 · Rental Equipment"
+    },
+    {
+      "IndicatorId": "640205",
+      "Indicator": "640205 · Motor Vehicle Leasing"
+    },
+    {
+      "IndicatorId": "640282",
+      "Indicator": "640282 · Delivery Services"
+    },
+    {
+      "IndicatorId": "640318",
+      "Indicator": "640318 · Contract Cleaning"
+    },
+    {
+      "IndicatorId": "640326",
+      "Indicator": "640326 · Waste Removal"
+    },
+    {
+      "IndicatorId": "640341",
+      "Indicator": "640341 · Security Services"
+    },
+    {
+      "IndicatorId": "640351",
+      "Indicator": "640351 · SVCS Legal"
+    },
+    {
+      "IndicatorId": "640403",
+      "Indicator": "640403 · Membership/Dues"
+    },
+    {
+      "IndicatorId": "640501",
+      "Indicator": "640501 · SVCS Independent Contractor"
+    },
+    {
+      "IndicatorId": "641401",
+      "Indicator": "641401 · Telecom Phones"
+    },
+    {
+      "IndicatorId": "641402",
+      "Indicator": "641402 · Telecom Long Distance and Local"
+    },
+    {
+      "IndicatorId": "641405",
+      "Indicator": "641405 · Wireless Phone"
+    },
+    {
+      "IndicatorId": "642002",
+      "Indicator": "642002 · Meals Non-Travel"
+    },
+    {
+      "IndicatorId": "642211",
+      "Indicator": "642211 · Insurance"
+    },
+    {
+      "IndicatorId": "642501",
+      "Indicator": "642501 · SVCS Printing"
+    },
+    {
+      "IndicatorId": "651851",
+      "Indicator": "651851 · Bank Charges/Interest Income"
+    },
+    {
+      "IndicatorId": "651901",
+      "Indicator": "651901 · Foreign Curr Exchange Gain/Loss"
+    },
+    {
+      "IndicatorId": "652101",
+      "Indicator": "652101 · Travel Foreign"
+    },
+    {
+      "IndicatorId": "652102",
+      "Indicator": "652102 · Travel Overseas Local"
+    },
+    {
+      "IndicatorId": "652201",
+      "Indicator": "652201 · Travel Trainee"
+    },
+    {
+      "IndicatorId": "652503",
+      "Indicator": "652503 · Other Miscellaneous Expenses"
+    }
+
+  ],
+  "AgeDisaggregations": [
+    "07 - 90063007  I-X-ZM-CDC- ACT",
+    "09 - 90063009 I-X-ZM-CDC-PMTCT",
+    "11 - 90063011  I-X-ZM-CDC-OHSS",
+    "12 - 90062712",
+    "13 - 90054213",
+    "13 - 90063013  I-X-ZM-CDC-HTXS",
+    "14 - 90063014  U-X-ZM-CDC-HTXS",
+    "15 - 90063015  I-X-ZM-CDC-HVTB",
+    "22 - 90063222 DoD CECAP",
+    "23 - 90063223  ESA-I-F-ZM-DOD-F",
+    "27 - 90061627 Afghan",
+    "31 - 80033031",
+    "31 - 90066431  PATH PAMO Pre",
+    "37 - 90062837  -U-X-ZM-CDC-CIRC",
+    "38 - 90062838 -I-X-ZM-CDC-CIRC",
+    "49 - 80020449 Zambia Fringe",
+    "65 - 90059465 DoD HTXS Y1",
+    "66 - 90059466 DoD PDCS Y1",
+    "67 - 90059467 DoD- PDTX Y1",
+    "(71 - 80033971)",
+    "79 - 90059379 DOD CIRC Y1",
+    "80 - 90059380 DOD HVTB Y1",
+    "81 - 90059381 DoD - OHSS Y1",
+    "82 - 90059382 DOD PMTCT Y1",
+    "83 - 90059383 DoD HVOP Y1",
+    "84 - 90059384 DoD- HBHC Y1",
+    "85 - 80018385 PTR",
+    "91 - 80025591 PAMO",
+    "97 - 80035497"
+  ],
+  "DefaultHandler": "default",
+  "Gender": "Male"
+}

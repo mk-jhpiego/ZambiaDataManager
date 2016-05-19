@@ -10,6 +10,7 @@ namespace ZambiaDataManager.Storage
 {
     public class SaveTableToDbCommand : IQueryHelper<IEnumerable<string>>
     {
+        public Action<string> Alert { get; set; }
         public DbHelper Db { get; set; }
         //public SaveTableToDbCommand()
         //{

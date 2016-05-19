@@ -50,6 +50,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -57,6 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -75,11 +77,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CodeLogic\GetExcelAsDataTable.cs" />
     <Compile Include="Forms\pageReviewData.xaml.cs">
       <DependentUpon>pageReviewData.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popups\ProjectedSelector.xaml.cs">
       <DependentUpon>ProjectedSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\QuickBooksImporter.xaml.cs">
+      <DependentUpon>QuickBooksImporter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Storage\DataMergeCommand.cs" />
     <Compile Include="Storage\db.cs" />
@@ -116,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\QuickBooksImporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Popups\WaitDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -151,6 +161,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="staticdata\finance.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="staticdata\IndicatorDefinitions.csv" />
     <None Include="staticdata\IndicatorDefinitions.xlsx" />
     <None Include="staticdata\ProgramAreaDefinitions.json">

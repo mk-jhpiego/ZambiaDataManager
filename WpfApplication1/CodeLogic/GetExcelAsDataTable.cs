@@ -1,15 +1,18 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿//using Excel = Microsoft.Office.Interop.Excel;
+
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+//using System.Data;
 using System.Windows;
 
 namespace ZambiaDataManager.CodeLogic
 {
-    public class GetValuesFromReport : IQueryHelper<List<DataValue>>
+    public class GetExcelAsDataTable : IQueryHelper<List<DataValue>>
     {
         public Action<string> Alert { get; set; }
         public string fileName { get; set; }
@@ -284,17 +287,12 @@ namespace ZambiaDataManager.CodeLogic
         private List<DataValue> ImportData(Microsoft.Office.Interop.Excel.Application excelApp, ProjectName projectName)
         {
             PerformProgressStep("Please wait, initialising");
-            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetAllProgramDataElements();
+            //we have twwo spreadsheets for finance: 
 
-            //we load the indicator definitions and data categories
-            //if (_loadAllProgramDataElements == null)
-            //{
-            //    lock (initProgDatElmts)
-            //    {
-            //        if (_loadAllProgramDataElements == null)
-            //            _loadAllProgramDataElements = new GetProgramAreaIndicators().GetAllProgramDataElements(projectName);
-            //    }
-            //}
+            //Expenses for expns for the mnth
+            //total_expenditure
+
+            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements();
 
             PerformProgressStep("Please wait, Opening Excel document");
 
@@ -332,14 +330,16 @@ namespace ZambiaDataManager.CodeLogic
                         vmmcProgramArea.ProgramArea = GetProgramAreaIndicators.IhpVmmcProgramAreaName;
                         _loadAllProgramDataElements.Clear();
                         _loadAllProgramDataElements.Add(vmmcProgramArea);
-
-                        //_loadAllProgramDataElements.RemoveAll(t => t.ProgramArea != GetProgramAreaIndicators.dodVmmcProgramAreaName);
-                        //_loadAllProgramDataElements[GetProgramAreaIndicators.IhpVmmcProgramAreaName] = _loadAllProgramDataElements[GetProgramAreaIndicators.dodVmmcProgramAreaName];
                         locationDetail = GetIhpReportLocationDetails(workbook);
                         break;
                     }
                 case ProjectName.IHP_Capacity_Building_and_Training:
                     {
+                        break;
+                    }
+                case ProjectName.General:
+                    {
+                        locationDetail = new LocationDetail();
                         break;
                     }
             }
@@ -373,118 +373,82 @@ namespace ZambiaDataManager.CodeLogic
 
                 //we have the column indexes of the first age category options, and other occurrences of the same
                 var firstAgeGroupCell = GetFirstAgeGroupCell(dataElement, xlrange, ProjectName.IHP_VMMC == projectName);
+                var ageGroupCells = GetMatchedCellsInRow(excelRange: xlrange,
+                    searchTerms: dataElement.AgeDisaggregations,
+                    endColumnIndex: colCount, startColumnIndex: firstAgeGroupCell.Column,
+                    rowIndex: firstAgeGroupCell.Row
+                    );
 
                 //Now we find the row indexes of the program indicators
-                //ProgramIndicator currentRowMatchingIndicator = null;
-                var firstIndcatorRowIndex = -1;
-                for (var rowIndex = 1; rowIndex <= rowCount; rowIndex++)
+                var indicatorList = (from t in dataElement.Indicators select t.Indicator).ToList();
+                var firstIndicatorCell = GetFirstMatchedCellByRow(excelRange: xlrange,
+                    searchTerms: indicatorList,
+                    startColumnIndex: 1,
+                    endColumnIndex: firstAgeGroupCell.Column - 1,
+                    maxRows: rowCount,
+                    statRowIndex: firstAgeGroupCell.Row + 1
+                    );
+
+                var indicatorCells = GetCellsInColumnContaining(
+                    excelRange: xlrange,
+                    columnIndex: firstIndicatorCell.Column,
+                    searchTerms: indicatorList,
+                    startRowIndex: firstIndicatorCell.Row,
+                    maxRows: rowCount
+                    );
+
+                foreach (var rowObject in indicatorCells)
                 {
-                    var value = getCellValue(xlrange, rowIndex, 1);
-                    if (string.IsNullOrWhiteSpace(value)) continue;
-                    var matchingDataElementByIndicatorId = dataElement.Indicators.FirstOrDefault(t => t.IndicatorId == value);
-                    if (matchingDataElementByIndicatorId != null)
+                    foreach (var columnObject in ageGroupCells)
                     {
-                        firstIndcatorRowIndex = rowIndex;
-                        //currentRowMatchingIndicator = matchingDataElementByIndicatorId;
-                        break;
+
+                        var value = getCellValue(xlrange, rowObject.Value.Row, columnObject.Value.Column);
+                        var asDouble = 0d;
+                        try
+                        {
+                            asDouble = value.ToDouble();
+                            if (asDouble == -2146826273 || asDouble == -2146826281)
+                            {
+                                ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
+                                //return null;
+                            }
+                        }
+                        catch
+                        {
+                            ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
+                            //return null;
+                        }
+
+                        if (asDouble != Constants.NOVALUE)
+                        {
+                            var dataValue = new DataValue()
+                            {
+                                IndicatorValue = asDouble,
+                                IndicatorId = rowObject.Key,
+                                ProgramArea = dataElement.ProgramArea,
+                                AgeGroup = columnObject.Key,
+                                Sex = "Male",
+
+                            };
+                            datavalues.Add(dataValue);
+                        }
                     }
                 }
-                //now we know that AgeGroups start from e.g. colmn 7 of row 4
-                //we also know that indicators start from Row X of column 1
-                //we can now start reading these values into an array for each indicator vs age group
-
-                //we start reading the values from cell [firstIndcatorRowIndex, firstAgeGroupCell.Colmn1]
-                LogCsvOutput("Processing: " + programAreaName);
-
-                var testBuilder = new StringBuilder();
-                testBuilder.AppendLine();
-                testBuilder.AppendLine(programAreaName);
-
-                var countdown = dataElement.Indicators.Count;
-                var i = firstIndcatorRowIndex;
-
-                PerformSubProgressStep();
-                do
-                {
-                    var indicatorid = getCellValue(xlrange, i, 1);
-                    if (string.IsNullOrWhiteSpace(indicatorid))
-                    {
-                        if (ProjectName.IHP_VMMC == projectName)
-                        {
-                            countdown--;
-                            continue;
-                        }
-
-                        throw new ArgumentNullException(string.Format("Expected a value in Cell ( A{0}) for sheet {1}", i, programAreaName));
-                    }
-
-                    var j = firstAgeGroupCell.Column;
-                    var counter = 0;
-
-                    //or we can get the corresponding data element and see what indicators it reports under
-                    while (counter < dataElement.AgeDisaggregations.Count)
-                    {
-                        while (counter < dataElement.AgeDisaggregations.Count)
-                        {
-                            var dataValue = GetDataValue(
-                                xlRange: xlrange,
-                                dataElement: dataElement,
-                                indicatorid: indicatorid,
-                                rowId: i,
-                                colmnId: j,
-                                counter: counter,
-                                sex: getGenderText(dataElement.Gender),
-                                //dataElement.Gender == "both" ? "Male" :
-                                //(dataElement.Gender == "Male" || dataElement.Gender == "Female" ? dataElement.Gender : ""),
-                                builder: testBuilder
-                                );
-                            if (dataValue != null)
-                                datavalues.Add(dataValue);
-                            j++;
-                            counter++;
-                        }
-                        j++;
-                        counter++;
-                    }
-
-                    if (dataElement.Gender == "both")
-                    {
-                        j = firstAgeGroupCell.Column2;
-                        counter = 0;
-                        while (counter < dataElement.AgeDisaggregations.Count)
-                        {
-                            var dataValue = GetDataValue(
-                                xlRange: xlrange,
-                                dataElement: dataElement, indicatorid: indicatorid,
-                                rowId: i, colmnId: j,
-                                counter: counter,
-                                sex: getGenderText("Female"),
-                                builder: testBuilder
-                                );
-                            if (dataValue != null)
-                                datavalues.Add(dataValue);
-                            j++;
-                            counter++;
-                        }
-                    }
-
-                    PerformSubProgressStep();
-                    testBuilder.AppendLine();
-                    countdown--;
-                    i++;
-                } while (countdown > 0);
-
-                LogCsvOutput(testBuilder.ToString());
-                //Console.WriteLine("Done - "+ dataElement.ProgramArea);
             }
 
             PerformProgressStep("Please wait, finalizing");
+
+            //todo: uncomment the given code below
+            //var x =
+                //from System.Data.DataRow row in datavalues.Rows
+                //    select row;
             datavalues.ForEach(t =>
             {
                 t.ReportYear = locationDetail.ReportYear;
                 t.ReportMonth = locationDetail.ReportMonth;
                 t.FacilityName = locationDetail.FacilityName;
             });
+
             PerformProgressStep("Please wait, Preparing to display results");
 
             //convert to dataset
@@ -596,23 +560,88 @@ namespace ZambiaDataManager.CodeLogic
             }
         }
 
+        private static Dictionary<string, RowColmnPair> GetCellsInColumnContaining(Range excelRange, int columnIndex, List<string> searchTerms,
+            int startRowIndex, int maxRows)
+        {
+            var indicatorCells = new Dictionary<string, RowColmnPair>();
+            for (var rowIndex = startRowIndex; rowIndex <= maxRows; rowIndex++)
+            {
+                var value = getCellValue(excelRange, rowIndex, columnIndex);
+                if (string.IsNullOrWhiteSpace(value)) continue;
+                if (searchTerms.Contains(value))
+                {
+                    indicatorCells[value] = new RowColmnPair() { Column = columnIndex, Row = rowIndex };
+                }
+            }
+            return indicatorCells;
+        }
+
+        private static Dictionary<string, RowColmnPair> GetMatchedCellsInRow(Range excelRange, List<string> searchTerms,
+            int rowIndex, int startColumnIndex, int endColumnIndex)
+        {
+            var toReturn = new Dictionary<string, RowColmnPair>();
+            for (var colmnId = startColumnIndex; colmnId <= endColumnIndex; colmnId++)
+            {
+                var value = getCellValue(excelRange, rowIndex, colmnId);
+
+                //people might have other columns, so we pick what we want
+                if (string.IsNullOrWhiteSpace(value) || value.Length > 40) continue;
+
+                //we find the first match, and quit once we read all columns in that row matching disaggregations
+                if (searchTerms.Contains(value))
+                {
+                    //we get all locations for our desired  row
+                    toReturn[value] = new RowColmnPair() { Column = colmnId, Row = rowIndex };
+                }
+            }
+            return toReturn;
+        }
+
+        private static RowColmnPair GetFirstMatchedCellByRow(Range excelRange, List<string> searchTerms, int statRowIndex, int maxRows, int startColumnIndex, int endColumnIndex )
+        {
+            RowColmnPair firstIndicatorCell = null;
+            for (var rowIndex = statRowIndex; rowIndex <= maxRows; rowIndex++)
+            {
+                for (var colIndex = endColumnIndex; colIndex >= startColumnIndex; colIndex--)
+                {
+                    var value = getCellValue(excelRange, rowIndex, colIndex);
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+                    if (searchTerms.Contains(value))
+                    {
+                        firstIndicatorCell = new RowColmnPair()
+                        {
+                            Column = colIndex,
+                            Row = rowIndex
+                        };
+                        break;
+                    }
+                }
+                if (firstIndicatorCell != null) break;
+            }
+            return firstIndicatorCell;
+        }
+
         private static RowColmnPair GetFirstAgeGroupCell(ProgramAreaDefinition dataElement, Range xlrange, bool isNonDod)
         {
             int colCount = xlrange.Columns.Count;
+            colCount = colCount > 15 ? 12 : colCount;
+
             int row = -1, colmn = -1, colmn2 = -1;
 
             var matchfound = false;
-            var maxDepthSearchRows = isNonDod ? 8 : 3;
+            var maxDepthSearchRows = 8;
+            //var firstAgeGroupColumn = -1;
             for (var rowId = 1; rowId <= maxDepthSearchRows; rowId++)
             {
                 for (var colmnId = 1; colmnId <= colCount; colmnId++)
                 {
                     var value = getCellValue(xlrange, rowId, colmnId);
-                    if (string.IsNullOrWhiteSpace(value) || value.Length > 20) continue;
+                    if (string.IsNullOrWhiteSpace(value) || value.Length > 40) continue;
 
                     if (dataElement.AgeDisaggregations.Contains(value))
                     {
-                        //we've found our row
+                        //we've found our column, time to find where the data begibs, lets find the corresponding indicator
+                        //we'll scan for columns from rowid to perhaps 5 places, and starting from column 0
                         row = rowId;
                         colmn = colmnId;
                         matchfound = true;
@@ -653,4 +682,6 @@ namespace ZambiaDataManager.CodeLogic
             return colmnIndex;
         }
     }
+
+
 }

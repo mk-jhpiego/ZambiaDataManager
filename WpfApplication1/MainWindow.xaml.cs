@@ -109,5 +109,11 @@ namespace ZambiaDataManager
                 Application.Current.Shutdown();
             }
         }
+
+        private void addQuickBooksData(object sender, RoutedEventArgs e)
+        {
+            var targetForm = new Forms.QuickBooksImporter();
+            stackMain.Content = targetForm;
+        }
     }
 }
