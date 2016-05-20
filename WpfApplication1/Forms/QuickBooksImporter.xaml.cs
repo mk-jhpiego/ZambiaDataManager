@@ -60,6 +60,14 @@ namespace ZambiaDataManager.Forms
                      select new FileDetails() { FileName = file }).ToList()
                     );
             }
+
+            //we prompt for the date
+            foreach(var fileDetail in SelectedFiles)
+            {
+                var filename = fileDetail.FileName.Split(' ');
+
+            }
+
             //we refresh the grid
             gIntermediateData.Visibility = Visibility.Collapsed;
 
@@ -128,8 +136,11 @@ namespace ZambiaDataManager.Forms
             //Sheet1 in TOtal spending for month file
             //'Expenses for expns for the mnth' for the mnth in Office allocation
 
+            //Incountry IONs expenses for total expenses
+            //QB Office Allocation for TPI for office allocations by project
+
             if (ExcelDataValues == null) { ExcelDataValues = new List<DataValue>(); } else { ExcelDataValues.Clear(); }
-            var file1 = new GetExcelAsDataTable()
+            var table1 = new GetFinanceDataFromExcel()
             {
                 fileName = files[0].FileName,
                 progressDisplayHelper = new WaitDialog()
@@ -137,11 +148,10 @@ namespace ZambiaDataManager.Forms
                     WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
                 }
                 ,
-                SelectedProject=ProjectName.General
-            };
+                SelectedProject = ProjectName.General
+            }.Execute();
 
-            var table1 = file1.Execute();
-            //var file2 = new GetExcelAsDataTable()
+            //var table2 = new GetFinanceDataFromExcel()
             //{
             //    fileName = files[1].FileName,
             //    progressDisplayHelper = new WaitDialog()
@@ -149,9 +159,8 @@ namespace ZambiaDataManager.Forms
             //        WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
             //    },
             //    SelectedProject = ProjectName.General
-            //};
-            //var table2 = file2.Execute();
-            var table2 = new List<DataValue>();
+            //}.Execute();
+            var table2 = new { };
             if (table1 == null || table2 == null)
             {
                 //we skip and alert the user of the error

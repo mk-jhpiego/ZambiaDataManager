@@ -77,7 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CodeLogic\ExcelWorksheetReaderBase.cs" />
     <Compile Include="CodeLogic\GetExcelAsDataTable.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Forms\pageReviewData.xaml.cs">
       <DependentUpon>pageReviewData.xaml</DependentUpon>
     </Compile>
@@ -91,6 +93,7 @@
     <Compile Include="Storage\db.cs" />
     <Compile Include="Storage\SaveTableToDbCommand.cs" />
     <Compile Include="Utilities\RandomTableNameGenerator.cs" />
+    <Compile Include="Utilities\ReportLocationProcessor.cs" />
     <Page Include="Forms\pageReviewData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

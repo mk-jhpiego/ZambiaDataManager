@@ -38,7 +38,8 @@ namespace ZambiaDataManager
         DOD = 2,
         IHP_VMMC,
         IHP_Capacity_Building_and_Training,
-        General
+        General,
+        Finance
     }
 
     public class FileDetails
@@ -167,10 +168,4 @@ namespace ZambiaDataManager
         public int Column { get; set; }
         public int Column2 { get; set; }
     }
-
-    public class Constants
-    {
-        public const double NOVALUE = -999999;
-    }
-
 }
