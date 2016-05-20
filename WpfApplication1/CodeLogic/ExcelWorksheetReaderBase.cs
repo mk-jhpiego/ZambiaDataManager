@@ -164,12 +164,13 @@ namespace ZambiaDataManager.CodeLogic
             }
             else
             {
-                var lower = locationDetail.ReportMonth.ToLowerInvariant();
-                var monthName = Constants.GetStandardMonthName(lower);
+                var monthName = Constants.GetStandardMonthName(locationDetail.ReportMonth);
                 locationDetail.ReportMonth = monthName;
             }
             return locationDetail;
         }
+
+
 
         public void PerformProgressStep(string message = "")
         {

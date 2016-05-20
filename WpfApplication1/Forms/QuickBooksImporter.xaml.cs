@@ -80,23 +80,6 @@ namespace ZambiaDataManager.Forms
             tHelpfulTip.Content = "Click Select Files to add more files or select next option";
         }
 
-        //void refreshDataGrid(bool showSelectedFiles)
-        //{
-        //    gSelectedFiles.Height = 0;
-        //    gIntermediateData.Height = 0;
-        //    if (showSelectedFiles)
-        //    {
-        //        gSelectedFiles.Height = defaultGridSize;
-        //        gSelectedFiles.ItemsSource = "";
-        //        gSelectedFiles.ItemsSource = SelectedFiles;
-        //    }
-        //    else
-        //    {
-        //        gIntermediateData.Height = defaultGridSize;
-
-        //    }
-        //}
-
         void EnableSaveButtons(bool viewState) { }
 
         private void ShowGridDisplayPort(List<DataValue> table1, List<DataValue> table2)
@@ -128,44 +111,138 @@ namespace ZambiaDataManager.Forms
         }
 
         CodeRunner<List<DataValue>> _runner;
-        public volatile List<DataValue> ExcelDataValues = null;
+        public volatile List<MatchedDataValue> ExcelDataValues = null;
+
+        public class FilesSelectedInfo
+        {
+            public string OfficeAllocationFile;
+            public string TotalCostsFile;
+
+            public LocationDetail LocationDetails;
+        }
+
+        public FilesSelectedInfo AssignSelectedFiles(List<FileDetails> files)
+        {
+            var thisYear = DateTime.Now.Year;
+
+            var officeAllocationFile = string.Empty;
+            var totalCostsFile = string.Empty;
+            var reportYear = -1;
+            var reportMonth = string.Empty;
+
+            for (var i = 0; i < 2; i++)
+            {
+                var filename = files[i].FileName;
+                var isOfficeAllocationFile = filename.ToLowerInvariant().Contains(Constants.OFFICE_ALLOCATION);
+                if (isOfficeAllocationFile && !string.IsNullOrWhiteSpace(officeAllocationFile))
+                {
+                    //means all are office allocation files
+                    MessageBox.Show("More than one Office Allocation file selected.");
+                    return null;
+                }
+                if (i > 0 && !isOfficeAllocationFile && string.IsNullOrWhiteSpace(officeAllocationFile))
+                {
+                    //means no office allocation file selected
+                    MessageBox.Show("Please ensure that one Office Allocation file is selected.");
+                    return null;
+                }
+                if (isOfficeAllocationFile)
+                {
+                    officeAllocationFile = filename;
+                }
+                else
+                {
+                    totalCostsFile = filename;
+                }
+                var reportYearAndMonth = GetReportYearAndMonthFromFileNames(filename, thisYear);
+                if (reportYearAndMonth == null)
+                {
+                    return null;
+                }
+                if (i > 0 && reportYearAndMonth.ReportYear != reportYear && reportYearAndMonth.ReportMonth != reportMonth)
+                {
+                    MessageBox.Show("The two files have inconsistent dates");
+                    return null;
+                }
+                reportYear = reportYearAndMonth.ReportYear;
+                reportMonth = reportYearAndMonth.ReportMonth;
+            }
+            return new FilesSelectedInfo()
+            {
+                OfficeAllocationFile = officeAllocationFile,
+                LocationDetails = new LocationDetail() { ReportMonth = reportMonth, ReportYear = reportYear },
+                TotalCostsFile = totalCostsFile
+            };
+        }
 
         void ReadDataFiles(List<FileDetails> files, ProjectName projectName)
         {
-            //Spending Data Table containing differences
-            //Sheet1 in TOtal spending for month file
-            //'Expenses for expns for the mnth' for the mnth in Office allocation
+            if (files.Count != 2)
+                throw new ArgumentOutOfRangeException("Expected two files passed in");
 
-            //Incountry IONs expenses for total expenses
-            //QB Office Allocation for TPI for office allocations by project
+            var processedFilesInfo = AssignSelectedFiles(files);
+            if (processedFilesInfo == null)
+                return;
 
-            if (ExcelDataValues == null) { ExcelDataValues = new List<DataValue>(); } else { ExcelDataValues.Clear(); }
-            var table1 = new GetFinanceDataFromExcel()
+            processedFilesInfo.LocationDetails.FacilityName = "5040HQ5";
+            if (ExcelDataValues == null) { ExcelDataValues = new List<MatchedDataValue>(); } else { ExcelDataValues.Clear(); }
+            var officeAllocationFileData = new GetFinanceDataFromExcel()
             {
-                fileName = files[0].FileName,
+                locationDetail = processedFilesInfo.LocationDetails,
+                fileName = processedFilesInfo.OfficeAllocationFile,
+                worksheetName =Constants.INCOUNTRY_ION_EXPENSES,
                 progressDisplayHelper = new WaitDialog()
                 {
                     WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
-                }
-                ,
+                },
                 SelectedProject = ProjectName.General
             }.Execute();
 
-            //var table2 = new GetFinanceDataFromExcel()
-            //{
-            //    fileName = files[1].FileName,
-            //    progressDisplayHelper = new WaitDialog()
-            //    {
-            //        WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
-            //    },
-            //    SelectedProject = ProjectName.General
-            //}.Execute();
-            var table2 = new { };
-            if (table1 == null || table2 == null)
+            var totalCostsData = new GetFinanceDataFromExcel()
+            {
+                locationDetail = processedFilesInfo.LocationDetails,
+                fileName = processedFilesInfo.TotalCostsFile,
+                worksheetName = string.Empty,
+                progressDisplayHelper = new WaitDialog()
+                {
+                    WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
+                },
+                SelectedProject = ProjectName.General
+            }.Execute();
+
+            if (officeAllocationFileData == null || totalCostsData == null)
             {
                 //we skip and alert the user of the error
                 return;
             }
+
+            var dict = new Dictionary<string, TwoDataValuePair>();
+            foreach(var totalCost in totalCostsData)
+            {
+                dict[totalCost.IndicatorId+ totalCost.AgeGroup] = new TwoDataValuePair()
+                {
+                    TotalCostDataValue = totalCost
+                };
+            }
+
+            foreach (var officeAlloc in officeAllocationFileData)
+            {
+                TwoDataValuePair twoValuePair;
+                var matching = dict.TryGetValue(officeAlloc.IndicatorId+ officeAlloc.AgeGroup, out twoValuePair);
+                if (twoValuePair == null)
+                {
+                    twoValuePair = new TwoDataValuePair();
+                    dict[officeAlloc.IndicatorId + officeAlloc.AgeGroup] = twoValuePair;
+                }
+                twoValuePair.OfficeAllocationDataValue = officeAlloc;
+            }
+
+            var table1 = (from matchedDvs in dict.Values
+                          //let x = matchedDvs.AsMatchedDataValue()
+                          //where x.OfficeAllocation != 0 && x.TotalCost != 0
+                          //select x
+                          select matchedDvs.AsMatchedDataValue()
+                          ).ToList();
 
             //we update the display
             gSelectedFiles.Visibility = Visibility.Collapsed;
@@ -175,6 +252,31 @@ namespace ZambiaDataManager.Forms
             gIntermediateData.Height = 500;
             //ShowGridDisplayPort(table1, table2);
             return;
+        }
+
+        private LocationDetail GetReportYearAndMonthFromFileNames(string fileName, int thisYear)
+        {
+            var fileNameParts = System.IO.Path.GetFileNameWithoutExtension(fileName).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            if (fileNameParts.Length < 2)
+                return null;
+
+            var yearStr = fileNameParts[fileNameParts.Length - 1];
+            int reportYear;
+            if (!int.TryParse(yearStr, out reportYear) || !Constants.acceptableYears.Contains(reportYear) || reportYear > thisYear)
+            {
+                MessageBox.Show("Error determining Report year or month. Please ensure the file ends with MMM YYYY");
+                return null;
+            }
+
+            var monthStr = fileNameParts[fileNameParts.Length - 2];
+            var reportMonth = Constants.GetStandardMonthName(monthStr);
+            if (string.IsNullOrWhiteSpace(reportMonth))
+            {
+                MessageBox.Show("Error determining Report year or month. Please ensure the file ends with MMM YYYY");
+                return null;
+            }
+            var toReturn = new LocationDetail() { ReportYear = reportYear, ReportMonth = reportMonth };
+            return toReturn;
         }
 
         private void clearSelected(object sender, RoutedEventArgs e)
@@ -199,7 +301,7 @@ namespace ZambiaDataManager.Forms
                 return;
             }
 
-            var valuesDataset = ExcelDataValues.ToDataset();
+            var valuesDataset = ExcelDataValues .ToDataset();
             if (valuesDataset.Tables.Count == 0)
             {
                 MessageBox.Show("Nothing to export");

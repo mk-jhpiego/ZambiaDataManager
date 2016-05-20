@@ -50,14 +50,13 @@
         	ItemsSource="{Binding ExcelDataValues, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"        
         	CanUserAddRows="True" CanUserSortColumns="True">
                 <DataGrid.Columns >
-                    <DataGridTextColumn x:Name="colFacilityName" Binding="{Binding FacilityName}" Header="Facility Name" Width="*"  />
                     <DataGridTextColumn x:Name="colReportYear" Binding="{Binding ReportYear}" Header="Report Year" Width="*"  />
                     <DataGridTextColumn x:Name="colReportMonth" Binding="{Binding ReportMonth}" Header="Report Month" Width="*"  />
                     <DataGridTextColumn x:Name="colProgramArea" Binding="{Binding ProgramArea}" Header="Program Area" Width="*"  />
-                    <DataGridTextColumn x:Name="colIndicatorId" Binding="{Binding IndicatorId}" Header="Indicator Id" Width="*"  />
-                    <DataGridTextColumn x:Name="colIndicatorValue" Binding="{Binding IndicatorValue}" Header="Indicator Value" Width="*"  />
-                    <DataGridTextColumn x:Name="colAgeGroup" Binding="{Binding AgeGroup}" Header="Age Group" Width="*"  />
-                    <DataGridTextColumn x:Name="colSex" Binding="{Binding Sex}" Header="Sex" Width="*"  />
+                    <DataGridTextColumn x:Name="colIndicatorId" Binding="{Binding IndicatorId}" Header="COA Code" Width="*"  />
+                    <DataGridTextColumn x:Name="colTotalCost" Binding="{Binding TotalCost}" Header="Total Cost" Width="*"  />
+                    <DataGridTextColumn x:Name="colOfficeAllocation" Binding="{Binding OfficeAllocation}" Header="Office Allocation" Width="*"  />
+                    <DataGridTextColumn x:Name="colAgeGroup" Binding="{Binding AgeGroup}" Header="Project IONs" Width="*"  />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

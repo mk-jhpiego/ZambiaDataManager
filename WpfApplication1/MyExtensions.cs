@@ -11,6 +11,39 @@ namespace ZambiaDataManager
 
     public static class MyExtensions
     {
+        public static DataSet ToDataset(this List<MatchedDataValue> dataValues)
+        {
+            //convert to dataset
+            var ds = new DataSet();
+            var table = new System.Data.DataTable() { TableName = "DataValue" };
+            table.Columns.Add("FacilityName", typeof(string));
+            table.Columns.Add("ReportYear", typeof(int));
+            table.Columns.Add("ReportMonth", typeof(string));
+
+            table.Columns.Add("ProgramArea", typeof(string));
+            table.Columns.Add("IndicatorId", typeof(string));
+            table.Columns.Add("AgeGroup", typeof(string));
+            table.Columns.Add("Sex", typeof(string));
+            table.Columns.Add("IndicatorValue", typeof(double));
+
+            ds.Tables.Add(table);
+
+            foreach (var datavalue in dataValues)
+            {
+                table.Rows.Add(
+                    datavalue.FacilityName,
+                    datavalue.ReportYear,
+                    datavalue.ReportMonth,
+                    datavalue.ProgramArea,
+                    datavalue.IndicatorId,
+                    datavalue.AgeGroup,
+                    datavalue.Sex,
+                    datavalue.IndicatorValue
+                    );
+            }
+            table.AcceptChanges();
+            return ds;
+        }
         public static DataSet ToDataset(this List<DataValue> dataValues)
         {
             //convert to dataset

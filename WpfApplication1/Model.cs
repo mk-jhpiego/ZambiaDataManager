@@ -77,6 +77,32 @@ namespace ZambiaDataManager
         //public string ReportYear { get; set; }
     }
 
+    public class TwoDataValuePair
+    {
+        public DataValue TotalCostDataValue = null, OfficeAllocationDataValue = null;
+        public MatchedDataValue AsMatchedDataValue()
+        {
+            var sourceObj = TotalCostDataValue ?? OfficeAllocationDataValue;
+            var t=new MatchedDataValue()
+            {
+                IndicatorId = sourceObj.IndicatorId,
+                AgeGroup = sourceObj.AgeGroup,
+
+                OfficeAllocation = OfficeAllocationDataValue == null ? 0: OfficeAllocationDataValue.IndicatorValue,
+                TotalCost = TotalCostDataValue == null ? 0 : TotalCostDataValue.IndicatorValue,
+            };
+            t.DirectCost = t.TotalCost - t.OfficeAllocation;
+            return t;
+        }
+    }
+
+    public class MatchedDataValue: DataValue
+    {
+        public double OfficeAllocation { get; set; }
+        public double TotalCost { get; set; }
+        public double DirectCost { get; set; }
+    }
+
     public class DataValue
     {
         public string FacilityName { get; set; }

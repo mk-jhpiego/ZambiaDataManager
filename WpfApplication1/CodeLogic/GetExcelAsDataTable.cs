@@ -14,6 +14,8 @@ namespace ZambiaDataManager.CodeLogic
 {
     public class GetFinanceDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
     {
+        internal string worksheetName;
+
         public GetFinanceDataFromExcel()
         {
 
@@ -34,6 +36,8 @@ namespace ZambiaDataManager.CodeLogic
             {
                 excelApp = new Microsoft.Office.Interop.Excel.Application() { Visible = false };
                 var res = ImportData(excelApp);
+                //add location details here
+
                 if (IsInError)
                     return null;
                 toReturn = res;
@@ -56,10 +60,6 @@ namespace ZambiaDataManager.CodeLogic
         {
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
-
-            //Expenses for expns for the mnth
-            //total_expenditure
-
             var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements();
 
             PerformProgressStep("Please wait, Opening Excel document");
@@ -76,73 +76,13 @@ namespace ZambiaDataManager.CodeLogic
                 worksheetNames.Add(worksheetName.Trim(), worksheetName);
             }
 
-            //we get the facility codes
-            //LocationDetail locationDetail = null;
-            var projectName = ProjectName.Finance;
-            switch (projectName)
-            {
-                case ProjectName.DOD:
-                    {
-                        Worksheet coverWorksheet = null;
-                        const string coverWorksheetName = "Cover1";
-                        try
-                        {
-                            coverWorksheet = (Worksheet)workbook.Sheets[coverWorksheetName];
-                        }
-                        catch
-                        {
-                            ShowMissingWorksheet(coverWorksheetName);
-                            return null;
-                        }
-
-                        locationDetail = GetReportLocationDetails(coverWorksheet, ShowErrorAndAbort);
-
-                        break;
-                    }
-                case ProjectName.IHP_VMMC:
-                    {
-                        //then its VMMC, we remove the other DOD program areas and just leave one
-                        if (!worksheetNames.ContainsKey(GetProgramAreaIndicators.IhpVmmcProgramAreaName))
-                        {
-                            throw new ArgumentNullException("Invalid file selected");
-                        }
-
-                        var vmmcProgramArea = _loadAllProgramDataElements.FirstOrDefault(t => t.ProgramArea == GetProgramAreaIndicators.dodVmmcProgramAreaName);
-                        vmmcProgramArea.ProgramArea = GetProgramAreaIndicators.IhpVmmcProgramAreaName;
-                        _loadAllProgramDataElements.Clear();
-                        _loadAllProgramDataElements.Add(vmmcProgramArea);
-                        locationDetail = GetIhpReportLocationDetails(workbook, ShowErrorAndAbort);
-                        break;
-                    }
-                case ProjectName.IHP_Capacity_Building_and_Training:
-                    {
-                        break;
-                    }
-                case ProjectName.None:
-                case ProjectName.General:
-                    {
-                        locationDetail = new LocationDetail();
-                        break;
-                    }
-                case ProjectName.Finance:
-                    {
-                        //
-                        //var name = excelApp.Name;
-                        locationDetail = new LocationDetail();
-                        break;
-                    }
-            }
-
-            if (locationDetail == null)
-                return null;
-
             var datavalues = new List<DataValue>();
 
             MarkStartOfMultipleSteps(_loadAllProgramDataElements.Count + 2);
             foreach (var dataElement in _loadAllProgramDataElements)
             {
                 var programAreaName = dataElement.ProgramArea;
-                var worksheetName = programAreaName;
+                //var worksheetName = programAreaName;
                 //if (isIhpVmmc && programAreaName != GetProgramAreaIndicators.dodVmmcProgramAreaName)
                 //    continue;
 
@@ -155,13 +95,19 @@ namespace ZambiaDataManager.CodeLogic
                 PerformProgressStep("Please wait, Processing worksheet: " + programAreaName);
                 ResetSubProgressIndicator(dataElement.Indicators.Count + 1);
 
+                //we get the first value if only one sheet
+                if (string.IsNullOrWhiteSpace(worksheetName)&& worksheetNames.Count ==1)
+                {
+                    worksheetName = worksheetNames.Values.FirstOrDefault();
+                }
+
                 var xlrange = ((Worksheet)workbook.Sheets[worksheetNames[worksheetName]]).UsedRange;
                 //we scan the first 3 rows for the row with the age groups specified for this program area
                 var rowCount = xlrange.Rows.Count;
                 var colCount = xlrange.Columns.Count;
 
                 //we have the column indexes of the first age category options, and other occurrences of the same
-                var firstAgeGroupCell = GetFirstAgeGroupCell(dataElement, xlrange, ProjectName.IHP_VMMC == projectName);
+                var firstAgeGroupCell = GetFirstAgeGroupCell(dataElement, xlrange, false);
                 var ageGroupCells = GetMatchedCellsInRow(excelRange: xlrange,
                     searchTerms: dataElement.AgeDisaggregations,
                     endColumnIndex: colCount, startColumnIndex: firstAgeGroupCell.Column,
@@ -196,6 +142,9 @@ namespace ZambiaDataManager.CodeLogic
                         try
                         {
                             asDouble = value.ToDouble();
+                            if (asDouble == 0)
+                                continue;
+
                             if (asDouble == -2146826273 || asDouble == -2146826281)
                             {
                                 ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
@@ -226,21 +175,6 @@ namespace ZambiaDataManager.CodeLogic
             }
 
             PerformProgressStep("Please wait, finalizing");
-
-            //todo: uncomment the given code below
-            //var x =
-                //from System.Data.DataRow row in datavalues.Rows
-                //    select row;
-            datavalues.ForEach(t =>
-            {
-                t.ReportYear = locationDetail.ReportYear;
-                t.ReportMonth = locationDetail.ReportMonth;
-                t.FacilityName = locationDetail.FacilityName;
-            });
-
-            PerformProgressStep("Please wait, Preparing to display results");
-
-            //convert to dataset
             return datavalues;
         }
     }

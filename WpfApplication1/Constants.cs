@@ -9,10 +9,15 @@ namespace ZambiaDataManager
     public class Constants
     {
         public const double NOVALUE = -999999;
+        public const string OFFICE_ALLOCATION = "office allocation";
+        public const string INCOUNTRY_ION_EXPENSES = "Incountry IONs expenses";
 
         public static List<string> monthsLongName = new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
         public static List<string> monthsShortName = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
         public static List<string> ihpMonthNames = new List<string>() { "Jan_1", "Feb_2", "Mar_3", "Apr_4", "May_5", "Jun_6", "Jul_7", "Aug_8", "Sep_9", "Oct_10", "Nov_11", "Dec_12" };
+
+        public static List<int> acceptableYears = new List<int>() { 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 };
+
 
         public static string GetStandardMonthName(string userMonthName)
         {
