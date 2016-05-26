@@ -1,0 +1,22 @@
+﻿[
+  {
+    "ReportName": "DOD Summary",
+    "procname": "proc_getdodsummary",
+    "parameters": {
+      "RequiresYear": true,
+      "RequiresMonth": true,
+      "RequiresFacility": false
+
+    }
+  },
+  {
+    "ReportName": "PEPFAR Report",
+    "procname": "proc_getPepfar",
+    "parameters": {
+      "RequiresYear": true,
+      "RequiresMonth": true,
+      "RequiresFacility": false
+    }
+  }
+
+]
