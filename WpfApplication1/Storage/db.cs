@@ -28,13 +28,31 @@ namespace ZambiaDataManager.Storage
 
         public static ConnectionBuilder GetDefaultConnection(ProjectName projectName, bool getAlternate = false)
         {
+            var defaultServerName = "ZM-VLUS56";
+            var defaultSqlExpress = string.Empty;
+            if (getAlternate)
+            {
+                defaultServerName = "D-5932S32";
+                defaultSqlExpress = "SQL2014DEV";
+            }
             //a dirty catch to avoid messing with the server. Feel free to remove
-            if (Environment.MachineName == "D-5932S32")
+            if (Environment.MachineName == "D-5932S32" || Environment.MachineName == "SUPER-LAP")
             {                
                 var res = MessageBox.Show("Use your Local Computer rather than the server MK ???????????", "WAIT!!!!!!!!!!!", MessageBoxButton.YesNoCancel);
                 if (res == MessageBoxResult.Yes)
                 {
-                    getAlternate = true;
+                   // getAlternate = true;
+                    //SUPER-LAP\SQL2014
+                    if (Environment.MachineName == "D-5932S32")
+                    {
+                        defaultServerName = "D-5932S32";
+                        defaultSqlExpress = "SQL2014DEV";
+                    }
+                    else
+                    {
+                        defaultServerName = "SUPER-LAP";
+                        defaultSqlExpress = "SQL2014";
+                    }
                 }
                 else if (res == MessageBoxResult.Cancel)
                 {
@@ -44,14 +62,6 @@ namespace ZambiaDataManager.Storage
                 {
                     //leave as is
                 }
-            }
-
-            var defaultServerName = "ZM-VLUS56";
-            var defaultSqlExpress = string.Empty;
-            if (getAlternate)
-            {
-                defaultServerName = "D-5932S32";
-                defaultSqlExpress = "SQL2014DEV";
             }
 
             ConnectionBuilder connBuilder = null;
