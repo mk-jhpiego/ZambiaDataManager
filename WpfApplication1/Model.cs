@@ -47,6 +47,12 @@ namespace ZambiaDataManager
         public string FileName { get; set; }
     }
 
+    public class FinanceDetails:FileDetails
+    {
+        public string ReportMonth { get; set; }
+        public int ReportYear { get; set; }
+    }
+
 
     public interface IQueryHelper<T> where T : class
     {
@@ -80,7 +86,7 @@ namespace ZambiaDataManager
     public class TwoDataValuePair
     {
         public DataValue TotalCostDataValue = null, OfficeAllocationDataValue = null;
-        public MatchedDataValue AsMatchedDataValue()
+        public MatchedDataValue AsMatchedDataValue(LocationDetail location)
         {
             var sourceObj = TotalCostDataValue ?? OfficeAllocationDataValue;
             var t=new MatchedDataValue()
@@ -90,8 +96,12 @@ namespace ZambiaDataManager
 
                 OfficeAllocation = OfficeAllocationDataValue == null ? 0: OfficeAllocationDataValue.IndicatorValue,
                 TotalCost = TotalCostDataValue == null ? 0 : TotalCostDataValue.IndicatorValue,
+                ReportMonth = location.ReportMonth,
+                ReportYear = location.ReportYear,
+                FacilityName = location.FacilityName
             };
             t.DirectCost = t.TotalCost - t.OfficeAllocation;
+            
             return t;
         }
     }
@@ -101,6 +111,7 @@ namespace ZambiaDataManager
         public double OfficeAllocation { get; set; }
         public double TotalCost { get; set; }
         public double DirectCost { get; set; }
+        public string ProjectMatchKey { get; internal set; }
     }
 
     public class DataValue

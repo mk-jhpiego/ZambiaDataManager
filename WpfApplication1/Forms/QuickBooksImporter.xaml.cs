@@ -29,14 +29,17 @@ namespace ZambiaDataManager.Forms
         public QuickBooksImporter()
         {
             InitializeComponent();
-            SelectedFiles = new List<FileDetails>();
+            SelectedFiles = new List<FinanceDetails>();
         }
 
         ProjectName CurrentProjectName = ProjectName.General;
-        public List<FileDetails> SelectedFiles { get; private set; }
+        public List<FinanceDetails> SelectedFiles { get; private set; }
+        //public List<MatchedDataValue> ProcessedDetails { get; private set; }
 
         private void selectFile(object sender, RoutedEventArgs e)
         {
+            SelectedFiles.Clear();
+
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
                 CheckFileExists = true,
@@ -55,22 +58,31 @@ namespace ZambiaDataManager.Forms
                         return;
                 }
 
+                var reportYearAndMonth = validateFileName(dialog.FileNames.ToList());
+                if (reportYearAndMonth == null)
+                {
+                    MessageBox.Show("Couldn't determine the Year and Month for the two files or they have inconsistent dates");
+                    return;
+                }
+
+                //we process for report year and month
                 SelectedFiles.AddRange(
                     (from file in dialog.FileNames
-                     select new FileDetails() { FileName = file }).ToList()
+                     select new FinanceDetails()
+                     {
+                         FileName = file,
+                         ReportYear = reportYearAndMonth.ReportYear,
+                         ReportMonth = reportYearAndMonth.ReportMonth
+                     }).ToList()
                     );
-            }
-
-            //we prompt for the date
-            foreach(var fileDetail in SelectedFiles)
-            {
-                var filename = fileDetail.FileName.Split(' ');
-
             }
 
             //we refresh the grid
             gIntermediateData.Visibility = Visibility.Collapsed;
-
+            if (gSelectedFiles.Height == 0)
+            {
+                gSelectedFiles.Height = defaultGridSize;
+            }
             gSelectedFiles.ItemsSource = "";
             gSelectedFiles.ItemsSource = SelectedFiles;
             gSelectedFiles.Visibility = Visibility.Visible;
@@ -87,6 +99,10 @@ namespace ZambiaDataManager.Forms
             //refreshDataGrid(false);
             gIntermediateData.ItemsSource = "";
             gIntermediateData.ItemsSource = table1;
+            if (gIntermediateData.Height == 0)
+            {
+                gIntermediateData.Height = defaultGridSize;
+            }
         }
 
         private void ResetAllGrids()
@@ -95,6 +111,10 @@ namespace ZambiaDataManager.Forms
             gIntermediateData.Height = 0;
             gSelectedFiles.ItemsSource = "";
             gIntermediateData.ItemsSource = "";
+            if (gIntermediateData.Height == 0)
+            {
+                gIntermediateData.Height = defaultGridSize;
+            }
             SelectedFiles.Clear();
             ExcelDataValues.Clear();
         }
@@ -108,6 +128,7 @@ namespace ZambiaDataManager.Forms
             //fire up template reader and let it do the rest
             var selectedFiles = SelectedFiles;
             ReadDataFiles(SelectedFiles, CurrentProjectName);
+            SelectedFiles.Clear();
         }
 
         CodeRunner<List<DataValue>> _runner;
@@ -121,15 +142,11 @@ namespace ZambiaDataManager.Forms
             public LocationDetail LocationDetails;
         }
 
-        public FilesSelectedInfo AssignSelectedFiles(List<FileDetails> files)
+        public FilesSelectedInfo AssignSelectedFiles(List<FinanceDetails> files)
         {
             var thisYear = DateTime.Now.Year;
-
             var officeAllocationFile = string.Empty;
             var totalCostsFile = string.Empty;
-            var reportYear = -1;
-            var reportMonth = string.Empty;
-
             for (var i = 0; i < 2; i++)
             {
                 var filename = files[i].FileName;
@@ -154,31 +171,53 @@ namespace ZambiaDataManager.Forms
                 {
                     totalCostsFile = filename;
                 }
-                var reportYearAndMonth = GetReportYearAndMonthFromFileNames(filename, thisYear);
+            }
+
+            var singlefile = files.FirstOrDefault() as FinanceDetails;
+            return new FilesSelectedInfo()
+            {
+                OfficeAllocationFile = officeAllocationFile,
+                LocationDetails = new LocationDetail() { ReportMonth = singlefile.ReportMonth, ReportYear = singlefile.ReportYear },
+                TotalCostsFile = totalCostsFile
+            };
+        }
+        LocationDetail validateFileName(List<string> fileNames)
+        {
+            if (fileNames.Count != 2)
+            {
+                return null;
+            }
+
+            LocationDetail reportYearAndMonth = null;
+            int i = 0, reportYear = 0; var reportMonth = string.Empty;
+            foreach (var filename in fileNames)
+            {
+                reportYearAndMonth = GetReportYearAndMonthFromFileNames(filename, DateTime.Now.Year);
                 if (reportYearAndMonth == null)
                 {
                     return null;
                 }
-                if (i > 0 && reportYearAndMonth.ReportYear != reportYear && reportYearAndMonth.ReportMonth != reportMonth)
+                if (i == 0)
                 {
-                    MessageBox.Show("The two files have inconsistent dates");
+                    reportYear = reportYearAndMonth.ReportYear;
+                    reportMonth = reportYearAndMonth.ReportMonth;
+                }
+                else if (reportYearAndMonth.ReportYear != reportYear && reportYearAndMonth.ReportMonth != reportMonth)
+                {
                     return null;
                 }
-                reportYear = reportYearAndMonth.ReportYear;
-                reportMonth = reportYearAndMonth.ReportMonth;
+
+                i++;
             }
-            return new FilesSelectedInfo()
-            {
-                OfficeAllocationFile = officeAllocationFile,
-                LocationDetails = new LocationDetail() { ReportMonth = reportMonth, ReportYear = reportYear },
-                TotalCostsFile = totalCostsFile
-            };
+            return reportYearAndMonth;
         }
 
-        void ReadDataFiles(List<FileDetails> files, ProjectName projectName)
+        void ReadDataFiles(List<FinanceDetails> files, ProjectName projectName)
         {
             if (files.Count != 2)
                 throw new ArgumentOutOfRangeException("Expected two files passed in");
+            var singlefile = files.FirstOrDefault();
+            //var locationDetail = new LocationDetail() { ReportYear = singlefile.ReportYear, ReportMonth = singlefile.ReportMonth };
 
             var processedFilesInfo = AssignSelectedFiles(files);
             if (processedFilesInfo == null)
@@ -190,7 +229,7 @@ namespace ZambiaDataManager.Forms
             {
                 locationDetail = processedFilesInfo.LocationDetails,
                 fileName = processedFilesInfo.OfficeAllocationFile,
-                worksheetName =Constants.INCOUNTRY_ION_EXPENSES,
+                worksheetName = Constants.INCOUNTRY_ION_EXPENSES,
                 progressDisplayHelper = new WaitDialog()
                 {
                     WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
@@ -217,9 +256,9 @@ namespace ZambiaDataManager.Forms
             }
 
             var dict = new Dictionary<string, TwoDataValuePair>();
-            foreach(var totalCost in totalCostsData)
+            foreach (var totalCost in totalCostsData)
             {
-                dict[totalCost.IndicatorId+ totalCost.AgeGroup] = new TwoDataValuePair()
+                dict[totalCost.IndicatorId + totalCost.AgeGroup] = new TwoDataValuePair()
                 {
                     TotalCostDataValue = totalCost
                 };
@@ -228,7 +267,7 @@ namespace ZambiaDataManager.Forms
             foreach (var officeAlloc in officeAllocationFileData)
             {
                 TwoDataValuePair twoValuePair;
-                var matching = dict.TryGetValue(officeAlloc.IndicatorId+ officeAlloc.AgeGroup, out twoValuePair);
+                var matching = dict.TryGetValue(officeAlloc.IndicatorId + officeAlloc.AgeGroup, out twoValuePair);
                 if (twoValuePair == null)
                 {
                     twoValuePair = new TwoDataValuePair();
@@ -237,18 +276,24 @@ namespace ZambiaDataManager.Forms
                 twoValuePair.OfficeAllocationDataValue = officeAlloc;
             }
 
-            var table1 = (from matchedDvs in dict.Values
-                          //let x = matchedDvs.AsMatchedDataValue()
-                          //where x.OfficeAllocation != 0 && x.TotalCost != 0
-                          //select x
-                          select matchedDvs.AsMatchedDataValue()
-                          ).ToList();
 
+            var table1 = (from matchedDvs in dict.Values
+                              //let x = matchedDvs.AsMatchedDataValue()
+                              //where x.OfficeAllocation != 0 && x.TotalCost != 0
+                              //select x
+                              //matchedDvs.
+                          select matchedDvs.AsMatchedDataValue(processedFilesInfo.LocationDetails)
+                          ).ToList();
+            table1.ForEach(
+                t => t.ProjectMatchKey = t.AgeGroup.ToLowerInvariant().Replace(" ", "").Replace("(", "").Replace(")", "")
+            );
+            ExcelDataValues = table1;
             //we update the display
+            //table1.ForEach(t=>t.ReportYear = )
             gSelectedFiles.Visibility = Visibility.Collapsed;
             gIntermediateData.Visibility = Visibility.Visible;
             gIntermediateData.ItemsSource = "";
-            gIntermediateData.ItemsSource = table1;
+            gIntermediateData.ItemsSource = ExcelDataValues;
             gIntermediateData.Height = 500;
             //ShowGridDisplayPort(table1, table2);
             return;
@@ -329,7 +374,7 @@ namespace ZambiaDataManager.Forms
                 dataImporter.Execute();
 
                 //we start the merge
-                var dataMerge = new DataMergeCommand()
+                var dataMerge = new ProjectFinanceMergeCommand()
                 {
                     TempTableName = tempTableName,
                     DestinationTable = "FacilityData",
@@ -348,6 +393,40 @@ namespace ZambiaDataManager.Forms
                 tHelpfulTip.Content = "Select Files to Import";
                 ResetAllGrids();
             }
+        }
+
+        private void Context_CopyAll(object sender, RoutedEventArgs e)
+        {
+            //Get the clicked MenuItem
+            var menuItem = (MenuItem)sender;
+            var copyOptions = Convert.ToString(menuItem.Tag);
+            if (string.IsNullOrWhiteSpace(copyOptions))
+                return;
+            var copySelected = false;
+            var requireHeader = false;
+            var split = copyOptions.Split(',');
+            if (split.Contains("CopySelected"))
+            {
+                copySelected = true;
+            }
+            if (split.Contains("HeaderYes"))
+            {
+                requireHeader = true;
+            }
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            Clipboard.SetData(DataFormats.CommaSeparatedValue, item.SelectedItems);
+
+            ////Get the underlying item, that you cast to your object that is bound
+            ////to the DataGrid (and has subject and state as property)
+            //var toDeleteFromBindedList = (YourObject)item.SelectedCells[0].Item;
+
+            ////Remove the toDeleteFromBindedList object from your ObservableCollection
+            //yourObservableCollection.Remove(toDeleteFromBindedList);
         }
     }
 }

@@ -82,6 +82,11 @@ namespace ZambiaDataManager.Storage
                         connBuilder = new ConnectionBuilder() { DatabaseName = "JhpiegoDb_IhpTraining", InstanceName = defaultSqlExpress, ServerName = defaultServerName };
                         break;
                     }
+                case ProjectName.General:
+                    {
+                        connBuilder = new ConnectionBuilder() { DatabaseName = "JhpiegoDb_General", InstanceName = defaultSqlExpress, ServerName = defaultServerName };
+                        break;
+                    }
             }
             return connBuilder;
         }
