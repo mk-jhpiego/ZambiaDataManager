@@ -42,7 +42,7 @@
             <Button x:Name="bAddVmmcMonthly" Content="Add Vmmc Monthly Data" Height="40" Click="addVmmcMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddVmmcMEDaily" Content="Add Vmmc Campaign Daily Data" Height="40" Click="addVmmcCampaignDailyData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bReviewUploadedData" Content="Review Uploaded Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
-            <Button x:Name="bAddDodData" Content="Add DOD Monthly Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddDodData" Content="Add DOD Monthly Data" Height="40" Click="addDodMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
         <StackPanel Grid.Column="2" Margin="0,3.527,0,10">
             <TextBlock x:Name="tLoggedInUser" Height="61.473" TextWrapping="Wrap" Margin="0,0,10,0" RenderTransformOrigin="0.494,0.636" Foreground="#FFF9F8F8" FlowDirection="RightToLeft"><Run Text="Not "/><Run Text="Logged In"/></TextBlock>

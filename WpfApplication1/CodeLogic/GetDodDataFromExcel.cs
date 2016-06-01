@@ -1,15 +1,13 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Office.Interop.Excel;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ZambiaDataManager.CodeLogic
 {
-    public class GetFinanceDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
+    public class GetDodDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
     {
         internal string worksheetName;
 
@@ -47,7 +45,7 @@ namespace ZambiaDataManager.CodeLogic
         {
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
-            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements();
+            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetAllProgramDataElement();
 
             PerformProgressStep("Please wait, Opening Excel document");
 
@@ -166,5 +164,6 @@ namespace ZambiaDataManager.CodeLogic
             PerformProgressStep("Please wait, finalizing");
             return datavalues;
         }
+
     }
 }

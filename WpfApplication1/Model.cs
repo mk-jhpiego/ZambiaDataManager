@@ -175,6 +175,7 @@ namespace ZambiaDataManager
 
         public string IndicatorId { get; set; }
         public string Indicator { get; set; }
+        public List<string> SubAgeDisaggregations { get; set; }
     }
 
     public class ProgramAreaIndicators

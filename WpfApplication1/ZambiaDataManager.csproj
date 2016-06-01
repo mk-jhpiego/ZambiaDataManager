@@ -78,6 +78,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CodeLogic\ExcelWorksheetReaderBase.cs" />
+    <Compile Include="CodeLogic\GetDodDataFromExcel.cs" />
     <Compile Include="CodeLogic\GetExcelAsDataTable.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Forms\pageReviewData.xaml.cs">
@@ -172,6 +173,9 @@
     </None>
     <None Include="staticdata\IndicatorDefinitions.csv" />
     <None Include="staticdata\IndicatorDefinitions.xlsx" />
+    <None Include="staticdata\DodProgramAreas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="staticdata\ProgramAreaDefinitions.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

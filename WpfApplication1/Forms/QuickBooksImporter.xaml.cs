@@ -32,7 +32,13 @@ namespace ZambiaDataManager.Forms
             SelectedFiles = new List<FinanceDetails>();
         }
 
-        ProjectName CurrentProjectName = ProjectName.General;
+        public ProjectName CurrentProjectName
+        {
+            get;
+            internal set;
+        }
+
+        //ProjectName CurrentProjectName = ProjectName.General;
         public List<FinanceDetails> SelectedFiles { get; private set; }
         //public List<MatchedDataValue> ProcessedDetails { get; private set; }
 
@@ -127,8 +133,11 @@ namespace ZambiaDataManager.Forms
 
             //fire up template reader and let it do the rest
             var selectedFiles = SelectedFiles;
-            ReadDataFiles(SelectedFiles, CurrentProjectName);
-            SelectedFiles.Clear();
+            var res = ReadDataFiles(SelectedFiles, CurrentProjectName);
+            if (res)
+            {
+                SelectedFiles.Clear();
+            }
         }
 
         CodeRunner<List<DataValue>> _runner;
@@ -212,7 +221,7 @@ namespace ZambiaDataManager.Forms
             return reportYearAndMonth;
         }
 
-        void ReadDataFiles(List<FinanceDetails> files, ProjectName projectName)
+        bool ReadDataFiles(List<FinanceDetails> files, ProjectName projectName)
         {
             if (files.Count != 2)
                 throw new ArgumentOutOfRangeException("Expected two files passed in");
@@ -221,7 +230,7 @@ namespace ZambiaDataManager.Forms
 
             var processedFilesInfo = AssignSelectedFiles(files);
             if (processedFilesInfo == null)
-                return;
+                return false;
 
             processedFilesInfo.LocationDetails.FacilityName = "5040HQ5";
             if (ExcelDataValues == null) { ExcelDataValues = new List<MatchedDataValue>(); } else { ExcelDataValues.Clear(); }
@@ -237,11 +246,17 @@ namespace ZambiaDataManager.Forms
                 SelectedProject = ProjectName.General
             }.Execute();
 
+            if (officeAllocationFileData == null)
+            {
+                //we skip and alert the user of the error
+                return false;
+            }
+
             var totalCostsData = new GetFinanceDataFromExcel()
             {
                 locationDetail = processedFilesInfo.LocationDetails,
                 fileName = processedFilesInfo.TotalCostsFile,
-                worksheetName = string.Empty,
+                worksheetName = Constants.TOTAL_EXPENDITURE,
                 progressDisplayHelper = new WaitDialog()
                 {
                     WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
@@ -252,7 +267,7 @@ namespace ZambiaDataManager.Forms
             if (officeAllocationFileData == null || totalCostsData == null)
             {
                 //we skip and alert the user of the error
-                return;
+                return false;
             }
 
             var dict = new Dictionary<string, TwoDataValuePair>();
@@ -296,7 +311,7 @@ namespace ZambiaDataManager.Forms
             gIntermediateData.ItemsSource = ExcelDataValues;
             gIntermediateData.Height = 500;
             //ShowGridDisplayPort(table1, table2);
-            return;
+            return true;
         }
 
         private LocationDetail GetReportYearAndMonthFromFileNames(string fileName, int thisYear)
@@ -393,40 +408,6 @@ namespace ZambiaDataManager.Forms
                 tHelpfulTip.Content = "Select Files to Import";
                 ResetAllGrids();
             }
-        }
-
-        private void Context_CopyAll(object sender, RoutedEventArgs e)
-        {
-            //Get the clicked MenuItem
-            var menuItem = (MenuItem)sender;
-            var copyOptions = Convert.ToString(menuItem.Tag);
-            if (string.IsNullOrWhiteSpace(copyOptions))
-                return;
-            var copySelected = false;
-            var requireHeader = false;
-            var split = copyOptions.Split(',');
-            if (split.Contains("CopySelected"))
-            {
-                copySelected = true;
-            }
-            if (split.Contains("HeaderYes"))
-            {
-                requireHeader = true;
-            }
-
-            //Get the ContextMenu to which the menuItem belongs
-            var contextMenu = (ContextMenu)menuItem.Parent;
-
-            //Find the placementTarget
-            var item = (DataGrid)contextMenu.PlacementTarget;
-            Clipboard.SetData(DataFormats.CommaSeparatedValue, item.SelectedItems);
-
-            ////Get the underlying item, that you cast to your object that is bound
-            ////to the DataGrid (and has subject and state as property)
-            //var toDeleteFromBindedList = (YourObject)item.SelectedCells[0].Item;
-
-            ////Remove the toDeleteFromBindedList object from your ObservableCollection
-            //yourObservableCollection.Remove(toDeleteFromBindedList);
         }
     }
 }

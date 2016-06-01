@@ -13,18 +13,13 @@ namespace ZambiaDataManager.CodeLogic
     {
         public List<DataValue> Execute()
         {
-            return DoDataImport(SelectedProject);
-        }
-
-        public List<DataValue> DoDataImport(ProjectName projectName)
-        {
             _showSimilarMessages = true;
             List<DataValue> toReturn = null;
             Microsoft.Office.Interop.Excel.Application excelApp = null;
             try
             {
                 excelApp = new Microsoft.Office.Interop.Excel.Application() { Visible = false };
-                var res = ImportData(excelApp, projectName);
+                var res = ImportData(excelApp, SelectedProject);
                 if (IsInError)
                     return null;
                 toReturn = res;
@@ -249,7 +244,6 @@ namespace ZambiaDataManager.CodeLogic
 
             //convert to dataset
             return datavalues;
-        }
-        
+        }       
     }
 }

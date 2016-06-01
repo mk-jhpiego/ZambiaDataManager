@@ -176,12 +176,22 @@ namespace ZambiaDataManager.CodeLogic
                     .ToList();
         }
 
+        public List<ProgramAreaDefinition> GetDodDataElements()
+        {
+            return GetProgramAreaDefinitions("staticdata//DodProgramAreas.json");
+        }
+
         public List<ProgramAreaDefinition> GetFinanceDataElements()
         {
+            return GetProgramAreaDefinitions("staticdata//finance.json");
+        }
+
+        private List<ProgramAreaDefinition> GetProgramAreaDefinitions(string fileName)
+        {
             //we get the avilable indicators by program area
-            var progAreas = File.ReadAllText("staticdata//finance.json");
-            var res = Newtonsoft.Json.JsonConvert.DeserializeObject<ProgramAreaDefinition>(progAreas);
-            return new List<ProgramAreaDefinition>() { res};
+            var progAreas = File.ReadAllText(fileName);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProgramAreaDefinition>>(progAreas);
+            //return new List<ProgramAreaDefinition>() { res };
         }
     }
 
