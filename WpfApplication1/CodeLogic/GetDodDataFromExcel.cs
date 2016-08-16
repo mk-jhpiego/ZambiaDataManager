@@ -45,7 +45,8 @@ namespace ZambiaDataManager.CodeLogic
         {
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
-            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetAllProgramDataElement();
+            var _loadAllProgramDataElements = new 
+                GetProgramAreaIndicators().GetAllProgramDataElements();
 
             PerformProgressStep("Please wait, Opening Excel document");
 
