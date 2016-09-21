@@ -123,40 +123,19 @@ namespace ZambiaDataManager.CodeLogic
 
                 foreach (var rowObject in indicatorCells)
                 {
-                    foreach (var columnObject in ageGroupCells)
+                    var matchingIndicator = dataElement.Indicators.Where(t => t.Indicator == rowObject.Key).FirstOrDefault();
+                    if (matchingIndicator == null)
                     {
+                        throw new ArgumentOutOfRangeException("Could not match indicator " + rowObject.Key);
+                    }
 
-                        var value = getCellValue(xlrange, rowObject.Value.Row, columnObject.Value.Column);
-                        var asDouble = 0d;
-                        try
+                    foreach (var indicatorAgeGroupCells in ageGroupCells)
+                    {
+                        foreach (var indicatorAgeGroupCell in indicatorAgeGroupCells.Value)
                         {
-                            asDouble = value.ToDouble();
-                            if (asDouble == 0)
+                            var dataValue = getCellValue(dataElement, matchingIndicator.IndicatorId, xlrange, rowObject, indicatorAgeGroupCells, indicatorAgeGroupCell);
+                            if (dataValue == null)
                                 continue;
-
-                            if (asDouble == -2146826273 || asDouble == -2146826281)
-                            {
-                                ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
-                                //return null;
-                            }
-                        }
-                        catch
-                        {
-                            ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
-                            //return null;
-                        }
-
-                        if (asDouble != Constants.NOVALUE)
-                        {
-                            var dataValue = new DataValue()
-                            {
-                                IndicatorValue = asDouble,
-                                IndicatorId = rowObject.Key,
-                                ProgramArea = dataElement.ProgramArea,
-                                AgeGroup = columnObject.Key,
-                                Sex = "Male",
-
-                            };
                             datavalues.Add(dataValue);
                         }
                     }

@@ -9,6 +9,7 @@ namespace ZambiaDataManager
     public class Constants
     {
         public const double NOVALUE = -999999;
+        public const string NULLVALUE = "NULLCELL";
         public const string OFFICE_ALLOCATION = "office allocation";
         public const string INCOUNTRY_ION_EXPENSES = "Incountry IONs expenses";
         public const string TOTAL_EXPENDITURE = "total_expenditure";

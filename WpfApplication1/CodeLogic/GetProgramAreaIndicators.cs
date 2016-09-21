@@ -44,10 +44,10 @@ namespace ZambiaDataManager.CodeLogic
         public const string dodVmmcProgramAreaName = "Prevention-MC";
         public const string IhpVmmcProgramAreaName = "MC";
 
-        List<string> maleFemaleIndicators = new List<string>() { "STI", "TB", "ART", "Family Planning", "Prevention - PWP", "Clinical Care" };
+        List<string> maleFemaleIndicators = new List<string>() { "STI", "HTC", "TB", "ART", "Family Planning", "Prevention - PWP", "Clinical Care" };
 
         Dictionary<string, string> singleGenderIndicators = new Dictionary<string, string>(){
-            {"PMTCT","Female"  },            { dodVmmcProgramAreaName ,"Male"}            };
+            {"PMTCT","Female"  },  {"CECAP","Female"  },          { dodVmmcProgramAreaName ,"Male"}            };
 
         private string UpdateIndicatorDefinitionsByProgramArea(Microsoft.Office.Interop.Excel.Application excelApp)
         {
@@ -100,10 +100,11 @@ namespace ZambiaDataManager.CodeLogic
                     }
                 }
 
-                if (programAreaName == "Family Planning")
-                {
-                    programAreaDefinition.DefaultHandler = "Custom";
-                }
+                //if (programAreaName == "Family Planning")
+                //{
+                //    programAreaDefinition.DefaultHandler = "Custom";
+                //}
+
                 //Prevention - PWP    programAreaName=="Prevention - PWP"
                 //we get the indicator codes and names. These are in the first and second columns starting from the second row
                 for (var i = 2; i <= rows; i++)

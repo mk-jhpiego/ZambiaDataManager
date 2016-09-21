@@ -10,6 +10,7 @@ namespace ZambiaDataManager.CodeLogic
     public class GetDodDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
     {
         internal string worksheetName;
+        const string CoverSheetName = "Cover1";
 
         public List<DataValue> Execute()
         {
@@ -21,11 +22,25 @@ namespace ZambiaDataManager.CodeLogic
             {
                 excelApp = new Microsoft.Office.Interop.Excel.Application() { Visible = false };
                 var res = ImportData(excelApp);
-                //add location details here
+                if (res != null)
+                {
+                    //add location details here
+                    PerformProgressStep("Please wait, finalizing");
 
-                if (IsInError)
-                    return null;
-                toReturn = res;
+                    res.ForEach(t =>
+                    {
+                        t.ReportYear = locationDetail.ReportYear;
+                        t.ReportMonth = locationDetail.ReportMonth;
+                        t.FacilityName = locationDetail.FacilityName;
+                    });
+
+                    PerformProgressStep("Please wait, Preparing to display results");
+
+                    if (IsInError)
+                        return null;
+
+                    toReturn = res;
+                }
             }
             catch (Exception ex)
             {
@@ -45,8 +60,10 @@ namespace ZambiaDataManager.CodeLogic
         {
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
-            var _loadAllProgramDataElements = new 
-                GetProgramAreaIndicators().GetAllProgramDataElements();
+            var _loadAllProgramDataElements = new
+                GetProgramAreaIndicators()
+                .GetDodDataElements();
+                //.GetAllProgramDataElements();
 
             PerformProgressStep("Please wait, Opening Excel document");
 
@@ -62,23 +79,44 @@ namespace ZambiaDataManager.CodeLogic
                 worksheetNames.Add(worksheetName.Trim().ToLowerInvariant(), worksheetName);
             }
 
-            if (!worksheetNames.ContainsKey(worksheetName.ToLowerInvariant()))
+            if (!worksheetNames.ContainsKey(CoverSheetName.ToLowerInvariant()))
             {
                 MessageBox.Show(
-                    string.Format(
-                    "Please ensure that the file \r'{0}'\r contains a sheet called '{1}'", fileName, worksheetName)
-                    , "Missing worksheet", MessageBoxButton.OK);
+    string.Format(
+    "Please ensure that the file \r'{0}'\r contains a Cover sheet called '{1}'", fileName, CoverSheetName)
+    , "Missing worksheet", MessageBoxButton.OK);
                 return null;
             }
 
-            var datavalues = new List<DataValue>();
+            var coverWorksheet = (Worksheet)workbook.Sheets[worksheetNames[CoverSheetName.ToLowerInvariant()]];
+            locationDetail = GetReportLocationDetails(coverWorksheet, ShowErrorAndAbort);
 
+            var datavalues = new List<DataValue>();
             MarkStartOfMultipleSteps(_loadAllProgramDataElements.Count + 2);
             foreach (var dataElement in _loadAllProgramDataElements)
             {
                 var programAreaName = dataElement.ProgramArea;
                 PerformProgressStep("Please wait, Processing worksheet: " + programAreaName);
                 ResetSubProgressIndicator(dataElement.Indicators.Count + 1);
+
+                worksheetName = programAreaName.ToLowerInvariant();
+                if (!worksheetNames.ContainsKey(worksheetName))
+                {
+                    MessageBox.Show(
+                        string.Format(
+                        "Please ensure that the file \r'{0}'\r contains a sheet called '{1}'", fileName, programAreaName)
+                        , "Missing worksheet", MessageBoxButton.OK);
+
+                    var choice = MessageBox.Show(string.Format("Do you still want to proceed and import the data without {0} data", programAreaName), "Proceed", MessageBoxButton.YesNo);
+                    if (choice != MessageBoxResult.Yes)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
                 var xlrange = ((Worksheet)workbook.Sheets[worksheetNames[worksheetName.ToLowerInvariant()]]).UsedRange;
                 //we scan the first 3 rows for the row with the age groups specified for this program area
@@ -122,49 +160,26 @@ namespace ZambiaDataManager.CodeLogic
 
                 foreach (var rowObject in indicatorCells)
                 {
-                    foreach (var columnObject in ageGroupCells)
+                    //we convert the indicator to an indicatorId
+                    var matchingIndicator = dataElement.Indicators.Where(t => t.Indicator == rowObject.Key).FirstOrDefault();
+                    if (matchingIndicator == null)
                     {
+                        throw new ArgumentOutOfRangeException("Could not match indicator " + rowObject.Key);
+                    }
 
-                        var value = getCellValue(xlrange, rowObject.Value.Row, columnObject.Value.Column);
-                        var asDouble = 0d;
-                        try
+                    foreach (var indicatorAgeGroupCells in ageGroupCells)
+                    {
+                        foreach (var indicatorAgeGroupCell in indicatorAgeGroupCells.Value)
                         {
-                            asDouble = value.ToDouble();
-                            if (asDouble == 0)
+                            var dataValue = getCellValue(dataElement, matchingIndicator.IndicatorId, xlrange, rowObject, indicatorAgeGroupCells, indicatorAgeGroupCell);
+                            if (dataValue == null)
                                 continue;
-
-                            if (asDouble == -2146826273 || asDouble == -2146826281)
-                            {
-                                ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
-                                //return null;
-                            }
-                        }
-                        catch
-                        {
-                            ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, columnObject.Value.Column);
-                            //return null;
-                        }
-
-                        if (asDouble != Constants.NOVALUE)
-                        {
-                            var dataValue = new DataValue()
-                            {
-                                IndicatorValue = asDouble,
-                                IndicatorId = rowObject.Key,
-                                ProgramArea = dataElement.ProgramArea,
-                                AgeGroup = columnObject.Key,
-                                Sex = "Male",
-
-                            };
                             datavalues.Add(dataValue);
                         }
                     }
                 }
             }
-
-            PerformProgressStep("Please wait, finalizing");
             return datavalues;
         }
-
     }
 }
