@@ -14,35 +14,20 @@ namespace ZambiaDataManager
         public static DataSet ToDataset(this List<MatchedDataValue> dataValues)
         {
             //convert to dataset
+            var serialised = Newtonsoft.Json.JsonConvert.SerializeObject(dataValues);
+            var table = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTable>(serialised);
             var ds = new DataSet();
-            var table = new System.Data.DataTable() { TableName = "DataValue" };
-            table.Columns.Add("FacilityName", typeof(string));
-            table.Columns.Add("ReportYear", typeof(int));
-            table.Columns.Add("ReportMonth", typeof(string));
-
-            table.Columns.Add("ProgramArea", typeof(string));
-            table.Columns.Add("IndicatorId", typeof(string));
-            table.Columns.Add("AgeGroup", typeof(string));
-            table.Columns.Add("Sex", typeof(string));
-            table.Columns.Add("IndicatorValue", typeof(double));
-
             ds.Tables.Add(table);
-
-            foreach (var datavalue in dataValues)
+            //Assert that all require columns are available
+            var expectedFields = new List<string>() { "ReportYear", "ReportMonth", "AgeGroup", "IndicatorId", "TotalCost", "OfficeAllocation" };
+            foreach(var field in expectedFields)
             {
-                table.Rows.Add(
-                    datavalue.FacilityName,
-                    datavalue.ReportYear,
-                    datavalue.ReportMonth,
-                    datavalue.ProgramArea,
-                    datavalue.IndicatorId,
-                    datavalue.AgeGroup,
-                    datavalue.Sex,
-                    datavalue.IndicatorValue
-                    );
+                if (!table.Columns.Contains(field))
+                {
+                    throw new ArgumentNullException("No column named " + field);
+                }
             }
-            table.AcceptChanges();
-            return ds;
+            return ds;            
         }
         public static DataSet ToDataset(this List<DataValue> dataValues)
         {

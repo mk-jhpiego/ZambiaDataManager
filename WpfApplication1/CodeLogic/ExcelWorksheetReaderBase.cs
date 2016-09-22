@@ -170,8 +170,6 @@ namespace ZambiaDataManager.CodeLogic
             return locationDetail;
         }
 
-
-
         public void PerformProgressStep(string message = "")
         {
             progressDisplayHelper.PerformProgressStep(message);
@@ -207,6 +205,19 @@ namespace ZambiaDataManager.CodeLogic
         protected object initProgDatElmts = new object();
 
         protected static List<string> customHandledIndicators = new List<string>() { "FP4", "FP6", "FP7" };
+
+        /// <summary>
+        /// Consider using getCellValue
+        /// </summary>
+        /// <param name="xlRange"></param>
+        /// <param name="dataElement"></param>
+        /// <param name="indicatorid"></param>
+        /// <param name="rowId"></param>
+        /// <param name="colmnId"></param>
+        /// <param name="counter"></param>
+        /// <param name="sex"></param>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         protected DataValue GetDataValue(Range xlRange, ProgramAreaDefinition dataElement, string indicatorid, int rowId, int colmnId, int counter, string sex, StringBuilder builder = null)
         {
             var i = rowId;
@@ -261,6 +272,73 @@ namespace ZambiaDataManager.CodeLogic
                     //builder.AppendFormat("{0}\t", "x");
                 }
             }
+            return dataValue;
+        }
+
+        protected DataValue getCellValue(ProgramAreaDefinition dataElement, string indicatorId, Range xlrange, KeyValuePair<string, RowColmnPair> rowObject, KeyValuePair<string, List<RowColmnPair>> indicatorAgeGroupCells, RowColmnPair indicatorAgeGroupCell)
+        {
+            var value = getCellValue(xlrange, rowObject.Value.Row, indicatorAgeGroupCell.Column, Constants.NULLVALUE);
+            if (value == Constants.NULLVALUE || value == "0")
+                return null;
+
+            var knownProblematicValues =
+                new List<string>() {
+                                "iud", "jaddel","hiv negative","hiv positive","hiv status unknown"
+                };
+            //value can be Constants.NULLVALUE for cells that are merged and return a null
+            if (knownProblematicValues.Contains(value.ToLowerInvariant()))
+            {
+                //we continue
+                //jaddel is FP4 Male Total and IUD is FP4 Female Total
+                //HIV Negative		
+                //HIV Positive
+                //HIV Status Unknown
+                return null;
+            }
+
+            var asDouble = 0d;
+            try
+            {
+                asDouble = value.ToDouble();
+                if (asDouble == 0)
+                    return null;
+
+                if (asDouble == -2146826273 || asDouble == -2146826281)
+                {
+                    ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, indicatorAgeGroupCell.Column);
+                    //return null;
+                }
+            }
+            catch
+            {
+                ShowErrorAndAbort(value, rowObject.Key, dataElement.ProgramArea, rowObject.Value.Row, indicatorAgeGroupCell.Column);
+                //return null;
+            }
+
+            if (asDouble == Constants.NOVALUE)
+                return null;
+
+            var sex = dataElement.Gender;
+            if (dataElement.Gender == "both")
+            {
+                if (indicatorAgeGroupCell.Index == 1)
+                {
+                    sex = "Male";
+                }
+                else
+                {
+                    sex = "Female";
+                }
+            }
+
+            var dataValue = new DataValue()
+            {
+                IndicatorValue = asDouble,
+                IndicatorId = indicatorId, //rowObject.Key,
+                ProgramArea = dataElement.ProgramArea,
+                AgeGroup = indicatorAgeGroupCells.Key,
+                Sex = sex,
+            };
             return dataValue;
         }
 
@@ -327,10 +405,10 @@ namespace ZambiaDataManager.CodeLogic
             return indicatorCells;
         }
 
-        protected static Dictionary<string, RowColmnPair> GetMatchedCellsInRow(Range excelRange, List<string> searchTerms,
+        protected static Dictionary<string, List<RowColmnPair>> GetMatchedCellsInRow(Range excelRange, List<string> searchTerms,
             int rowIndex, int startColumnIndex, int endColumnIndex)
         {
-            var toReturn = new Dictionary<string, RowColmnPair>();
+            var toReturn = new Dictionary<string, List<RowColmnPair>>();
             for (var colmnId = startColumnIndex; colmnId <= endColumnIndex; colmnId++)
             {
                 var value = getCellValue(excelRange, rowIndex, colmnId);
@@ -342,7 +420,14 @@ namespace ZambiaDataManager.CodeLogic
                 if (searchTerms.Contains(value))
                 {
                     //we get all locations for our desired  row
-                    toReturn[value] = new RowColmnPair() { Column = colmnId, Row = rowIndex };
+                    if (!toReturn.ContainsKey(value))
+                    {
+                        toReturn[value] = new List<RowColmnPair>();
+                    }
+                    var list = toReturn[value];
+                    var rowColmnPair = new RowColmnPair() { Column = colmnId, Row = rowIndex };
+                    rowColmnPair.Index = list.Count + 1;
+                    list.Add(rowColmnPair);
                 }
             }
             return toReturn;
@@ -412,10 +497,10 @@ namespace ZambiaDataManager.CodeLogic
             return new RowColmnPair(row, colmn, colmn2);
         }
 
-        public static string getCellValue(Range xlrange, int rowId, int colmnId)
+        public static string getCellValue(Range xlrange, int rowId, int colmnId, string valueIfNull = "")
         {
             var cellvalue = Convert.ToString(xlrange[rowId, colmnId].Value);
-            return cellvalue == null ? string.Empty : cellvalue.ToString().Trim();
+            return cellvalue == null ? (valueIfNull == "" ? string.Empty : valueIfNull) : cellvalue.ToString().Trim();
         }
 
         protected static int findNextOccurence(ProgramAreaDefinition dataElement, Range xlrange, int colCount, int rowId, int startColmnIndex, string valueToFind)

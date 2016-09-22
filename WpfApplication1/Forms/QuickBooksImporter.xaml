@@ -40,24 +40,42 @@
         	Margin="25,5,10,0"
         	ItemsSource="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
         	CanUserAddRows="True" CanUserSortColumns="True">
-                <DataGrid.Columns >
-                    <DataGridTextColumn x:Name="colFileName" Binding="{Binding FileName}" Header="File Name" Width="*"  />
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="colReportYear1" Binding="{Binding ReportYear}" Header="Year" Width="0.1*"  />
+                    <DataGridTextColumn x:Name="colReportMonth1" Binding="{Binding ReportMonth}" Header="Report Month" Width="0.15*"   />
+                    <DataGridTextColumn x:Name="colFileName1" Binding="{Binding FileName}" Header="File Name" Width="*"  />
                 </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="Copy"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
             </DataGrid>
             <DataGrid x:Name="gIntermediateData" Height="0"
         	AutoGenerateColumns="False"                      
         	Margin="25,5,10,0"
-        	ItemsSource="{Binding ExcelDataValues, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"        
-        	CanUserAddRows="True" CanUserSortColumns="True">
+        	ItemsSource="{Binding ProcessedDetails, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                      IsReadOnly="True" CanUserSortColumns="True">
                 <DataGrid.Columns >
-                    <DataGridTextColumn x:Name="colReportYear" Binding="{Binding ReportYear}" Header="Report Year" Width="*"  />
-                    <DataGridTextColumn x:Name="colReportMonth" Binding="{Binding ReportMonth}" Header="Report Month" Width="*"  />
-                    <DataGridTextColumn x:Name="colProgramArea" Binding="{Binding ProgramArea}" Header="Program Area" Width="*"  />
-                    <DataGridTextColumn x:Name="colIndicatorId" Binding="{Binding IndicatorId}" Header="COA Code" Width="*"  />
-                    <DataGridTextColumn x:Name="colTotalCost" Binding="{Binding TotalCost}" Header="Total Cost" Width="*"  />
-                    <DataGridTextColumn x:Name="colOfficeAllocation" Binding="{Binding OfficeAllocation}" Header="Office Allocation" Width="*"  />
-                    <DataGridTextColumn x:Name="colAgeGroup" Binding="{Binding AgeGroup}" Header="Project IONs" Width="*"  />
+                    <DataGridTextColumn x:Name="colReportYear" Binding="{Binding ReportYear}" Header="Report Year" Width="0.1*"  />
+                    <DataGridTextColumn x:Name="colReportMonth" Binding="{Binding ReportMonth}" Header="Report Month" Width="0.2*"  />
+                    
+                    <DataGridTextColumn x:Name="colAgeGroup" Binding="{Binding AgeGroup}" Header="Project IONs" Width="0.5*"  />
+                    <DataGridTextColumn x:Name="colIndicatorId" Binding="{Binding IndicatorId}" Header="GL Code" Width="*"  />                   
+
+                    <DataGridTextColumn x:Name="colTotalCost" Binding="{Binding TotalCost}" Header="Total Cost" Width="0.2*"  />
+                    <DataGridTextColumn x:Name="colOfficeAllocation" Binding="{Binding OfficeAllocation}" Header="Office Allocation" Width="0.2*"  />
+                    
                 </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="Copy"/>
+                        <!--<MenuItem Header="Copy Selected" Click="Context_CopyAll" Tag="CopySelected,HeaderNo"></MenuItem>
+                        <MenuItem Header="Copy All" Click="Context_CopyAll" Tag="CopyAll,HeaderNo"></MenuItem>
+                        <MenuItem Header="Copy Selected (with Headers)" Click="Context_CopyAll" Tag="CopySelected,HeaderYes"></MenuItem>
+                        <MenuItem Header="Copy All (with Headers)" Click="Context_CopyAll" Tag="CopyAll,HeaderYes"></MenuItem>-->
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
             </DataGrid>
         </StackPanel>
     </StackPanel>

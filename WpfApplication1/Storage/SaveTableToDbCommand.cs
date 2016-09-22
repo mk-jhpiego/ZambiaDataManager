@@ -25,11 +25,6 @@ namespace ZambiaDataManager.Storage
             var targetTable = table.TableName;
             //we create the table
             var builder = new StringBuilder();
-            foreach (DataColumn dc in table.Columns)
-            {
-                builder.AppendFormat("");
-            }
-
             var res =
                 string.Format("create table {0} ({1})", targetTable,
                 string.Join(",",

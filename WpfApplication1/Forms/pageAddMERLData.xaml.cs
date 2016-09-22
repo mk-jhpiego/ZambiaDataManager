@@ -32,6 +32,12 @@ namespace ZambiaDataManager.Forms
             SelectedFiles = new List<FileDetails>();
         }
 
+        public ProjectName CurrentProjectName
+        {
+            get;
+            internal set;
+        }
+
         public List<FileDetails> SelectedFiles { get; private set; }
 
         private void selectFile(object sender, RoutedEventArgs e)
@@ -47,8 +53,10 @@ namespace ZambiaDataManager.Forms
             var dialogResult = dialog.ShowDialog() ?? false;
             if (dialogResult)
             {
+                var currentFiles = (from file in SelectedFiles select file.FileName).ToList();
+                var dialogFiles = dialog.FileNames.ToList().Except(currentFiles);
                 SelectedFiles.AddRange(
-                    (from file in dialog.FileNames
+                    (from file in dialogFiles
                      select new FileDetails() { FileName = file }).ToList()
                     );
             }
@@ -87,7 +95,6 @@ namespace ZambiaDataManager.Forms
 
         private void ResetAllGrids()
         {
-            _currentProjectName = ProjectName.None;
             gSelectedFiles.Height = 0;
             gIntermediateData.Height = 0;
             gSelectedFiles.ItemsSource = "";
@@ -104,21 +111,33 @@ namespace ZambiaDataManager.Forms
 
             //fire up template reader and let it do the rest
             var selectedFiles = SelectedFiles;
-            ReadDataFiles(SelectedFiles, ProjectName.IHP_VMMC);
+            ReadDataFiles(SelectedFiles, CurrentProjectName);
         }
 
         CodeRunner<List<DataValue>> _runner;
         public volatile List<DataValue> ExcelDataValues = null;
-        ProjectName _currentProjectName = ProjectName.None;
+        //ProjectName _currentProjectName = ProjectName.None;
 
         void ReadDataFiles(List<FileDetails> files, ProjectName projectName)
         {
             if (ExcelDataValues == null){ExcelDataValues = new List<DataValue>();}else { ExcelDataValues.Clear(); }
-            _currentProjectName = projectName;
-
+            
             foreach (var file in files)
             {
-                var worker = new GetValuesFromReport() { fileName = file.FileName, SelectedProject = projectName };
+                IQueryHelper<List<DataValue>> worker = null;
+                if (projectName == ProjectName.DOD)
+                {
+                    worker = new GetDodDataFromExcel() {
+                        fileName = file.FileName,
+                        SelectedProject = projectName,
+                        //locationDetail = processedFilesInfo.LocationDetails,
+                        //worksheetName = Constants.INCOUNTRY_ION_EXPENSES
+                    };
+                }
+                else
+                {
+                    worker = new GetValuesFromReport() { fileName = file.FileName, SelectedProject = projectName };
+                }
                 worker.progressDisplayHelper = new WaitDialog() { WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner };
 
                 var intermediateResults = worker.Execute();
@@ -130,44 +149,10 @@ namespace ZambiaDataManager.Forms
 
                 ExcelDataValues.AddRange(intermediateResults);
             }
+
             //we update the display
             ShowGridDisplayPort(ExcelDataValues);
-            return;
-
-
-            var fileName = string.Empty;
-            if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
-            {
-                _runner = new CodeRunner<List<DataValue>>()
-                {
-                    ShowSplash = true,
-                    CodeToExcute = new GetValuesFromReport() { fileName = fileName, SelectedProject = projectName },
-                    AsyncCallBack = (q) =>
-                    {
-                        if (q == null)
-                            return;
-
-                        EnableSaveButtons(true);
-                        ExcelDataValues = q;
-                        ////valuesDataset = q.ToDataset();
-                        //if (dataGridView1.InvokeRequired)
-                        //{
-                        //    dataGridView1.Invoke(
-                        //        new refreshDisplay((s) => {
-                        //            ShowGridDisplayPort(s.Tables[0]);
-                        //        }),
-                        //        valuesDataset);
-                        //    return;
-                        //}
-                        ShowGridDisplayPort(ExcelDataValues);
-                    }
-                };
-                _runner.Execute();
-            }
-        }
-
-        private void clearSelected(object sender, RoutedEventArgs e)
-        {
+            return;            
         }
 
         void saveToAltServer(object sender, RoutedEventArgs e)
@@ -197,9 +182,7 @@ namespace ZambiaDataManager.Forms
             var tempTableName = new RandomTableNameGenerator().Execute();
             valuesDataset.Tables[0].TableName = tempTableName;
 
-
-            var currentProject = _currentProjectName;
-            var connBuilder = DbFactory.GetDefaultConnection(currentProject, saveToDevServer);
+            var connBuilder = DbFactory.GetDefaultConnection(CurrentProjectName, saveToDevServer);
             if (connBuilder == null)
                 return;
 

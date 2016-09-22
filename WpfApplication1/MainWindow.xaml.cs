@@ -58,13 +58,28 @@ namespace ZambiaDataManager
 
         private void addVmmcMonthly(object sender, RoutedEventArgs e)
         {
-            var targetForm = new Forms.pageAddMERLData();
+            var targetForm = new Forms.pageAddMERLData()
+            {
+                CurrentProjectName = ProjectName.IHP_VMMC
+            };
+            stackMain.Content = targetForm;
+        }
+        private void addDodMonthly(object sender, RoutedEventArgs e)
+        {
+            var targetForm = new Forms.pageAddMERLData()
+            {
+                CurrentProjectName = ProjectName.DOD
+            };
             stackMain.Content = targetForm;
         }
 
         private void addVmmcCampaignDailyData(object sender, RoutedEventArgs e)
         {
-
+            var targetForm = new Forms.pageAddMERLData()
+            {
+                CurrentProjectName = ProjectName.IHP_VMMC
+            };
+            stackMain.Content = targetForm;
         }
 
         private void reviewUploadedData(object sender, RoutedEventArgs e)
@@ -112,7 +127,10 @@ namespace ZambiaDataManager
 
         private void addQuickBooksData(object sender, RoutedEventArgs e)
         {
-            var targetForm = new Forms.QuickBooksImporter();
+            var targetForm = new Forms.QuickBooksImporter()
+            {
+                CurrentProjectName = ProjectName.General
+            };
             stackMain.Content = targetForm;
         }
     }

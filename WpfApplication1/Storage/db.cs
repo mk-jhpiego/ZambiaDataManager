@@ -32,18 +32,28 @@ namespace ZambiaDataManager.Storage
             var defaultSqlExpress = string.Empty;
             if (getAlternate)
             {
-                defaultServerName = "D-5932S32";
-                defaultSqlExpress = "SQL2014DEV";
+                //defaultServerName = "D-5932S32";
+                //defaultSqlExpress = "SQL2014DEV";
+
+                defaultServerName = "D-9W48GC2";
+                defaultSqlExpress = "SQL2014";
             }
             //a dirty catch to avoid messing with the server. Feel free to remove
-            if (Environment.MachineName == "D-5932S32" || Environment.MachineName == "SUPER-LAP")
+            if (Environment.MachineName == "D-9W48GC2" || Environment.MachineName == "D-5932S32" 
+                || Environment.MachineName == "SUPER-LAP")
             {                
                 var res = MessageBox.Show("Use your Local Computer rather than the server MK ???????????", "WAIT!!!!!!!!!!!", MessageBoxButton.YesNoCancel);
                 if (res == MessageBoxResult.Yes)
                 {
-                   // getAlternate = true;
+                    // getAlternate = true;
                     //SUPER-LAP\SQL2014
-                    if (Environment.MachineName == "D-5932S32")
+                    //D-9W48GC2\SQL2014
+                    if (Environment.MachineName == "D-9W48GC2")
+                    {
+                        defaultServerName = "D-9W48GC2";
+                        defaultSqlExpress = "SQL2014";
+                    }
+                    else if (Environment.MachineName == "D-5932S32")
                     {
                         defaultServerName = "D-5932S32";
                         defaultSqlExpress = "SQL2014DEV";
@@ -80,6 +90,11 @@ namespace ZambiaDataManager.Storage
                 case ProjectName.IHP_Capacity_Building_and_Training:
                     {
                         connBuilder = new ConnectionBuilder() { DatabaseName = "JhpiegoDb_IhpTraining", InstanceName = defaultSqlExpress, ServerName = defaultServerName };
+                        break;
+                    }
+                case ProjectName.General:
+                    {
+                        connBuilder = new ConnectionBuilder() { DatabaseName = "JhpiegoDb_General", InstanceName = defaultSqlExpress, ServerName = defaultServerName };
                         break;
                     }
             }

@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jhpiego")]
-[assembly: AssemblyProduct("ZambiaDataManager")]
+[assembly: AssemblyProduct("Zambia Data Manager")]
 [assembly: AssemblyCopyright("Copyright © Jhpiego 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
