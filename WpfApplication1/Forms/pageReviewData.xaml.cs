@@ -32,6 +32,10 @@ namespace ZambiaDataManager.Forms
         {
             InitializeComponent();
             var dbbuilder = DbFactory.GetDefaultConnection(PageController.Instance.DefaultProjectName);
+            if (dbbuilder == null)
+            {
+                //perhaps we fail to load and throw an exception
+            }
             dbhelper = new DbHelper(dbbuilder);
 
             currentList = fetchData();
@@ -57,10 +61,13 @@ namespace ZambiaDataManager.Forms
             var month = dbhelper.GetScalar("select MonthID From MonthLookUp where MonthName = @ReportMonth",
 new CommandParam().Add("ReportMonth", currentRow["ReportMonth"]));
 
-            dbhelper.ExecSql("delete from FacilityData where FacilityIndex = @FacilityIndex and ReferenceYear = @ReportYear and ReferenceMonth = @ReportMonth",
-                                new CommandParam().Add("FacilityIndex", facilityindex)
+            //delete the selected row
+            var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            dbhelper.ExecProc("dbo.proc_BackupAndDelete",
+                new CommandParam().Add("FacilityIndex", facilityindex)
                 .Add("ReportYear", year)
                 .Add("ReportMonth", month)
+                .Add("username", user)
                 );
 
             currentList = fetchData();
@@ -89,7 +96,7 @@ new CommandParam().Add("ReportMonth", currentRow["ReportMonth"]));
                 //join IndicatorLookup il on f.IndicatorSerial = il.IndicatorSerial
                 //join ProgramAreaLookUp pa on il.ProgramAreaID = pa.ProgramAreaID
                 //";
-                "select distinct ProvinceName, DistrictName, FacilityName, '' ProgramArea, [Year] as ReportYear, [Month] as ReportMonth From MainData";
+                "select distinct ProvinceName, DistrictName, FacilityName, [Year] as ReportYear, [Month] as ReportMonth From MainData";
 
             return dbhelper.GetTable(sql);
         }

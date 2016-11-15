@@ -8,9 +8,15 @@ using System.Windows.Controls;
 
 namespace ZambiaDataManager
 {
-
     public static class MyExtensions
     {
+        public static string toCleanAge(this string ageString)
+        {
+            //we remove spaces
+            //change to lower
+            return ageString.ToLowerInvariant().Replace(" ","");
+        }
+
         public static DataSet ToDataset(this List<MatchedDataValue> dataValues)
         {
             //convert to dataset

@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZambiaDataManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1366" Loaded="Window_Loaded">
+        Title="MainWindow" Height="700" Width="1366" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="485*"/>
-            <ColumnDefinition Width="70*" MaxWidth="70"/>
+            <ColumnDefinition Width="87*"/>
+            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition Width="14*" MaxWidth="70"/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.518,1.504" StartPoint="0.505,-0.108">
@@ -18,10 +19,10 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <TextBlock x:Name="tApplicationTitle" Height="40" TextWrapping="Wrap" Text="Zambia Data Manager" VerticalAlignment="Top" FontSize="22" Margin="10,3.527,-21,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin"/>
+        <TextBlock x:Name="tApplicationTitle" Height="40" TextWrapping="Wrap" Text="Zambia Data Manager" VerticalAlignment="Top" FontSize="22" Margin="10,4,414,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8" Grid.ColumnSpan="2"/>
 
 
-        <StackPanel Margin="10,43.527,10,3.973">
+        <StackPanel Margin="10,44,9.6,4.4">
             <TextBlock x:Name="textBlock_Copy4" Height="27.5" TextWrapping="Wrap" Text="Reports and Summaries" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
             <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" 
                                  
@@ -44,12 +45,12 @@
             <Button x:Name="bReviewUploadedData" Content="Review Uploaded Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddDodData" Content="Add DOD Monthly Data" Height="40" Click="addDodMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
-        <StackPanel Grid.Column="2" Margin="0,3.527,0,10">
+        <StackPanel Grid.Column="3" Margin="0.4,4,0,10.4">
             <TextBlock x:Name="tLoggedInUser" Height="61.473" TextWrapping="Wrap" Margin="0,0,10,0" RenderTransformOrigin="0.494,0.636" Foreground="#FFF9F8F8" FlowDirection="RightToLeft"><Run Text="Not "/><Run Text="Logged In"/></TextBlock>
             <Button x:Name="bManageAccount" Content="Manage &#xA;Account" Height="80" Click="manageAccount" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bMakeDataAvailableLocally" Content="Make data &#xA;available &#xA;Offline" Height="75" Click="updateLocalRepo" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
-        <Label x:Name="label" Content="Main Content Area" Height="60" Grid.Column="1" Margin="10,10,10,0" VerticalAlignment="Top" FontSize="18" Foreground="#FFF9F8F8" HorizontalContentAlignment="Center" Width="1018" />
-        <Frame x:Name="stackMain" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Grid.Column="1" Margin="10,75,10,10"/>
+        <Label x:Name="label" Content="Main Content Area" Height="60" Grid.Column="1" Margin="11.4,10,10.6,0" VerticalAlignment="Top" FontSize="18" Foreground="#FFF9F8F8" HorizontalContentAlignment="Center" Width="1018" Grid.ColumnSpan="2" />
+        <Frame x:Name="stackMain" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Grid.Column="1" Margin="10.4,75,9.6,10.4" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

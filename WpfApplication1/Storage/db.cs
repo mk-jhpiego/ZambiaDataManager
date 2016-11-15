@@ -212,6 +212,28 @@ namespace ZambiaDataManager.Storage
             }
             return res;
         }
+
+        public Dictionary<object, object> GetLookups(string sqlStatement)
+        {
+            var res = new Dictionary<object, object>();
+            using (var conn = new SqlConnection(_connString))
+            using (var cmd = new SqlCommand(sqlStatement) { Connection = conn })
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var key = reader[0];
+                    var value = reader[1];
+                    if (key == DBNull.Value || value == DBNull.Value)
+                        continue;
+
+                    res.Add(key, value);
+                }
+                conn.Close();
+            }
+            return res;
+        }
         //
         internal List<string> GetListText(string sqlStatement)
         {
@@ -297,6 +319,22 @@ namespace ZambiaDataManager.Storage
             }
             return table;
         }
-    }
 
+        internal void ExecProc(string procedureName, CommandParam commandParam)
+        {
+            var table = new DataTable();
+            using (var conn = new SqlConnection(_connString))
+            using (var cmd = new SqlCommand(procedureName, conn) {
+                CommandType = CommandType.StoredProcedure })
+            {
+                conn.Open();
+                foreach(var par in commandParam.Parameters)
+                {
+                    cmd.Parameters.AddWithValue(par.Name, par.Value);
+                }
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+    }
 }

@@ -121,15 +121,20 @@ namespace ZambiaDataManager.Forms
         void ReadDataFiles(List<FileDetails> files, ProjectName projectName)
         {
             if (ExcelDataValues == null){ExcelDataValues = new List<DataValue>();}else { ExcelDataValues.Clear(); }
-            
+            var connBuilder = DbFactory.GetDefaultConnection(CurrentProjectName);
+            if (connBuilder == null)
+                return;
+
             foreach (var file in files)
             {
                 IQueryHelper<List<DataValue>> worker = null;
                 if (projectName == ProjectName.DOD)
                 {
-                    worker = new GetDodDataFromExcel() {
+                    worker = new GetDodDataFromExcel()
+                    {
                         fileName = file.FileName,
                         SelectedProject = projectName,
+                        ageGroupsProvider = new AgegroupsProvider() { DB = new DbHelper(connBuilder) }
                         //locationDetail = processedFilesInfo.LocationDetails,
                         //worksheetName = Constants.INCOUNTRY_ION_EXPENSES
                     };
@@ -187,7 +192,6 @@ namespace ZambiaDataManager.Forms
                 return;
 
             var contextDb = new DbHelper(connBuilder);
-
             try
             {
                 var dataImporter = new SaveTableToDbCommand()
@@ -197,7 +201,14 @@ namespace ZambiaDataManager.Forms
                 };
 
                 dataImporter.Execute();
+            }
+            catch
+            {
+                throw;
+            }
 
+            try
+            {
                 //we start the merge
                 var dataMerge = new DataMergeCommand()
                 {
@@ -209,7 +220,7 @@ namespace ZambiaDataManager.Forms
                 // we save, 
                 dataMerge.Execute();
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
