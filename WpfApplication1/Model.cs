@@ -140,6 +140,24 @@ namespace ZambiaDataManager
             Gender = string.Empty;
         }
 
+        private List<string> _cleanAgeDisaggregations = null;
+        public List<string> getCleanAgeDisaggregations()
+        {
+            if (_cleanAgeDisaggregations == null)
+            {
+                var x = new List<string>();
+                foreach(var age in AgeDisaggregations)
+                {
+                    x.Add(age.toCleanAge());
+                }
+                if (_cleanAgeDisaggregations == null)
+                {
+                    _cleanAgeDisaggregations = x;
+                }
+            }
+            return _cleanAgeDisaggregations;
+        }
+
         //public ServiceAreaDataset ServiceAreas { get; set; }
         public string ProgramArea { get; set; }
         public List<ProgramIndicator> Indicators { get; set; }

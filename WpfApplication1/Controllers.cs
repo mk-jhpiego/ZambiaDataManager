@@ -20,5 +20,6 @@ namespace ZambiaDataManager
         }
 
         public ProjectName DefaultProjectName { get; set; }
+        public Dictionary<string, string> AlternateAgegroups { get; set; }
     }
 }

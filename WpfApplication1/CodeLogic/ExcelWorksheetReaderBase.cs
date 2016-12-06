@@ -6,11 +6,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ZambiaDataManager.Storage;
 
 namespace ZambiaDataManager.CodeLogic
 {
     public class ExcelWorksheetReaderBase
     {
+        public AgegroupsProvider ageGroupsProvider { get; internal set; }
+
         public Action<string> Alert { get; set; }
         public string fileName { get; set; }
         public LocationDetail locationDetail = null;
@@ -278,7 +281,7 @@ namespace ZambiaDataManager.CodeLogic
         protected DataValue getCellValue(ProgramAreaDefinition dataElement, string indicatorId, Range xlrange, KeyValuePair<string, RowColmnPair> rowObject, KeyValuePair<string, List<RowColmnPair>> indicatorAgeGroupCells, RowColmnPair indicatorAgeGroupCell)
         {
             var value = getCellValue(xlrange, rowObject.Value.Row, indicatorAgeGroupCell.Column, Constants.NULLVALUE);
-            if (value == Constants.NULLVALUE || value == "0")
+            if (value == Constants.NULLVALUE)
                 return null;
 
             var knownProblematicValues =
@@ -300,8 +303,8 @@ namespace ZambiaDataManager.CodeLogic
             try
             {
                 asDouble = value.ToDouble();
-                if (asDouble == 0)
-                    return null;
+                //if (asDouble == 0)
+                //    return null;
 
                 if (asDouble == -2146826273 || asDouble == -2146826281)
                 {
@@ -408,27 +411,79 @@ namespace ZambiaDataManager.CodeLogic
         protected static Dictionary<string, List<RowColmnPair>> GetMatchedCellsInRow(Range excelRange, List<string> searchTerms,
             int rowIndex, int startColumnIndex, int endColumnIndex)
         {
+            var alternateAgeGroups = PageController.Instance.AlternateAgegroups;
+            //we convert our search terms to standard
+            var standardSearchTerms = new Dictionary<string, string>();
+            foreach (var ageDisagg in searchTerms)
+            {
+                var stdAgeDisagg = string.Empty;
+                if(!alternateAgeGroups.TryGetValue(ageDisagg.toCleanAge(), out stdAgeDisagg))
+                {
+                    //we throw exception as our master dictionary does not have thids
+                    throw new ArgumentOutOfRangeException("Database does not have this alternate age disaggregation " + ageDisagg);
+                }
+                standardSearchTerms.Add(stdAgeDisagg, ageDisagg);
+            }
+        
             var toReturn = new Dictionary<string, List<RowColmnPair>>();
             for (var colmnId = startColumnIndex; colmnId <= endColumnIndex; colmnId++)
             {
                 var value = getCellValue(excelRange, rowIndex, colmnId);
-
                 //people might have other columns, so we pick what we want
-                if (string.IsNullOrWhiteSpace(value) || value.Length > 40) continue;
-
-                //we find the first match, and quit once we read all columns in that row matching disaggregations
-                if (searchTerms.Contains(value))
+                if (string.IsNullOrWhiteSpace(value) || value.Length > 40)
                 {
-                    //we get all locations for our desired  row
-                    if (!toReturn.ContainsKey(value))
+                    //we try getting the row before as header might be merged
+                    if (rowIndex == 1)
+                        continue;
+                    value = getCellValue(excelRange, rowIndex - 1, colmnId);
+                    if (string.IsNullOrWhiteSpace(value) || value.Length > 40)
+                        continue;
+                }
+
+                //we convert the value read to standard term and skip if not in alternate age groups
+                //Skipping because it could be other fields contained in the sheet
+                var cleanedValue = value.toCleanAge();
+                if (alternateAgeGroups.ContainsKey(cleanedValue))
+                {
+                    var stdExlAgeGrp = alternateAgeGroups[cleanedValue];
+                    if (!standardSearchTerms.ContainsKey(stdExlAgeGrp))
                     {
-                        toReturn[value] = new List<RowColmnPair>();
+                        //we only want the age disaggregations that match our field dictionary
+                        continue;
                     }
-                    var list = toReturn[value];
+
+                    //we get all locations for our desired  row
+                    if (!toReturn.ContainsKey(stdExlAgeGrp))
+                    {
+                        toReturn[stdExlAgeGrp] = new List<RowColmnPair>();
+                    }
+                    var list = toReturn[stdExlAgeGrp];
                     var rowColmnPair = new RowColmnPair() { Column = colmnId, Row = rowIndex };
                     rowColmnPair.Index = list.Count + 1;
                     list.Add(rowColmnPair);
                 }
+                else
+                {
+                    //perhaps we log that we skipped this field
+                }
+            }
+
+            //we do some extra validations
+            //we check if all our search terms are matched
+            var searchTermsUnmatched = new List<string>();
+            foreach (var searchTerm in standardSearchTerms)
+            {
+                if (!toReturn.ContainsKey(searchTerm.Key))
+                {
+                    searchTermsUnmatched.Add(searchTerm.Key);
+                }
+            }
+
+            if (searchTermsUnmatched.Count > 0)
+            {
+                //convert to string
+                var asString = string.Join(",", searchTermsUnmatched);
+                throw new ArgumentOutOfRangeException("Could not find equivalent Age Disaggregations for the following: " + asString);
             }
             return toReturn;
         }
@@ -466,15 +521,23 @@ namespace ZambiaDataManager.CodeLogic
 
             var matchfound = false;
             var maxDepthSearchRows = 8;
-            //var firstAgeGroupColumn = -1;
+
+            var cleanAgeDisaggs = dataElement.getCleanAgeDisaggregations();         
+
             for (var rowId = 1; rowId <= maxDepthSearchRows; rowId++)
             {
                 for (var colmnId = 1; colmnId <= colCount; colmnId++)
                 {
-                    var value = getCellValue(xlrange, rowId, colmnId);
-                    if (string.IsNullOrWhiteSpace(value) || value.Length > 40) continue;
+                    var rawAgeValue = getCellValue(xlrange, rowId, colmnId);
+                    if (string.IsNullOrWhiteSpace(rawAgeValue) || rawAgeValue.Length > 40) continue;
 
-                    if (dataElement.AgeDisaggregations.Contains(value))
+                    var cleanAgeValue = rawAgeValue.toCleanAge();
+                    if (!PageController.Instance.AlternateAgegroups.ContainsKey(cleanAgeValue))
+                        continue;
+
+                    //if (dataElement.AgeDisaggregations.Contains(value))
+                    if (cleanAgeDisaggs.Contains(cleanAgeValue) &&
+                        cleanAgeDisaggs.IndexOf(cleanAgeValue) == 0)
                     {
                         //we've found our column, time to find where the data begibs, lets find the corresponding indicator
                         //we'll scan for columns from rowid to perhaps 5 places, and starting from column 0
@@ -482,12 +545,11 @@ namespace ZambiaDataManager.CodeLogic
                         colmn = colmnId;
                         matchfound = true;
 
-                        if (dataElement.Gender.ToLowerInvariant() == "both")
-                        {
-                            //we continue and find the next occurrence of this value                            
-                            colmn2 = findNextOccurence(dataElement, xlrange, colCount, rowId, colmnId + 1, value);
-                        }
-
+                        //if (dataElement.Gender.ToLowerInvariant() == "both")
+                        //{
+                        //    //we continue and find the next occurrence of this value                            
+                        //    colmn2 = findNextOccurence(dataElement, xlrange, colCount, rowId, colmnId + 1, cleanAgeValue);
+                        //}
                         break;
                     }
                 }
@@ -509,9 +571,10 @@ namespace ZambiaDataManager.CodeLogic
             int colmnIndex = -1;
             for (var colmnId = startColmnIndex; colmnId <= colCount; colmnId++)
             {
-                var value = getCellValue(xlrange, rowId, colmnId);
-                if (value != valueToFind)
+                var value = getCellValue(xlrange, rowId, colmnId, string.Empty);
+                if (string.IsNullOrWhiteSpace(value) || value.toCleanAge() != valueToFind)
                     continue;
+
                 colmnIndex = colmnId;
                 break;
             }

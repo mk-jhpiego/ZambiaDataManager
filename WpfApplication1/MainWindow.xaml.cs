@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZambiaDataManager.Popups;
+using ZambiaDataManager.Storage;
 
 namespace ZambiaDataManager
 {
@@ -116,6 +117,11 @@ namespace ZambiaDataManager
             {
                 PageController.Instance.DefaultProjectName = dialog.SelectedProjectName;
                 Title = "Jhpiego Zambia Data Manager: Default project selected is " + dialog.SelectedProjectName.ToString();
+                var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                tLoggedInUser.Text = user??"Not Logged In" ;
+
+                //we load db data
+                loadDbData();
             }
             else
             {
@@ -123,6 +129,26 @@ namespace ZambiaDataManager
                 //we disable everything
                 Application.Current.Shutdown();
             }
+        }
+        
+        void loadDbData()
+        {
+            var db = new DbHelper(DbFactory.GetDefaultConnection(PageController.Instance.DefaultProjectName));
+            var provider = new AgegroupsProvider()
+            {
+                DB = db
+            };
+
+            //
+            var alternateAgeGroups = provider.getAlternateAgeGroups();
+            var cleanAges = new Dictionary<string, string>();
+            foreach(var age in alternateAgeGroups)
+            {
+                //there might be some overwriting but its fine
+                cleanAges[age.Key.toCleanAge()] = age.Value;
+            }
+
+            PageController.Instance.AlternateAgegroups = cleanAges;
         }
 
         private void addQuickBooksData(object sender, RoutedEventArgs e)
@@ -132,6 +158,11 @@ namespace ZambiaDataManager
                 CurrentProjectName = ProjectName.General
             };
             stackMain.Content = targetForm;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

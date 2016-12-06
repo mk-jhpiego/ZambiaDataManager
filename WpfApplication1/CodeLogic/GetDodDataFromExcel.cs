@@ -4,13 +4,14 @@ using System.Linq;
 using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Windows;
+using ZambiaDataManager.Storage;
 
 namespace ZambiaDataManager.CodeLogic
 {
     public class GetDodDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
     {
         internal string worksheetName;
-        const string CoverSheetName = "Cover1";
+        const string CoverSheetName = "Cover1";        
 
         public List<DataValue> Execute()
         {
@@ -58,12 +59,24 @@ namespace ZambiaDataManager.CodeLogic
 
         private List<DataValue> ImportData(Microsoft.Office.Interop.Excel.Application excelApp)
         {
+            //we analyse if our field dictionary has unique indicatorids
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
             var _loadAllProgramDataElements = new
                 GetProgramAreaIndicators()
                 .GetDodDataElements();
-                //.GetAllProgramDataElements();
+            //.GetAllProgramDataElements();
+
+            foreach (var element in _loadAllProgramDataElements)
+            {
+                var allIndicIds = (from t in element.Indicators
+                                   select t.IndicatorId).Count();
+                var distinctIndicIds = (from t in element.Indicators
+                                        select t.IndicatorId).ToList().Distinct().Count();
+                if (allIndicIds != distinctIndicIds)
+                    throw new ArgumentOutOfRangeException(
+                        "Duplicate indicatorids for program area " + element.ProgramArea);
+            }
 
             PerformProgressStep("Please wait, Opening Excel document");
 

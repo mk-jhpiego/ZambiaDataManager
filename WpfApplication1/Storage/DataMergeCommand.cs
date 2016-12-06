@@ -108,6 +108,23 @@ SELECT
         }
     }
 
+    public class AgegroupsProvider
+    {
+        public DbHelper DB { get; set; }
+        const string ageGroupSql = "select a.AgeGroup AlterNameAgeGroup, l.AgeGroupName StandardAgeGroup From AgeGroupLookupAlternate a join AgeGroupLookUp l on a.AgeGroupId = l.AgeGroupID";
+        public Dictionary<string,string> getAlternateAgeGroups()
+        {
+            //GetLookups
+            var toReturn = new Dictionary<string, string>();
+            var lookups = DB.GetLookups(ageGroupSql);
+            lookups.ToList().ForEach(lookup => toReturn.Add(Convert.ToString(lookup.Key), Convert.ToString(lookup.Value)));
+            //from lookup in lookups
+            //let key = Convert.ToString(lookup.Key)
+            //let value = Convert.ToString(lookup.Value)
+            return toReturn;
+        }
+    }
+
     public class ProjectFinanceMergeCommand : BaseMergeCommand
     {
         protected override void DoMerge()
