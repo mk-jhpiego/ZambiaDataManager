@@ -48,10 +48,11 @@ namespace ZambiaDataManager.Storage
                     // getAlternate = true;
                     //SUPER-LAP\SQL2014
                     //D-9W48GC2\SQL2014
+                    //D-9W48GC2\SQLDEV
                     if (Environment.MachineName == "D-9W48GC2")
                     {
                         defaultServerName = "D-9W48GC2";
-                        defaultSqlExpress = "SQL2014";
+                        defaultSqlExpress = "SQLDEV";
                     }
                     else if (Environment.MachineName == "D-5932S32")
                     {

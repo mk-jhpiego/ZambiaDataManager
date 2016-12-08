@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,6 +112,7 @@ namespace ZambiaDataManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             //we prompt for the default database
             var dialog = new ProjectedSelector();
             if (dialog.ShowDialog() != null && dialog.SelectedProjectName != ProjectName.None)
@@ -121,7 +123,30 @@ namespace ZambiaDataManager
                 tLoggedInUser.Text = user??"Not Logged In" ;
 
                 //we load db data
-                loadDbData();
+                var shutDown = false;
+                try
+                {
+                    loadDbData();
+                }
+                catch (SqlException sqlex)
+                {
+                    MessageBox.Show("Could not connect to the database. The application will shut down");
+                    shutDown = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not start the application. Error has been logged. The application will shut down");
+                    shutDown = true;
+                }
+                finally
+                {
+
+                }
+
+                if (shutDown)
+                {
+                    Application.Current.Shutdown();
+                }
             }
             else
             {
@@ -130,7 +155,14 @@ namespace ZambiaDataManager
                 Application.Current.Shutdown();
             }
         }
-        
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show("An issue is preventing startup. Please retry. The app will shutdown. If the problem persists, please call for support");
+            e.Handled = true;
+            Application.Current.Shutdown();
+        }
+
         void loadDbData()
         {
             var db = new DbHelper(DbFactory.GetDefaultConnection(PageController.Instance.DefaultProjectName));
