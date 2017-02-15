@@ -51,5 +51,7 @@ namespace ZambiaDataManager.Popups
             }
             this.DialogResult = true;
         }
+
+        public bool RememberSelection { get { return chkRememberSelection.IsChecked ?? false; } }
     }
 }

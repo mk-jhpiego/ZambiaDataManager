@@ -62,5 +62,18 @@ namespace ZambiaDataManager
             }
             return monthName;
         }
+
+        public static class Preferences
+        {
+            public const string PROJECT = "defaultProject";
+            public const string SERVER = "defaultServer";
+            const string PROJECTNAMEENTRY = "pname";
+        }
+
+        public static class CommonFolders
+        {
+            public const string USEROPTIONS = "useroptions.json";
+            public const string WORKINGFOLDER = "jdatamanager";
+        }
     }
 }

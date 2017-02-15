@@ -4,10 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZambiaDataManager.Popups"
-        mc:Ignorable="d" Height="300" Width="549" Background="#FF3F3F46">
+        mc:Ignorable="d" Height="320" Width="549" Background="#FF3F3F46">
     <Grid Margin="24,-14,13,14">
-        <StackPanel >
-            <Label Margin="0,20,0,5" >Please select the default project to use for this session</Label>
+        <StackPanel>
+            <Label Margin="0,20,-0.4,5" >Please select the default project to use for this session</Label>
+            <CheckBox x:Name="chkRememberSelection"                       
+                      Content="Remember my selection" FontWeight="Bold" Margin="100,15,80.6,0">
+                <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                </CheckBox.LayoutTransform>
+            </CheckBox>
             <Button x:Name="bDOD" Content="DOD" 
         		HorizontalAlignment="Center" Height="45" Margin="0,5,0,0"                     
         		VerticalAlignment="Top" Width="345" FontSize="16" FontWeight="SemiBold" 
@@ -40,6 +46,8 @@
         		VerticalContentAlignment="Center" Background="#FFD3CBCB"
                     Click="bVmmc_Click"
                />
+
+
         </StackPanel>
     </Grid>
 </Window>

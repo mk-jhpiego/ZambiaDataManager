@@ -10,6 +10,14 @@ namespace ZambiaDataManager
 {
     public static class MyExtensions
     {
+        public static resultStatusClass flip(this resultStatus res)
+        {
+            return new resultStatusClass(res);
+        }
+        public static resultStatus flip(this resultStatusClass res)
+        {
+            return res.ResultStatus;
+        }
         public static string toCleanAge(this string ageString)
         {
             //we remove spaces

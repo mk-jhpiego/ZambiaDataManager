@@ -1,0 +1,19 @@
+﻿<Window x:Class="ZambiaDataManager.Popups.Splash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZambiaDataManager.Popups"
+        mc:Ignorable="d" Height="300" Width="549" Background="#FF3F3F46" WindowStyle="None">
+    <Grid Margin="24,10,13,14">
+        <Label x:Name="label" Content="Data Manager" 
+               HorizontalAlignment="Left" Height="115" Margin="0,10,0,0" 
+               VerticalAlignment="Top" Width="504" FontSize="35" FontWeight="SemiBold" 
+               FontStretch="Expanded"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center" Background="#FFD3CBCB"
+               />
+        <Label x:Name="lblMainMessage" Content="Please wait, loading" HorizontalAlignment="Left" Margin="0,130,0,0" VerticalAlignment="Top" Width="494"/>
+        <ProgressBar x:Name="prgMain" HorizontalAlignment="Left" Height="5" Margin="10,170,0,0" VerticalAlignment="Top" Width="521"/>
+    </Grid>
+</Window>

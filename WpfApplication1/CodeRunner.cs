@@ -7,7 +7,6 @@ using ZambiaDataManager.Popups;
 
 namespace ZambiaDataManager
 {
-
     public class CodeRunner<T> : ICommandExecutor where T : class
     {
         public IQueryHelper<T> CodeToExcute { get; internal set; }
@@ -27,18 +26,6 @@ namespace ZambiaDataManager
         void closeSplash()
         {
             closeForm();
-
-            //if (defaultSplashScreen != null)
-            //{
-            //    if (defaultSplashScreen.InvokeRequired)
-            //    {
-            //        defaultSplashScreen.Invoke(new closeFormDelegate(() => { closeForm(); }));
-            //    }
-            //    else
-            //    {
-            //        closeForm();
-            //    }
-            //}
         }
 
         public void Execute()
@@ -63,5 +50,4 @@ namespace ZambiaDataManager
             defaultSplashScreen.ShowDialog();
         }
     }
-
 }

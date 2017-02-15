@@ -42,6 +42,11 @@ namespace ZambiaDataManager
         Finance
     }
 
+    public enum MenuStatus
+    {
+        Enabled, Disabled
+    }
+
     public class FileDetails
     {
         public string FileName { get; set; }

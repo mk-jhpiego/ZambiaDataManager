@@ -110,50 +110,79 @@ namespace ZambiaDataManager
 
         }
 
+        void setMainMenuStatus(Visibility status)
+        {
+            stackUserMenu.Visibility = status;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Hide();
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+
+            //we show the wait window
+            setMainMenuStatus(Visibility.Hidden);
+
+            //show the wait message
+            
             //we prompt for the default database
-            var dialog = new ProjectedSelector();
-            if (dialog.ShowDialog() != null && dialog.SelectedProjectName != ProjectName.None)
+            var defaultProject = mainapp.Instance.Worker.getDefaultProject();
+
+            if (defaultProject == ProjectName.None)
             {
-                PageController.Instance.DefaultProjectName = dialog.SelectedProjectName;
-                Title = "Jhpiego Zambia Data Manager: Default project selected is " + dialog.SelectedProjectName.ToString();
-                var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                tLoggedInUser.Text = user??"Not Logged In" ;
-
-                //we load db data
-                var shutDown = false;
-                try
+                var dialog = new ProjectedSelector();
+                if (dialog.ShowDialog() != null && dialog.SelectedProjectName != ProjectName.None)
                 {
-                    loadDbData();
+                    defaultProject = dialog.SelectedProjectName;
+                    if (dialog.RememberSelection)
+                    {
+                        //we save the selected project
+                        mainapp.Instance.Worker.setDefaultProject(defaultProject);
+                    }
                 }
-                catch (SqlException sqlex)
+                else
                 {
-                    MessageBox.Show("Could not connect to the database. The application will shut down");
-                    shutDown = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Could not start the application. Error has been logged. The application will shut down");
-                    shutDown = true;
-                }
-                finally
-                {
-
-                }
-
-                if (shutDown)
-                {
+                    //means they canceled
+                    //we disable everything
                     Application.Current.Shutdown();
                 }
             }
-            else
+
+            PageController.Instance.DefaultProjectName = defaultProject;
+            Title = "Jhpiego Zambia Data Manager v2.1: Default project selected is " + defaultProject.ToString();
+            var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            tLoggedInUser.Text = user ?? "Not Logged In";
+
+            //we load db data
+            var shutDown = false;
+
+            //we check the connection
+            if (!isConnected())
+                return;
+
+            try
+            {             
+                loadDbData();
+                setMainMenuStatus(Visibility.Visible);
+            }
+            catch (SqlException sqlex)
             {
-                //means they canceled
-                //we disable everything
+                MessageBox.Show("Could not connect to the database. The application will shut down");
+                shutDown = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not start the application. Error has been logged. The application will shut down");
+                shutDown = true;
+            }
+            finally
+            {
+            }
+            if (shutDown)
+            {
                 Application.Current.Shutdown();
             }
+            this.Show();
         }
 
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -163,14 +192,39 @@ namespace ZambiaDataManager
             Application.Current.Shutdown();
         }
 
-        void loadDbData()
+        bool isConnected()
         {
-            var db = new DbHelper(DbFactory.GetDefaultConnection(PageController.Instance.DefaultProjectName));
+            var toReturn = false;
+            var dbconnection = DbFactory.GetDefaultConnection(
+    PageController.Instance.DefaultProjectName);
+            var db = new DbHelper(dbconnection);
+            try
+            {
+                var test = db.GetScalar("select 1", 3);
+                toReturn = true;
+            }
+            catch (SqlException e)
+            {
+                toReturn = false;
+            }
+            catch (Exception e)
+            {
+                toReturn = false;
+            }
+            return toReturn;
+        }
+
+        bool loadDbData()
+        {
+            var toReturn = false;
+            //what db data
+            var dbconnection = DbFactory.GetDefaultConnection(
+                PageController.Instance.DefaultProjectName);            
+            var db = new DbHelper(dbconnection);
             var provider = new AgegroupsProvider()
             {
                 DB = db
             };
-
             //
             var alternateAgeGroups = provider.getAlternateAgeGroups();
             var cleanAges = new Dictionary<string, string>();
@@ -181,6 +235,7 @@ namespace ZambiaDataManager
             }
 
             PageController.Instance.AlternateAgegroups = cleanAges;
+            return toReturn;
         }
 
         private void addQuickBooksData(object sender, RoutedEventArgs e)

@@ -52,6 +52,22 @@ into {1}
 ";
             dbHelper.ExecSql(string.Format(sql, TempTableName, newTempTableName));
 
+            //we check how many records came through
+            sql = "select count(*) from {0}";
+            var recCountOldTable = dbHelper.GetScalar(string.Format(sql, TempTableName));
+            var recCountNewTable = dbHelper.GetScalar(string.Format(sql, newTempTableName));
+            if (recCountNewTable != recCountOldTable)
+            {
+                var results = MessageBox.Show(
+                   string.Format("Count of records about to be imported ({0}) do not match the expected number ({1}). Do you want to continue?", 
+                   recCountNewTable, recCountOldTable), "Something unexpected happened", MessageBoxButton.YesNo);
+                if (results == MessageBoxResult.No)
+                {
+                    //we abort
+                    return;
+                }
+            }
+
             //we check if the data we have is unique or already exists
             sql = @"
 select count(*) as tCount from {0} f 
@@ -101,6 +117,7 @@ SELECT
 [ReferenceMonth],[Sex] as GenderId,[AgeGroupId],
 [Value] as IndicatorValue FROM {0}";
             dbHelper.ExecSql(string.Format(sql, newTempTableName));
+            //recCount = dbHelper.GetScalar(string.Format(sql, newTempTableName));
 
             //we clean up
             sql = "drop table {0};drop table {1}; ";

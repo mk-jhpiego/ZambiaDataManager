@@ -14,9 +14,10 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\ZM-VLUS56\Shared\Zambia Data Manager\</PublishUrl>
+    <TargetFrameworkProfile />
+    <PublishUrl>D:\Dropbox %28Jhpiego.org%29\development\it systems\ZambiaDataManager\v3\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Unc</InstallFrom>
+    <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -24,14 +25,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -104,10 +103,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="app\mainapp.cs" />
     <Compile Include="CodeLogic\ExcelWorksheetReaderBase.cs" />
     <Compile Include="CodeLogic\GetDodDataFromExcel.cs" />
     <Compile Include="CodeLogic\GetExcelAsDataTable.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="datamanager.xaml.cs">
+      <DependentUpon>datamanager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\pageReviewData.xaml.cs">
       <DependentUpon>pageReviewData.xaml</DependentUpon>
     </Compile>
@@ -118,11 +121,19 @@
     <Compile Include="Forms\QuickBooksImporter.xaml.cs">
       <DependentUpon>QuickBooksImporter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Popups\Splash.xaml.cs">
+      <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="runners\appinitialiser.cs" />
     <Compile Include="Storage\DataMergeCommand.cs" />
     <Compile Include="Storage\db.cs" />
     <Compile Include="Storage\SaveTableToDbCommand.cs" />
     <Compile Include="Utilities\RandomTableNameGenerator.cs" />
     <Compile Include="Utilities\ReportLocationProcessor.cs" />
+    <Page Include="datamanager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\pageReviewData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,6 +168,10 @@
     <Page Include="Forms\QuickBooksImporter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\Splash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Popups\WaitDialog.xaml">
       <SubType>Designer</SubType>

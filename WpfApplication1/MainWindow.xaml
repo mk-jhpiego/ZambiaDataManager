@@ -22,7 +22,7 @@
         <TextBlock x:Name="tApplicationTitle" Height="40" TextWrapping="Wrap" Text="Zambia Data Manager" VerticalAlignment="Top" FontSize="22" Margin="10,4,414,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8" Grid.ColumnSpan="2"/>
 
 
-        <StackPanel Margin="10,44,9.6,4.4">
+        <StackPanel Margin="10,44,9.6,4.4" Name="stackUserMenu" >
             <TextBlock x:Name="textBlock_Copy4" Height="27.5" TextWrapping="Wrap" Text="Reports and Summaries" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
             <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" 
                                  
@@ -50,7 +50,7 @@
             <Button x:Name="bManageAccount" Content="Manage &#xA;Account" Height="80" Click="manageAccount" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bMakeDataAvailableLocally" Content="Make data &#xA;available &#xA;Offline" Height="75" Click="updateLocalRepo" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
-        <Label x:Name="label" Content="Main Content Area" Height="60" Grid.Column="1" Margin="11.4,10,10.6,0" VerticalAlignment="Top" FontSize="18" Foreground="#FFF9F8F8" HorizontalContentAlignment="Center" Width="1018" Grid.ColumnSpan="2" />
+        <Label x:Name="lblMainContentArea" Content="Main Content Area" Height="60" Grid.Column="1" Margin="11.4,10,10.6,0" VerticalAlignment="Top" FontSize="18" Foreground="#FFF9F8F8" HorizontalContentAlignment="Center" Width="1018" Grid.ColumnSpan="2" />
         <Frame x:Name="stackMain" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Grid.Column="1" Margin="10.4,75,9.6,10.4" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
