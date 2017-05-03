@@ -20,19 +20,17 @@
             </LinearGradientBrush>
         </Grid.Background>
         <TextBlock x:Name="tApplicationTitle" Height="40" TextWrapping="Wrap" Text="Zambia Data Manager" VerticalAlignment="Top" FontSize="22" Margin="10,4,414,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8" Grid.ColumnSpan="2"/>
-
-
         <StackPanel Margin="10,44,9.6,4.4" Name="stackUserMenu" >
             <TextBlock x:Name="textBlock_Copy4" Height="27.5" TextWrapping="Wrap" Text="Reports and Summaries" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
-            <Button x:Name="bViewPepfarReport" Content="PEPFAR Report" Height="40" 
+            <Button x:Name="bCoAgReport" Content="CoAg Report" Height="40" 
                                  
                     d:LayoutOverrides="LeftPosition, RightPosition" Click="bViewPepfarReport_Click"/>
-            <Button x:Name="bViewAdminSummaryReport" Content="Admin Summary" Height="40" Click="showAdminSummaryReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bShowPrsReport" Content="PRS Report" Height="40" Click="showPRSreport" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bViewProgramIndicators" Content="Program Indicators" Height="40" Click="showProgramIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bViewAllIndicators" Content="View All Indicators" Height="40" Click="showAllIndicatorsReport" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bViewSitesReporting" Content="View Sites Reporting" Click="viewAllSitesReporting" d:LayoutOverrides="LeftPosition, RightPosition" Height="40" VerticalAlignment="Top"/>
             <TextBlock x:Name="textBlock_Copy5" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
-            <Button x:Name="bShowMap" Content="GIS Map" Height="40" Click="showMap" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bShowMap" Content="AutoRun" Height="40" Click="showMap" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <TextBlock x:Name="textBlock" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
             <TextBlock x:Name="textBlock_Copy1" Height="27.5" TextWrapping="Wrap" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"><Run Text="Technical "/><Run Text="Data Upload"/><LineBreak/><Run/></TextBlock>
             <Button x:Name="bAddVmmcTechDaily" Content="Add Vmmc Daily Report" Height="30" Click="addVmmcTechnicalReport" d:LayoutOverrides="LeftPosition, RightPosition"/>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,10 @@ using System.Windows.Controls;
 
 namespace ZambiaDataManager
 {
+    //public class reportHandlerHelper
+    //{
+    //    public Func<string, List<KeyValuePair<string, object>>, DataTable> refreshHandler;
+    //}
     public class ParamPair
     {
         public ParamPair(string name, object value)

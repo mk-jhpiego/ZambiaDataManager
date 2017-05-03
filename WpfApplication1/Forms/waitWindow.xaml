@@ -1,0 +1,27 @@
+﻿<Page x:Class="ZambiaDataManager.Forms.waitWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ZambiaDataManager.Forms"
+      mc:Ignorable="d" 
+      d:DesignHeight="1018" d:DesignWidth="585"
+      Title="pageAddMERLData" Width="1018" Height="585">
+    <StackPanel Margin="0,0,0,0">
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <Label x:Name="lblMainMessage" Content="Please wait. App is getting started, ..." 
+                   HorizontalAlignment="Left"
+                   Height="40" FontSize="18"/>
+        </StackPanel>
+        <StackPanel RenderTransformOrigin="0.5,0.5" Height="545" Margin="0,0,3,0">
+            <StackPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0.51"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="2.491"/>
+                </TransformGroup>
+            </StackPanel.RenderTransform>
+        </StackPanel>
+    </StackPanel>
+</Page>

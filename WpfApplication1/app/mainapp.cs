@@ -64,16 +64,28 @@ namespace ZambiaDataManager
     public class mainAppWorker
     {
         PreferencesHelper _preferences;
+        ServerPasswordsHelper _ServerPasswordsHelper;
         public mainAppWorker()
         {
             _preferences = new PreferencesHelper(
                 getAppFolder(Constants.CommonFolders.WORKINGFOLDER));
+
+            _ServerPasswordsHelper = new ServerPasswordsHelper();
+            var uname = _ServerPasswordsHelper.get("username");
+            var pwd = _ServerPasswordsHelper.get("password");
+            var servername = _ServerPasswordsHelper.get("server");
+
+            DbFactory.ServerName = servername;
+            DbFactory.InstanceName = "";
+            DbFactory.username = uname;
+            DbFactory.password = pwd;
+
             //a dirty catch to avoid messing with the server. Feel free to remove
             if (Environment.MachineName == "D-9W48GC2"
                 || Environment.MachineName == "SUPER-LAP")
             {
-                var res = MessageBox.Show("Use your Local Computer rather than the server MK ???????????", "WAIT!!!!!!!!!!!", MessageBoxButton.YesNoCancel);
-                if (res == MessageBoxResult.Yes)
+                var res = MessageBox.Show("Use your Local Computer rather than the server MK ???????????", "WAIT!!!!!!!!!!!", MessageBoxButton.OKCancel);
+                if (res == MessageBoxResult.OK)
                 {
                     if (Environment.MachineName == "D-9W48GC2")
                     {
@@ -138,15 +150,29 @@ namespace ZambiaDataManager
         }
     }
 
-    public class PreferencesHelper
+    public class ServerPasswordsHelper : PropertyStorageHelper
     {
-        string appFolder;
-        string userOptionsFilePath;
-        public PreferencesHelper(string workingFolder)
+        public ServerPasswordsHelper() : base("DbData\\dbaccess.json")
         {
-            appFolder = workingFolder;
-            userOptionsFilePath = Path.Combine(appFolder, 
-                Constants.CommonFolders.USEROPTIONS);
+
+        }
+    }
+    public class PreferencesHelper: PropertyStorageHelper
+    {
+        public PreferencesHelper(string workingFolder):base(Path.Combine(workingFolder,
+                Constants.CommonFolders.USEROPTIONS))
+        {
+
+        }
+    }
+
+    public class PropertyStorageHelper
+    {
+        //string appFolder;
+        protected string userOptionsFilePath;
+        public PropertyStorageHelper(string workingFolder)
+        {
+            userOptionsFilePath = workingFolder;
         }
 
         public void set(string preference, string value)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,15 +31,43 @@ namespace ZambiaDataManager
 
         private void showMap(object sender, RoutedEventArgs e)
         {
+            //we pick he folder
+            var baseFolderName = "C:\\Data Manager Files";
+            const string added = "added";
+            const string notAdded = "notadded";
+            var folders = new List<string>() {baseFolderName,
+                System.IO.Path.Combine(baseFolderName, added),
+                System.IO.Path.Combine(baseFolderName, notAdded)
+            };
 
+            foreach (var folder in folders)
+            {
+                if (!Directory.Exists(baseFolderName))
+                {
+                    Directory.CreateDirectory(baseFolderName);
+                }
+            }
+
+            //and start monitoring files or run everyonce in a while
+            while (true)
+            {
+                //we select the file
+                var unprocessedFiles = Directory.GetFiles(
+                    baseFolderName, "*.xlsz");
+
+                foreach(var file in unprocessedFiles)
+                {
+                    //
+
+                }
+            }
+
+            //for files that we've processed, we move them to a separate folder
+
+            //
         }
 
         private void showPepfarReport(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void showAdminSummaryReport(object sender, RoutedEventArgs e)
         {
 
         }
@@ -105,23 +134,65 @@ namespace ZambiaDataManager
 
         }
 
-        private void bViewPepfarReport_Click(object sender, RoutedEventArgs e)
+        System.Data.DataTable refreshDataHandler(
+            string procName,            
+            List<KeyValuePair<string, object>> parameters
+            )
         {
-
+            var dbconnection = DbFactory.GetDefaultConnection(
+                PageController.Instance.DefaultProjectName);
+            var db = new DbHelper(dbconnection);
+            var table = db.GetTable(procName, true, parameters);
+            return table;
         }
 
-        void setMainMenuStatus(Visibility status)
+        private void bViewPepfarReport_Click(object sender, RoutedEventArgs e)
         {
-            stackUserMenu.Visibility = status;
+            var procName = "proc_getcoag_report";
+            var parameters = new List<KeyValuePair<string, object>>() {
+                    new KeyValuePair<string, object>( "@yearMonth","2017 Mar") };
+            var table = refreshDataHandler(procName, parameters);
+            var targetForm = new Forms.gridDisplay()
+            {
+                procedureName = procName,
+                refreshHandler = refreshDataHandler
+            };
+            targetForm.refreshDataGrid(table);
+            stackMain.Content = targetForm;
+        }
+
+        private void showPRSreport(object sender, RoutedEventArgs e)
+        {
+            var procName = "proc_get_summary_pivot";
+            var parameters = new List<KeyValuePair<string, object>>() {
+                    new KeyValuePair<string, object>( "@yearMonth","2017 Mar") };
+            var table = refreshDataHandler(procName, parameters);
+            var targetForm = new Forms.gridDisplay()
+            {
+                procedureName = procName,
+                refreshHandler = refreshDataHandler
+            };
+            targetForm.refreshDataGrid(table);
+            stackMain.Content = targetForm;
+        }
+
+        Forms.waitWindow _waitWindow = null;
+        void setIsReady(bool status, string msg = "")
+        {
+            stackUserMenu.IsEnabled = status;
+            if (_waitWindow == null)
+            {
+                _waitWindow= new Forms.waitWindow() { showWait = status, displayMsg = msg };
+                stackMain.Content = _waitWindow;
+            }
+            _waitWindow.showWait = status;
+            _waitWindow.displayMsg = msg;
+            _waitWindow.InvalidateArrange();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Hide();
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-
-            //we show the wait window
-            setMainMenuStatus(Visibility.Hidden);
 
             //show the wait message
             
@@ -153,36 +224,62 @@ namespace ZambiaDataManager
             var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             tLoggedInUser.Text = user ?? "Not Logged In";
 
+            //we show the wait window
+            setIsReady(false);
+            
+            _syncClass = new syncClass();
+            var scheduler = TaskScheduler
+                .FromCurrentSynchronizationContext();
+            var task = Task.Run(()=>setUpDatabase()).
+                ContinueWith(t=> setIsReady(_syncClass.successful, _syncClass.message), scheduler);
+        }
+
+        volatile syncClass _syncClass;
+
+        class syncClass
+        {
+            public bool successful { get; set; }
+            public string message { get; set; }
+        }
+
+        void setUpDatabase()
+        {
             //we load db data
             var shutDown = false;
-
             //we check the connection
             if (!isConnected())
+            {
+                var dbconnection = DbFactory.GetDefaultConnection(
+                    PageController.Instance.DefaultProjectName);
+                _syncClass.message = string.Format(
+                    "Could not connect to the server {0}\\{1}",
+                    dbconnection.ServerName, dbconnection.DatabaseName);
+                _syncClass.successful = false;
                 return;
+            }
 
             try
-            {             
+            {
                 loadDbData();
-                setMainMenuStatus(Visibility.Visible);
             }
             catch (SqlException sqlex)
             {
-                MessageBox.Show("Could not connect to the database. The application will shut down");
+                _syncClass.message = "Could not connect to the database. The application will shut down";
+                //MessageBox.Show("Could not connect to the database. The application will shut down");
                 shutDown = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not start the application. Error has been logged. The application will shut down");
+                _syncClass.message = "Could not start the application. Error has been logged. The application will shut down";
+                //MessageBox.Show("Could not start the application. Error has been logged. The application will shut down");
                 shutDown = true;
             }
             finally
             {
             }
-            if (shutDown)
-            {
-                Application.Current.Shutdown();
-            }
-            this.Show();
+
+            _syncClass.successful = !shutDown;
+            return;
         }
 
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -200,7 +297,7 @@ namespace ZambiaDataManager
             var db = new DbHelper(dbconnection);
             try
             {
-                var test = db.GetScalar("select 1", 3);
+                var test = db.GetScalar("select 1", 30);
                 toReturn = true;
             }
             catch (SqlException e)
@@ -219,7 +316,7 @@ namespace ZambiaDataManager
             var toReturn = false;
             //what db data
             var dbconnection = DbFactory.GetDefaultConnection(
-                PageController.Instance.DefaultProjectName);            
+                PageController.Instance.DefaultProjectName);         
             var db = new DbHelper(dbconnection);
             var provider = new AgegroupsProvider()
             {
