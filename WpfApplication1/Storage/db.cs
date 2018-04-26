@@ -13,6 +13,8 @@ namespace ZambiaDataManager.Storage
     {
         public static string InstanceName = string.Empty;
         public static string ServerName = "ZM-VLUS56";
+        public static string MachineNameDevDefault = "ZM-9W48GC2";
+        public static string MachineNameDevOther = "SUPER-LAP";
         public static string password = "";
         public static string username = "";
 
@@ -22,7 +24,7 @@ namespace ZambiaDataManager.Storage
             var defaultSqlExpress = InstanceName;
             if (getAlternate)
             {
-                defaultServerName = "D-9W48GC2";
+                defaultServerName = MachineNameDevDefault;
                 defaultSqlExpress = "SQL2014";
             }
 
@@ -61,6 +63,18 @@ namespace ZambiaDataManager.Storage
                             DatabaseName = "JhpiegoDb_IhpTraining",
                             InstanceName = defaultSqlExpress,
                             ServerName = defaultServerName };
+                        break;
+                    }
+                case ProjectName.MCSP:
+                    {
+                        connBuilder = new ConnectionBuilder()
+                        {
+                            User = username,
+                            Password = password,
+                            DatabaseName = "JhpiegoDb_MCSP",
+                            InstanceName = defaultSqlExpress,
+                            ServerName = defaultServerName
+                        };
                         break;
                     }
                 case ProjectName.General:

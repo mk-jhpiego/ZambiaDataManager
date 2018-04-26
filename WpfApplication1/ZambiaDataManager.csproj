@@ -64,7 +64,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -105,13 +105,20 @@
     <Compile Include="app\mainapp.cs" />
     <Compile Include="CodeLogic\ExcelWorksheetReaderBase.cs" />
     <Compile Include="CodeLogic\GetDodDataFromExcel.cs" />
+    <Compile Include="CodeLogic\GetExcelAsDataTable2.cs" />
     <Compile Include="CodeLogic\GetExcelAsDataTable.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="datamanager.xaml.cs">
       <DependentUpon>datamanager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\pageYearMonthFilter.xaml.cs">
+      <DependentUpon>pageYearMonthFilter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\gridDisplay.xaml.cs">
       <DependentUpon>gridDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TimesheetImporter.xaml.cs">
+      <DependentUpon>TimesheetImporter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\waitWindow.xaml.cs">
       <DependentUpon>waitWindow.xaml</DependentUpon>
@@ -120,6 +127,10 @@
       <DependentUpon>pageReviewData.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
+    <Compile Include="modules\ISerialisableWebDataset.cs" />
+    <Compile Include="modules\mcsp_lng\discontinueIudIndicatorRow.cs" />
+    <Compile Include="modules\mcsp_lng\receivingIudIndicatorRow.cs" />
+    <Compile Include="modules\vmmc\vmmcIndicatorRow.cs" />
     <Compile Include="Popups\ProjectedSelector.xaml.cs">
       <DependentUpon>ProjectedSelector.xaml</DependentUpon>
     </Compile>
@@ -130,6 +141,9 @@
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
     <Compile Include="runners\appinitialiser.cs" />
+    <Compile Include="Storage\ProjectFinanceMergeCommand.cs" />
+    <Compile Include="Storage\VmmcDataMergeCommand.cs" />
+    <Compile Include="Storage\McspLngDataMergeCommand.cs" />
     <Compile Include="Storage\DataMergeCommand.cs" />
     <Compile Include="Storage\db.cs" />
     <Compile Include="Storage\SaveTableToDbCommand.cs" />
@@ -139,9 +153,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\pageYearMonthFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\gridDisplay.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\TimesheetImporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\waitWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -227,6 +249,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="staticdata\districtList.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="staticdata\timesheet.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="staticdata\finance.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

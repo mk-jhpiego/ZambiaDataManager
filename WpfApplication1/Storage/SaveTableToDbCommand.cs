@@ -12,9 +12,8 @@ namespace ZambiaDataManager.Storage
     {
         public Action<string> Alert { get; set; }
         public DbHelper Db { get; set; }
-        //public SaveTableToDbCommand()
-        //{
-        //}
+        public bool IsWebData { get; set; }
+
         public IDisplayProgress progressDisplayHelper { get; set; }
         public DataSet TargetDataset { get; internal set; }
 
@@ -52,5 +51,4 @@ namespace ZambiaDataManager.Storage
             return new List<string>();
         }
     }
-
 }

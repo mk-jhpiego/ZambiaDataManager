@@ -150,7 +150,8 @@ namespace ZambiaDataManager.CodeLogic
                 var ageGroupCells = GetMatchedCellsInRow(excelRange: xlrange,
                     searchTerms: dataElement.AgeDisaggregations,
                     endColumnIndex: colCount, startColumnIndex: firstAgeGroupCell.Column,
-                    rowIndex: firstAgeGroupCell.Row
+                    rowIndex: firstAgeGroupCell.Row,
+                    alternateAgeLookup: null
                     );
 
                 //Now we find the row indexes of the program indicators
