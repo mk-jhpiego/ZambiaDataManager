@@ -182,9 +182,9 @@ namespace ZambiaDataManager.CodeLogic
             return GetProgramAreaDefinitions("staticdata//DodProgramAreas.json");
         }
 
-        public List<ProgramAreaDefinition> GetFinanceDataElements()
+        public List<ProgramAreaDefinition> GetFinanceDataElements(string definitions_file)
         {
-            return GetProgramAreaDefinitions("staticdata//finance.json");
+            return GetProgramAreaDefinitions(definitions_file);
         }
 
         private List<ProgramAreaDefinition> GetProgramAreaDefinitions(string fileName)

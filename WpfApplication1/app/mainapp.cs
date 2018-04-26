@@ -81,20 +81,20 @@ namespace ZambiaDataManager
             DbFactory.password = pwd;
 
             //a dirty catch to avoid messing with the server. Feel free to remove
-            if (Environment.MachineName == "D-9W48GC2"
-                || Environment.MachineName == "SUPER-LAP")
+            if (Environment.MachineName == DbFactory.MachineNameDevDefault
+                || Environment.MachineName == DbFactory.MachineNameDevOther)
             {
                 var res = MessageBox.Show("Use your Local Computer rather than the server MK ???????????", "WAIT!!!!!!!!!!!", MessageBoxButton.OKCancel);
                 if (res == MessageBoxResult.OK)
                 {
-                    if (Environment.MachineName == "D-9W48GC2")
+                    if (Environment.MachineName == DbFactory.MachineNameDevDefault)
                     {
-                        DbFactory.ServerName = "D-9W48GC2";
+                        DbFactory.ServerName = DbFactory.MachineNameDevDefault;
                         DbFactory.InstanceName = "SQLDEV";
                     }
                     else
                     {
-                        DbFactory.ServerName = "SUPER-LAP";
+                        DbFactory.ServerName = DbFactory.MachineNameDevOther;
                         DbFactory.InstanceName = "SQL2014";
                     }
                 }
