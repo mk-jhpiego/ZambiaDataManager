@@ -44,7 +44,8 @@ namespace ZambiaDataManager
         IHP_VMMC,
         IHP_Capacity_Building_and_Training,
         General,
-        Finance
+        Finance,
+        MCSP
     }
 
     public enum MenuStatus

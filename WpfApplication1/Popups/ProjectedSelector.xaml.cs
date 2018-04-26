@@ -41,6 +41,10 @@ namespace ZambiaDataManager.Popups
             {
                 SelectedProjectName = ProjectName.IHP_VMMC;
             }
+            else if (name == "bMcsp")
+            {
+                SelectedProjectName = ProjectName.MCSP;
+            }
             else if (name == "bTraining")
             {
                 SelectedProjectName = ProjectName.IHP_Capacity_Building_and_Training;

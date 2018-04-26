@@ -8,6 +8,10 @@ namespace ZambiaDataManager
 {
     public class Constants
     {
+        //Roles
+        public const int ImportVmmcWeb = 205;
+
+        //others
         public const double NOVALUE = -999999;
         public const string NULLVALUE = "NULLCELL";
         public const string OFFICE_ALLOCATION = "office allocation";
@@ -20,7 +24,7 @@ namespace ZambiaDataManager
 
         public static List<int> acceptableYears = new List<int>() { 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 };
 
-
+        
         public static string GetStandardMonthName(string userMonthName)
         {
             var lower = userMonthName.ToLowerInvariant();
@@ -74,6 +78,15 @@ namespace ZambiaDataManager
         {
             public const string USEROPTIONS = "useroptions.json";
             public const string WORKINGFOLDER = "jdatamanager";
+        }
+
+
+        public static class ProjectTerms
+        {
+            public const string RECEIVING_IUD = "receiving-iud";
+            public const string DISCONTINUE_IUD = "discontinue-iud";
+
+            public const string VMMC = "vmmc";
         }
     }
 }
