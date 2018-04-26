@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -92,6 +93,22 @@ namespace ZambiaDataManager.Forms
             gIntermediateData.ItemsSource = "";
             gIntermediateData.ItemsSource = dataSource;
         }
+        public BaseMergeCommand mergeHelper { get; set; }
+        public DataTable webData = null;
+        public void ShowGridDisplayPort(DataTable dataSource = null)
+        {
+            refreshDataGrid(false);
+            gIntermediateData.ItemsSource = "";
+            gIntermediateData.Columns.Clear();
+            gIntermediateData.AutoGenerateColumns = true;
+            gIntermediateData.IsReadOnly = true;
+            gIntermediateData.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+           // gIntermediateData.sc
+            bSelectFile.IsEnabled = false;
+            bReviewFiles.IsEnabled = false;
+            webData = dataSource;
+            gIntermediateData.ItemsSource = webData.DefaultView;
+        }
 
         private void ResetAllGrids()
         {
@@ -100,7 +117,8 @@ namespace ZambiaDataManager.Forms
             gSelectedFiles.ItemsSource = "";
             gIntermediateData.ItemsSource = "";
             SelectedFiles.Clear();
-            ExcelDataValues.Clear();
+            webData = null;
+            if (ExcelDataValues != null) ExcelDataValues.Clear();
         }
 
         double defaultGridSize = 500;
@@ -173,12 +191,22 @@ namespace ZambiaDataManager.Forms
         void SaveToServer(bool saveToDevServer)
         {
             //we get valuesDataset
-            if (ExcelDataValues == null || ExcelDataValues.Count == 0)
+            if ((ExcelDataValues == null || ExcelDataValues.Count == 0) && webData == null)
             {
                 return;
             }
 
-            var valuesDataset = ExcelDataValues.ToDataset();
+            DataSet valuesDataset = null;
+            if (webData != null)
+            {
+                valuesDataset = new DataSet();
+                //webData.TableName = "DataValue";
+                valuesDataset.Tables.Add(webData);
+            }
+            else
+            {
+                valuesDataset = ExcelDataValues.ToDataset();
+            }
             if (valuesDataset.Tables.Count == 0)
             {
                 MessageBox.Show("Nothing to export");
@@ -197,10 +225,15 @@ namespace ZambiaDataManager.Forms
                 var dataImporter = new SaveTableToDbCommand()
                 {
                     TargetDataset = valuesDataset,
-                    Db = contextDb
+                    Db = contextDb,
+                    IsWebData = (webData != null)
                 };
 
                 dataImporter.Execute();
+            }
+            catch(SqlException sqlex)
+            {
+                throw;
             }
             catch
             {
@@ -210,12 +243,11 @@ namespace ZambiaDataManager.Forms
             try
             {
                 //we start the merge
-                var dataMerge = new DataMergeCommand()
-                {
-                    TempTableName = tempTableName,
-                    DestinationTable = "FacilityData",
-                    Db = contextDb
-                };
+                var dataMerge = mergeHelper;
+                dataMerge.TempTableName = tempTableName;
+                dataMerge.DestinationTable = "FacilityData";
+                dataMerge.Db = contextDb;
+                dataMerge.IsWebData = (webData != null);
 
                 // we save, 
                 dataMerge.Execute();

@@ -13,10 +13,10 @@
             <Image x:Name="img3"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
             <Button x:Name="bSelectFile" Content="Select Files" Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="145" FontWeight="Bold"/>
             <Image x:Name="img1"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
-            <Button x:Name="bSelectFile_Copy" Content="Review Selected Files" Margin="0,0,0,0"                 
+            <Button x:Name="bReviewFiles" Content="Review Selected Files" Margin="0,0,0,0"                 
         	Click="reviewSelectedFiles" HorizontalAlignment="Left" Width="145" Height="40" FontWeight="Bold"/>
             <Image x:Name="img2"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
-            <Button x:Name="bSelectFile_Copy1" Content="Save to Server" Height="40" Margin="0,0,0,0" 
+            <Button x:Name="bSaveToServer" Content="Save to Server" Height="40" Margin="0,0,0,0" 
             	VerticalAlignment="Bottom"                 
             	Click="saveToServer" HorizontalAlignment="Left" Width="145" FontWeight="Bold"/>
             <Button x:Name="bSaveToAlternate" Content="Save to Alt Server" Height="40" Margin="0,0,0,0" 

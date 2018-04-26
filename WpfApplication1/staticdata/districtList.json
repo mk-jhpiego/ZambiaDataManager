@@ -1,0 +1,1234 @@
+﻿//[
+//  {
+//    "province": "Central",
+//    "district": "Test District",
+//    "districtid": 666,
+//    "facility": "Croco UHC",
+//    "cleanName": "croco-uhc"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Test District",
+//    "districtid": 666,
+//    "facility": "SengaX FLH",
+//    "cleanName": "sengax-flh"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Test District",
+//    "districtid": 666,
+//    "facility": "Dundu RHC",
+//    "cleanName": "dundu-rhc"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Test District",
+//    "districtid": 666,
+//    "facility": "Kabilas Site",
+//    "cleanName": "kabilas-site"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Test District",
+//    "districtid": 666,
+//    "facility": "Donald-Lungu HP",
+//    "cleanName": "donald-lungu-hp"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Chibombo",
+//    "cleanName": "chibombo"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Chipembi",
+//    "cleanName": "chipembi"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Chisamba",
+//    "cleanName": "chisamba"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Chitanda",
+//    "cleanName": "chitanda"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Kamaila",
+//    "cleanName": "kamaila"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Kayosha",
+//    "cleanName": "kayosha"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Keembe",
+//    "cleanName": "keembe"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Kapila",
+//    "cleanName": "kapila"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Liteta Hospital",
+//    "cleanName": "liteta-hospital"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Malambanyama",
+//    "cleanName": "malambanyama"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Malombe",
+//    "cleanName": "malombe"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Momboshi",
+//    "cleanName": "momboshi"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Muntemba",
+//    "cleanName": "muntemba"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Mwachisompola",
+//    "cleanName": "mwachisompola"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Mwanjuni",
+//    "cleanName": "mwanjuni"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Shifwankula",
+//    "cleanName": "shifwankula"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "Twalumba",
+//    "cleanName": "twalumba"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Chibombo",
+//    "districtid": 1,
+//    "facility": "ZNS Chisamba",
+//    "cleanName": "zns-chisamba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Kalomo District Hospital",
+//    "cleanName": "kalomo-district-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Mayoba",
+//    "cleanName": "mayoba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Mubanga",
+//    "cleanName": "mubanga"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Mukwela",
+//    "cleanName": "mukwela"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Mulamba",
+//    "cleanName": "mulamba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Munkolo",
+//    "cleanName": "munkolo"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Kalomo",
+//    "districtid": 10,
+//    "facility": "Sipatunyana",
+//    "cleanName": "sipatunyana"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Zimba",
+//    "districtid": 301,
+//    "facility": "Simwatachela",
+//    "cleanName": "simwatachela"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Zimba",
+//    "districtid": 301,
+//    "facility": "Luyaba",
+//    "cleanName": "luyaba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Zimba",
+//    "districtid": 301,
+//    "facility": "Mapatizya",
+//    "cleanName": "mapatizya"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Zimba",
+//    "districtid": 301,
+//    "facility": "Nakowa",
+//    "cleanName": "nakowa"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Zimba",
+//    "districtid": 301,
+//    "facility": "Simafumba",
+//    "cleanName": "simafumba"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kalulushi",
+//    "districtid": 11,
+//    "facility": "Chibuluma",
+//    "cleanName": "chibuluma"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Ipusukilo",
+//    "cleanName": "ipusukilo"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Kamfinsa  Clinic",
+//    "cleanName": "kamfinsa--clinic"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Kawama Kitwe",
+//    "cleanName": "kawama-kitwe"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Kitwe Central Hospital",
+//    "cleanName": "kitwe-central-hospital"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Kwacha",
+//    "cleanName": "kwacha"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Mulenga",
+//    "cleanName": "mulenga"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Kitwe",
+//    "districtid": 12,
+//    "facility": "Riverside",
+//    "cleanName": "riverside"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Hillcrest",
+//    "cleanName": "hillcrest"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Kasiya",
+//    "cleanName": "kasiya"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Libuyu",
+//    "cleanName": "libuyu"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Linda",
+//    "cleanName": "linda"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Livingstone Airport",
+//    "cleanName": "livingstone-airport"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Livingstone Hospital",
+//    "cleanName": "livingstone-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Livingstone Police",
+//    "cleanName": "livingstone-police"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Mahatma Gandhi Livingstone",
+//    "cleanName": "mahatma-gandhi-livingstone"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Maramba",
+//    "cleanName": "maramba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Mosi-oa-tunya",
+//    "cleanName": "mosi-oa-tunya"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Nakatindi",
+//    "cleanName": "nakatindi"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Namatama",
+//    "cleanName": "namatama"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Nsongwe",
+//    "cleanName": "nsongwe"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Livingstone",
+//    "districtid": 13,
+//    "facility": "Simoonga",
+//    "cleanName": "simoonga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Luangwa",
+//    "districtid": 14,
+//    "facility": "Chitope",
+//    "cleanName": "chitope"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Luangwa",
+//    "districtid": 14,
+//    "facility": "Kasinsa",
+//    "cleanName": "kasinsa"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Luangwa",
+//    "districtid": 14,
+//    "facility": "Luangwa District Hospital",
+//    "cleanName": "luangwa-district-hospital"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Arakan Camp Hospital",
+//    "cleanName": "arakan-camp-hospital"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Bauleni",
+//    "cleanName": "bauleni"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Chainama Hospital",
+//    "cleanName": "chainama-hospital"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Chazanga",
+//    "cleanName": "chazanga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Chunga Sub Centre",
+//    "cleanName": "chunga-sub-centre"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Evelyn Hone",
+//    "cleanName": "evelyn-hone"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Garden Health Post",
+//    "cleanName": "garden-health-post"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "George",
+//    "cleanName": "george"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kamulanga HP",
+//    "cleanName": "kamulanga-hp"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kamwala HP",
+//    "cleanName": "kamwala-hp"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kamwala",
+//    "cleanName": "kamwala"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kanyama Self-help",
+//    "cleanName": "kanyama-self-help"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kanyama West",
+//    "cleanName": "kanyama-west"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Kaunda Square",
+//    "cleanName": "kaunda-square"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Lusaka Railway",
+//    "cleanName": "lusaka-railway"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Mahopo",
+//    "cleanName": "mahopo"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Makeni Ecumenical Centre",
+//    "cleanName": "makeni-ecumenical-centre"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Makeni Villa",
+//    "cleanName": "makeni-villa"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Makeni Transit HP",
+//    "cleanName": "makeni-transit-hp"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Malata ",
+//    "cleanName": "malata-"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Mandevu",
+//    "cleanName": "mandevu"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Matero Main",
+//    "cleanName": "matero-main"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "Matero Reference",
+//    "cleanName": "matero-reference"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Lusaka District",
+//    "districtid": 15,
+//    "facility": "UNZA HC",
+//    "cleanName": "unza-hc"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Chivuna",
+//    "cleanName": "chivuna"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Itebe",
+//    "cleanName": "itebe"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Hanjalika",
+//    "cleanName": "hanjalika"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Hanzala",
+//    "cleanName": "hanzala"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Kafue Gorge Hospital",
+//    "cleanName": "kafue-gorge-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Kaleya Urban",
+//    "cleanName": "kaleya-urban"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Kaonga",
+//    "cleanName": "kaonga"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "KASCOL",
+//    "cleanName": "kascol"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Konkola",
+//    "cleanName": "konkola"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Lubombo",
+//    "cleanName": "lubombo"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Magoye",
+//    "cleanName": "magoye"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Mainza",
+//    "cleanName": "mainza"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Mazabuka Hospital",
+//    "cleanName": "mazabuka-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Mbayamusuma",
+//    "cleanName": "mbayamusuma"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Mugoto",
+//    "cleanName": "mugoto"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Mukuyu",
+//    "cleanName": "mukuyu"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Munjile",
+//    "cleanName": "munjile"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Nanga PLC",
+//    "cleanName": "nanga-plc"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Nanga",
+//    "cleanName": "nanga"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Nega Nega",
+//    "cleanName": "nega-nega"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Njomona",
+//    "cleanName": "njomona"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Mazabuka",
+//    "districtid": 16,
+//    "facility": "Research Station",
+//    "cleanName": "research-station"
+//  },
+//  {
+//    "province": "Western",
+//    "district": "Mongu",
+//    "districtid": 17,
+//    "facility": "Lewanika General Hospital",
+//    "cleanName": "lewanika-general-hospital"
+//  },
+//  {
+//    "province": "Western",
+//    "district": "Mongu",
+//    "districtid": 17,
+//    "facility": "Limulunga Stage II",
+//    "cleanName": "limulunga-stage-ii"
+//  },
+//  {
+//    "province": "Western",
+//    "district": "Mongu",
+//    "districtid": 17,
+//    "facility": "Mulambwa",
+//    "cleanName": "mulambwa"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Monze",
+//    "districtid": 18,
+//    "facility": "Bweengwa",
+//    "cleanName": "bweengwa"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Monze",
+//    "districtid": 18,
+//    "facility": "Hamangaba",
+//    "cleanName": "hamangaba"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Monze",
+//    "districtid": 18,
+//    "facility": "Monze Urban Clinic",
+//    "cleanName": "monze-urban-clinic"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Monze",
+//    "districtid": 18,
+//    "facility": "Njolamwanza",
+//    "cleanName": "njolamwanza"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Clinic 3",
+//    "cleanName": "clinic-3"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Kamuchanga Clinic",
+//    "cleanName": "kamuchanga-clinic"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Muf 14 Miles",
+//    "cleanName": "muf-14-miles"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Murundu",
+//    "cleanName": "murundu"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Mutundu",
+//    "cleanName": "mutundu"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Mufurila",
+//    "districtid": 19,
+//    "facility": "Twatasha",
+//    "cleanName": "twatasha"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chilanga",
+//    "districtid": 2,
+//    "facility": "Kazimva",
+//    "cleanName": "kazimva"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chilanga",
+//    "districtid": 2,
+//    "facility": "Makeni Konga",
+//    "cleanName": "makeni-konga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chilanga",
+//    "districtid": 2,
+//    "facility": "Mwembeshi Prisons",
+//    "cleanName": "mwembeshi-prisons"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Chabota",
+//    "cleanName": "chabota"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Kalundu",
+//    "cleanName": "kalundu"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Kapyanga",
+//    "cleanName": "kapyanga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Kayanga",
+//    "cleanName": "kayanga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Mwembeshi",
+//    "cleanName": "mwembeshi"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Shibuyunji",
+//    "districtid": 1086,
+//    "facility": "Nampundwe",
+//    "cleanName": "nampundwe"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Kaloko",
+//    "cleanName": "kaloko"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Kaniki",
+//    "cleanName": "kaniki"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Kawama Ndola",
+//    "cleanName": "kawama-ndola"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Lubuto",
+//    "cleanName": "lubuto"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Masala New",
+//    "cleanName": "masala-new"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Ndola Centra Hospital",
+//    "cleanName": "ndola-centra-hospital"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Ndola",
+//    "districtid": 21,
+//    "facility": "Twapia",
+//    "cleanName": "twapia"
+//  },
+//  {
+//    "province": "Western",
+//    "district": "Senanga",
+//    "districtid": 22,
+//    "facility": "Senanga District Hospital",
+//    "cleanName": "senanga-district-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Siavonga",
+//    "districtid": 23,
+//    "facility": "Siavonga Hospital",
+//    "cleanName": "siavonga-hospital"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Chililabombwe",
+//    "districtid": 3,
+//    "facility": "Lubengele",
+//    "cleanName": "lubengele"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Chingola",
+//    "districtid": 4,
+//    "facility": "Kalilo",
+//    "cleanName": "kalilo"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Chingola",
+//    "districtid": 4,
+//    "facility": "Kasompe",
+//    "cleanName": "kasompe"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Chingola",
+//    "districtid": 4,
+//    "facility": "Luano - Kapisha",
+//    "cleanName": "luano---kapisha"
+//  },
+//  {
+//    "province": "Copperbelt",
+//    "district": "Chingola",
+//    "districtid": 4,
+//    "facility": "Muchinshi",
+//    "cleanName": "muchinshi"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Choma",
+//    "districtid": 5,
+//    "facility": "Mochipapa",
+//    "cleanName": "mochipapa"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Choma",
+//    "districtid": 5,
+//    "facility": "Popota",
+//    "cleanName": "popota"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Choma",
+//    "districtid": 5,
+//    "facility": "ZNS Choma Camp",
+//    "cleanName": "zns-choma-camp"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chongwe",
+//    "districtid": 6,
+//    "facility": "Chainda",
+//    "cleanName": "chainda"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chongwe",
+//    "districtid": 6,
+//    "facility": "Chikumbi",
+//    "cleanName": "chikumbi"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chongwe",
+//    "districtid": 6,
+//    "facility": "Chongwe HC",
+//    "cleanName": "chongwe-hc"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chongwe",
+//    "districtid": 6,
+//    "facility": "Ngwerere RHC",
+//    "cleanName": "ngwerere-rhc"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Bwacha",
+//    "cleanName": "bwacha"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Kabwe General Hospital",
+//    "cleanName": "kabwe-general-hospital"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Kabwe Medium Prison",
+//    "cleanName": "kabwe-medium-prison"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Kasanda",
+//    "cleanName": "kasanda"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Katondo",
+//    "cleanName": "katondo"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Kawama Kabwe",
+//    "cleanName": "kawama-kabwe"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Mahatma Gandhi Memorial",
+//    "cleanName": "mahatma-gandhi-memorial"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Mpima Prison",
+//    "cleanName": "mpima-prison"
+//  },
+//  {
+//    "province": "Central",
+//    "district": "Kabwe Urban",
+//    "districtid": 7,
+//    "facility": "Natuseko",
+//    "cleanName": "natuseko"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Apollo",
+//    "cleanName": "apollo"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Chanyanya",
+//    "cleanName": "chanyanya"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Chikupi",
+//    "cleanName": "chikupi"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Chilanga",
+//    "cleanName": "chilanga"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Chisankane",
+//    "cleanName": "chisankane"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Estates",
+//    "cleanName": "estates"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Kafue District Hospital",
+//    "cleanName": "kafue-district-hospital"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Kambale",
+//    "cleanName": "kambale"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Kris Katumba",
+//    "cleanName": "kris-katumba"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Mt. Makulu",
+//    "cleanName": "mt--makulu"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "Nangongwe OPD/Maternity",
+//    "cleanName": "nangongwe-opd-maternity"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Kafue",
+//    "districtid": 8,
+//    "facility": "St Euginia",
+//    "cleanName": "st-euginia"
+//  },
+//  {
+//    "province": "Western",
+//    "district": "Kalabo",
+//    "districtid": 9,
+//    "facility": "Kalabo District Hospital",
+//    "cleanName": "kalabo-district-hospital"
+//  },
+//  {
+//    "province": "Southern",
+//    "district": "Chikankata",
+//    "districtid": 300,
+//    "facility": "Terra-nova",
+//    "cleanName": "terra-nova"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chirundu",
+//    "districtid": 8111,
+//    "facility": "Chipepo",
+//    "cleanName": "chipepo"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chirundu",
+//    "districtid": 8111,
+//    "facility": "Jamba",
+//    "cleanName": "jamba"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chirundu",
+//    "districtid": 8111,
+//    "facility": "Kapululira",
+//    "cleanName": "kapululira"
+//  },
+//  {
+//    "province": "Lusaka",
+//    "district": "Chirundu",
+//    "districtid": 8111,
+//    "facility": "Lusitu",
+//    "cleanName": "lusitu"
+//  }
+//]
