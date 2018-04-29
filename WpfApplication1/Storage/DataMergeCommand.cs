@@ -23,6 +23,25 @@ namespace ZambiaDataManager.Storage
             return toReturn;
         }
     }
+    public class StaffLookupsProvider
+    {
+        public DbHelper DB { get; set; }
+        const string lookupSql = "select lower(StaffNumber) IndicatorId, upper(StaffNumber) Indicator From StaffLookup";
+        public Dictionary<string, string> getStaffIds()
+        {
+            //GetLookups
+            var toReturn = new Dictionary<string, string>();
+            var lookups = DB.GetLookups(lookupSql);
+            lookups.ToList().ForEach(lookup => toReturn.Add(Convert.ToString(lookup.Key), Convert.ToString(lookup.Value)));
+            return toReturn;
+        }
+        public List<string> getProjectIons()
+        {
+            //GetLookups
+            var toReturn = new Dictionary<string, string>();
+            return DB.GetListText("select ProjectIon from ProjectLookup");
+        }
+    }
 
     public class BaseMergeCommand : IQueryHelper<IEnumerable<string>>
     {

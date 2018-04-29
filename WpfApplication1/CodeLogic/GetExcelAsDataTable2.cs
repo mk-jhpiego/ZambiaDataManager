@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ZambiaDataManager.Storage;
 
 namespace ZambiaDataManager.CodeLogic
 {
@@ -14,6 +15,7 @@ namespace ZambiaDataManager.CodeLogic
         internal string worksheetName;
         public int reportYear { get; set; }
         public string reportMonth { get; set; }
+        public DbHelper Db { get; set; }
 
         public List<DataValue> Execute()
         {
@@ -52,6 +54,20 @@ namespace ZambiaDataManager.CodeLogic
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
             var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements("staticdata//timesheet.json");
+            var dataElement = _loadAllProgramDataElements.FirstOrDefault();
+            //we load the indicators from db if they exist, else use the default ones
+            var staffLookups = new Storage.StaffLookupsProvider() { DB = Db }.getStaffIds();
+            var indicators = GetProgramAreaIndicators.getProgramIndicators(staffLookups);
+            if (indicators.Count > 0)
+            {
+                dataElement.Indicators = indicators;
+            }
+            //we load ions from the db and use that if they exist, else use the default ones
+            var project_ions = new Storage.StaffLookupsProvider() { DB = Db }.getProjectIons();
+            if (project_ions.Count > 0)
+            {
+                dataElement.AgeDisaggregations = project_ions;
+            }
 
             PerformProgressStep("Please wait, Opening Excel document");
 
@@ -80,9 +96,8 @@ namespace ZambiaDataManager.CodeLogic
             var datavalues = new List<DataValue>();
             acts.Add(string.Format("Step 3 - {0}", DateTime.Now));
             MarkStartOfMultipleSteps(_loadAllProgramDataElements.Count + 2);
-            foreach (var dataElement in _loadAllProgramDataElements)
-            {
-                
+            //foreach (var dataElement in _loadAllProgramDataElements)
+            //{                
                 var programAreaName = dataElement.ProgramArea;
                 PerformProgressStep("Please wait, Processing worksheet: " + programAreaName);
                 ResetSubProgressIndicator(dataElement.Indicators.Count + 1);
@@ -173,7 +188,7 @@ namespace ZambiaDataManager.CodeLogic
                     rcount++;
                     acts.Add(string.Format("Step 8: Row {0} Processed - {1}", rcount, DateTime.Now));
                 }
-            }
+            //}
 
             var g = "";
             acts.ForEach(t => g += t);

@@ -182,6 +182,13 @@ namespace ZambiaDataManager.CodeLogic
             return GetProgramAreaDefinitions("staticdata//DodProgramAreas.json");
         }
 
+        public static List<ProgramIndicator> getProgramIndicators( Dictionary<string,string> indicatorDictionary)
+        {
+            return (from k in indicatorDictionary.Keys
+                     select new ProgramIndicator() { Indicator = indicatorDictionary[k], IndicatorId = k })
+                    .ToList<ProgramIndicator>();        
+        }
+
         public List<ProgramAreaDefinition> GetFinanceDataElements(string definitions_file)
         {
             return GetProgramAreaDefinitions(definitions_file);

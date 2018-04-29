@@ -216,7 +216,7 @@ namespace ZambiaDataManager.Forms
                 reportYear = singlefile.ReportYear,
                 reportMonth = singlefile.ReportMonth,
                 locationDetail = null,
-
+                Db = new DbHelper(DbFactory.GetDefaultConnection(CurrentProjectName)),
                 fileName = singlefile.FileName,
                 worksheetName = "Sheet1",
                 progressDisplayHelper = new WaitDialog()
@@ -306,7 +306,7 @@ namespace ZambiaDataManager.Forms
             var connBuilder = DbFactory.GetDefaultConnection(currentProject, saveToDevServer);
             if (connBuilder == null)
                 return;
-
+            //new DbHelper(DbFactory.GetDefaultConnection(CurrentProjectName, saveToDevServer));
             var contextDb = new DbHelper(connBuilder);
 
             try

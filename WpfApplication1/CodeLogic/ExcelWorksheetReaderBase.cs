@@ -531,8 +531,8 @@ namespace ZambiaDataManager.CodeLogic
                     if (string.IsNullOrWhiteSpace(rawAgeValue) || rawAgeValue.Length > 40) continue;
 
                     var cleanAgeValue = rawAgeValue.toCleanAge();
-                    if (cleanAgeDisaggs.Contains(cleanAgeValue) &&
-                        cleanAgeDisaggs.IndexOf(cleanAgeValue) == 0)
+                    //no longer searching if its thefirst item, since we are going from Column 1
+                    if (cleanAgeDisaggs.Contains(cleanAgeValue))
                     {
                         //we've found our column, time to find where the data begibs, lets find the corresponding indicator
                         //we'll scan for columns from rowid to perhaps 5 places, and starting from column 0
