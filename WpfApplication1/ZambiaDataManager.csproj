@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="runners\appinitialiser.cs" />
     <Compile Include="Storage\ProjectFinanceMergeCommand.cs" />
+    <Compile Include="Storage\TimesheetsDataMergeCommand.cs" />
     <Compile Include="Storage\VmmcDataMergeCommand.cs" />
     <Compile Include="Storage\McspLngDataMergeCommand.cs" />
     <Compile Include="Storage\DataMergeCommand.cs" />

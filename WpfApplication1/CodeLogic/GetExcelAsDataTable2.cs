@@ -9,9 +9,11 @@ using System.Windows;
 
 namespace ZambiaDataManager.CodeLogic
 {
-    public class GetFinanceDataFromExcel : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
+    public class GetExcelAsDataTable2 : ExcelWorksheetReaderBase, IQueryHelper<List<DataValue>>
     {
         internal string worksheetName;
+        public int reportYear { get; set; }
+        public string reportMonth { get; set; }
 
         public List<DataValue> Execute()
         {
@@ -45,9 +47,11 @@ namespace ZambiaDataManager.CodeLogic
 
         private List<DataValue> ImportData(Microsoft.Office.Interop.Excel.Application excelApp)
         {
+            var acts = new List<string>();
+            acts.Add(string.Format("Step 1 - {0}", DateTime.Now));
             PerformProgressStep("Please wait, initialising");
             //we have twwo spreadsheets for finance: 
-            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements("staticdata//finance.json");
+            var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements("staticdata//timesheet.json");
 
             PerformProgressStep("Please wait, Opening Excel document");
 
@@ -62,6 +66,7 @@ namespace ZambiaDataManager.CodeLogic
                 var worksheetName = ((Worksheet)(workbook.Sheets[indx])).Name;
                 worksheetNames.Add(worksheetName.Trim().ToLowerInvariant(), worksheetName);
             }
+            acts.Add(string.Format("Step 2 - {0}", DateTime.Now));
 
             if (!worksheetNames.ContainsKey(worksheetName.ToLowerInvariant()))
             {
@@ -73,10 +78,11 @@ namespace ZambiaDataManager.CodeLogic
             }
 
             var datavalues = new List<DataValue>();
-
+            acts.Add(string.Format("Step 3 - {0}", DateTime.Now));
             MarkStartOfMultipleSteps(_loadAllProgramDataElements.Count + 2);
             foreach (var dataElement in _loadAllProgramDataElements)
             {
+                
                 var programAreaName = dataElement.ProgramArea;
                 PerformProgressStep("Please wait, Processing worksheet: " + programAreaName);
                 ResetSubProgressIndicator(dataElement.Indicators.Count + 1);
@@ -86,8 +92,10 @@ namespace ZambiaDataManager.CodeLogic
                 var rowCount = xlrange.Rows.Count;
                 var colCount = xlrange.Columns.Count;
 
+                //  xlrange.Rows
+
                 //we have the column indexes of the first age category options, and other occurrences of the same
-                var firstAgeGroupCell = GetFirstAgeGroupCell(dataElement, xlrange, false);
+                var firstAgeGroupCell = GetFirstAgeGroupCell(dataElement, xlrange);
                 if (firstAgeGroupCell.Column == -1 && firstAgeGroupCell.Row == -1)
                 {
                     MessageBox.Show(
@@ -96,14 +104,15 @@ namespace ZambiaDataManager.CodeLogic
     , "Incorrectly formatted file", MessageBoxButton.OK);
                     return null;
                 }
-
+                acts.Add(string.Format("Step 4 - {0}", DateTime.Now));
                 var ageGroupCells = GetMatchedCellsInRow(excelRange: xlrange,
                     searchTerms: dataElement.AgeDisaggregations,
                     endColumnIndex: colCount, startColumnIndex: firstAgeGroupCell.Column,
                     rowIndex: firstAgeGroupCell.Row,
-                    alternateAgeLookup: null
+                    alternateAgeLookup: dataElement.AgeDisaggregations.ToDictionary(t => t.toCleanAge(), v => v)
                     );
 
+                acts.Add(string.Format("Step 5 - {0}", DateTime.Now));
                 //Now we find the row indexes of the program indicators
                 var indicatorList = (from t in dataElement.Indicators select t.Indicator).ToList();
                 var firstIndicatorCell = GetFirstMatchedCellByRow(excelRange: xlrange,
@@ -111,9 +120,10 @@ namespace ZambiaDataManager.CodeLogic
                     startColumnIndex: 1,
                     endColumnIndex: firstAgeGroupCell.Column - 1,
                     maxRows: rowCount,
-                    statRowIndex: firstAgeGroupCell.Row + 1
+                    statRowIndex: firstAgeGroupCell.Row + 2
                     );
 
+                acts.Add(string.Format("Step 6 - {0}", DateTime.Now));
                 var indicatorCells = GetCellsInColumnContaining(
                     excelRange: xlrange,
                     columnIndex: firstIndicatorCell.Column,
@@ -122,8 +132,11 @@ namespace ZambiaDataManager.CodeLogic
                     maxRows: rowCount
                     );
 
+                acts.Add(string.Format("Step 7 Start Rows - {0}", DateTime.Now));
+                var rcount = 0;
                 foreach (var rowObject in indicatorCells)
                 {
+                    
                     var matchingIndicator = dataElement.Indicators.Where(t => t.Indicator == rowObject.Key).FirstOrDefault();
                     if (matchingIndicator == null)
                     {
@@ -134,14 +147,36 @@ namespace ZambiaDataManager.CodeLogic
                     {
                         foreach (var indicatorAgeGroupCell in indicatorAgeGroupCells.Value)
                         {
-                            var dataValue = getCellValue(dataElement, matchingIndicator.IndicatorId, xlrange, rowObject, indicatorAgeGroupCells, indicatorAgeGroupCell);
+                            var dataValue = getCellValue(dataElement, 
+                                matchingIndicator.IndicatorId, xlrange, rowObject, 
+                                indicatorAgeGroupCells, indicatorAgeGroupCell);
                             if (dataValue == null)
                                 continue;
-                            datavalues.Add(dataValue);
+
+                            //people are facilities and indicator is 'Project LOE'
+                            var hoursCharged = new DataValue()
+                            {
+                                FacilityName = dataValue.IndicatorId,
+
+                                IndicatorValue = dataValue.IndicatorValue,
+                                IndicatorId = "Project LOE",
+                                ProgramArea = dataValue.ProgramArea,
+                                AgeGroup = dataValue.AgeGroup,
+                                ReportYear = reportYear,
+                                ReportMonth = reportMonth,
+                                Sex= dataValue.Sex
+                            };
+
+                            datavalues.Add(hoursCharged);
                         }
                     }
+                    rcount++;
+                    acts.Add(string.Format("Step 8: Row {0} Processed - {1}", rcount, DateTime.Now));
                 }
             }
+
+            var g = "";
+            acts.ForEach(t => g += t);
 
             PerformProgressStep("Please wait, finalizing");
             return datavalues;

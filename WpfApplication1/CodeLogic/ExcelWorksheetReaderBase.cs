@@ -408,23 +408,25 @@ namespace ZambiaDataManager.CodeLogic
             return indicatorCells;
         }
 
-        protected static Dictionary<string, List<RowColmnPair>> GetMatchedCellsInRow(Range excelRange, List<string> searchTerms,
+        protected static Dictionary<string, List<RowColmnPair>> GetMatchedCellsInRow(
+            Dictionary<string, string> alternateAgeLookup, Range excelRange, 
+            List<string> searchTerms,
             int rowIndex, int startColumnIndex, int endColumnIndex)
         {
-            var alternateAgeGroups = PageController.Instance.AlternateAgegroups;
+            var alternateAgeGroups = alternateAgeLookup ?? PageController.Instance.AlternateAgegroups;
             //we convert our search terms to standard
             var standardSearchTerms = new Dictionary<string, string>();
             foreach (var ageDisagg in searchTerms)
             {
                 var stdAgeDisagg = string.Empty;
-                if(!alternateAgeGroups.TryGetValue(ageDisagg.toCleanAge(), out stdAgeDisagg))
+                if (!alternateAgeGroups.TryGetValue(ageDisagg.toCleanAge(), out stdAgeDisagg))
                 {
                     //we throw exception as our master dictionary does not have thids
                     throw new ArgumentOutOfRangeException("Database does not have this alternate age disaggregation " + ageDisagg);
                 }
                 standardSearchTerms.Add(stdAgeDisagg, ageDisagg);
             }
-        
+
             var toReturn = new Dictionary<string, List<RowColmnPair>>();
             for (var colmnId = startColumnIndex; colmnId <= endColumnIndex; colmnId++)
             {
@@ -510,6 +512,39 @@ namespace ZambiaDataManager.CodeLogic
                 if (firstIndicatorCell != null) break;
             }
             return firstIndicatorCell;
+        }
+
+        protected static RowColmnPair GetFirstAgeGroupCell(ProgramAreaDefinition dataElement, Range xlrange)
+        {
+            int colCount = xlrange.Columns.Count;
+            colCount = colCount > 15 ? 12 : colCount;
+            int row = -1, colmn = -1, colmn2 = -1;
+            var matchfound = false;
+            var maxDepthSearchRows = 8;
+            var cleanAgeDisaggs = dataElement.getCleanAgeDisaggregations();
+
+            for (var rowId = 1; rowId <= maxDepthSearchRows; rowId++)
+            {
+                for (var colmnId = 1; colmnId <= colCount; colmnId++)
+                {
+                    var rawAgeValue = getCellValue(xlrange, rowId, colmnId);
+                    if (string.IsNullOrWhiteSpace(rawAgeValue) || rawAgeValue.Length > 40) continue;
+
+                    var cleanAgeValue = rawAgeValue.toCleanAge();
+                    if (cleanAgeDisaggs.Contains(cleanAgeValue) &&
+                        cleanAgeDisaggs.IndexOf(cleanAgeValue) == 0)
+                    {
+                        //we've found our column, time to find where the data begibs, lets find the corresponding indicator
+                        //we'll scan for columns from rowid to perhaps 5 places, and starting from column 0
+                        row = rowId;
+                        colmn = colmnId;
+                        matchfound = true;
+                        break;
+                    }
+                }
+                if (matchfound) break;
+            }
+            return new RowColmnPair(row, colmn, colmn2);
         }
 
         protected static RowColmnPair GetFirstAgeGroupCell(ProgramAreaDefinition dataElement, Range xlrange, bool isNonDod)
