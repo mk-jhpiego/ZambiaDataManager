@@ -117,6 +117,9 @@
     <Compile Include="Forms\gridDisplay.xaml.cs">
       <DependentUpon>gridDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MaxzamImporter.xaml.cs">
+      <DependentUpon>MaxzamImporter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TimesheetImporter.xaml.cs">
       <DependentUpon>TimesheetImporter.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,7 @@
     </Compile>
     <Compile Include="runners\appinitialiser.cs" />
     <Compile Include="Storage\ProjectFinanceMergeCommand.cs" />
+    <Compile Include="Storage\MaxzamDataMergeCommand.cs" />
     <Compile Include="Storage\TimesheetsDataMergeCommand.cs" />
     <Compile Include="Storage\VmmcDataMergeCommand.cs" />
     <Compile Include="Storage\McspLngDataMergeCommand.cs" />
@@ -159,6 +163,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\gridDisplay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\MaxzamImporter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -343,6 +351,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\staff_img.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

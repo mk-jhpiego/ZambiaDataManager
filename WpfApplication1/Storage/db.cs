@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -52,6 +54,18 @@ namespace ZambiaDataManager.Storage
                             DatabaseName = "JhpiegoDb_IhpVmmc",
                             InstanceName = defaultSqlExpress,
                             ServerName = defaultServerName };
+                        break;
+                    }
+                case ProjectName.Maxzam:
+                    {
+                        connBuilder = new ConnectionBuilder()
+                        {
+                            User = username,
+                            Password = password,
+                            DatabaseName = "JhpiegoDb_Maxzam",
+                            InstanceName = defaultSqlExpress,
+                            ServerName = defaultServerName
+                        };
                         break;
                     }
                 case ProjectName.IHP_Capacity_Building_and_Training:
@@ -153,11 +167,39 @@ namespace ZambiaDataManager.Storage
             {
                 foreach (DataColumn c in table.Columns)
                 {
+                    //if()
                     bcp.ColumnMappings.Add(c.ColumnName, c.ColumnName);
                 }
                 conn.Open();
                 table.AcceptChanges();
-                bcp.WriteToServer(table);
+                //bcp.WriteToServer(table);
+                try
+                {
+                    bcp.WriteToServer(table);
+                    //sqlTran.Commit();
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
+                    {
+                        string pattern = @"\d+";
+                        Match match = Regex.Match(ex.Message.ToString(), pattern);
+                        var index = Convert.ToInt32(match.Value) - 1;
+
+                        FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var sortedColumns = fi.GetValue(bcp);
+                        var items = (Object[])sortedColumns.GetType().GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sortedColumns);
+
+                        FieldInfo itemdata = items[index].GetType().GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var metadata = itemdata.GetValue(items[index]);
+
+                        var column = metadata.GetType().GetField("column", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+                        var length = metadata.GetType().GetField("length", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+                        throw new FormatException (String.Format("Column: {0} contains data with a length greater than: {1}", column, length));
+                    }
+
+                    throw;
+                }
                 bcp.Close();
             }
         }

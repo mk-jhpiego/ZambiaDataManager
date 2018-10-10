@@ -1,4 +1,4 @@
-﻿<Page x:Class="ZambiaDataManager.Forms.TimesheetImporter"
+﻿<Page x:Class="ZambiaDataManager.Forms.MaxzamImporter"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,12 +6,12 @@
       xmlns:local="clr-namespace:ZambiaDataManager.Forms"
       mc:Ignorable="d" 
       d:DesignHeight="585" d:DesignWidth="1018"
-      Title="TimesheetImporter">
+      Title="MaxzamImporter">
     <StackPanel Margin="0,0,0,0">
         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
             <TextBlock FontSize="16"><Run Text="Import "/><LineBreak/><Run Text="Excel"/></TextBlock>
             <Image x:Name="img3"  Height="40" Width="35" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
-            <Button x:Name="bSelectFile" Content="Select LOE File" Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>
+            <Button x:Name="bSelectFile" Content="Select CSV Files" Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Click="selectFile" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>
             <Image x:Name="img1"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/right_chevron.png"/>
             <Button x:Name="bSelectFile_Copy" Content="Review Selected Files" Margin="0,0,0,0"                 
         	Click="reviewSelectedFiles" HorizontalAlignment="Left" Width="140" Height="40" FontWeight="Bold"/>
@@ -21,12 +21,13 @@
             	Click="saveToServer" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>
             <Image x:Name="img4"  Height="40" Width="70" Source="/ZambiaDataManager;component/res/staff_img.png"/>
 
-            <Button x:Name="bEditStaff" Content="Edit Staff Info" Height="40" Margin="0,0,0,0" 
+            <!--<Button x:Name="bEditStaff" Content="Edit Staff Info" Height="40" Margin="0,0,0,0" 
             	VerticalAlignment="Bottom"                 
             	Click="showStaffEditor" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>
             <Button x:Name="bUpdateProjectION" Content="Update Project Info" Height="40" Margin="0,0,0,0" 
             	VerticalAlignment="Bottom"                 
-            	Click="showProjectEditor" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>
+            	Click="showProjectEditor" HorizontalAlignment="Left" Width="140" FontWeight="Bold"/>-->
+            
             <Button x:Name="bSaveToAlternate" Content="Save to Alt Server" Height="40" Margin="0,0,0,0" 
             	VerticalAlignment="Bottom"                 
             	Click="saveToAltServer" HorizontalAlignment="Left" Width="145" FontWeight="Bold" Visibility="Hidden"/>
@@ -81,8 +82,8 @@
         	ItemsSource="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
         	CanUserAddRows="True" CanUserSortColumns="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="colReportYear1" Binding="{Binding ReportYear}" Header="Year" Width="0.1*"  />
-                    <DataGridTextColumn x:Name="colReportMonth1" Binding="{Binding ReportMonth}" Header="Report Month" Width="0.15*"   />
+                    <!--<DataGridTextColumn x:Name="colReportYear1" Binding="{Binding ReportYear}" Header="Year" Width="0.1*"  />
+                    <DataGridTextColumn x:Name="colReportMonth1" Binding="{Binding ReportMonth}" Header="Report Month" Width="0.15*"   />-->
                     <DataGridTextColumn x:Name="colFileName1" Binding="{Binding FileName}" Header="File Name" Width="*"  />
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>

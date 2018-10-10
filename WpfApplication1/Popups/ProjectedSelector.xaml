@@ -30,6 +30,14 @@
         		VerticalContentAlignment="Center" Background="#FFD3CBCB"
                     Click="bVmmc_Click"
                />
+            <Button x:Name="bMaxzam" Content="Maxzam" 
+        		HorizontalAlignment="Center" Height="45" Margin="0,5,0,0" 
+        		VerticalAlignment="Top" Width="345" FontSize="16" FontWeight="SemiBold" 
+        		FontStretch="Expanded"
+        		HorizontalContentAlignment="Center"
+        		VerticalContentAlignment="Center" Background="#FFD3CBCB"
+                    Click="bVmmc_Click"
+               />
             <Button x:Name="bTraining" Content="IHP Training and Capacity Building" 
         		HorizontalAlignment="Center" Height="45" Margin="0,5,0,0" 
         		VerticalAlignment="Top" Width="345" FontSize="16" FontWeight="SemiBold" 

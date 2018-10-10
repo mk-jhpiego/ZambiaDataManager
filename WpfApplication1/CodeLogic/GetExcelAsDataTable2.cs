@@ -56,7 +56,7 @@ namespace ZambiaDataManager.CodeLogic
             var _loadAllProgramDataElements = new GetProgramAreaIndicators().GetFinanceDataElements("staticdata//timesheet.json");
             var dataElement = _loadAllProgramDataElements.FirstOrDefault();
             //we load the indicators from db if they exist, else use the default ones
-            var staffLookups = new Storage.StaffLookupsProvider() { DB = Db }.getStaffIds();
+            var staffLookups = new StaffLookupsProvider() { DB = Db }.getStaffIds();
             var indicators = GetProgramAreaIndicators.getProgramIndicators(staffLookups);
             if (indicators.Count > 0)
             {

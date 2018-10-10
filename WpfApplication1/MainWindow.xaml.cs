@@ -53,7 +53,7 @@ namespace ZambiaDataManager
             }
 
             PageController.Instance.DefaultProjectName = defaultProject;
-            Title = "Jhpiego Zambia Data Manager 2018.04: Default project selected is " + defaultProject.ToString();
+            Title = "Jhpiego Zambia Data Manager 2018.05: Default project selected is " + defaultProject.ToString();
             var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             tLoggedInUser.Text = user ?? "Not Logged In";
 
@@ -347,6 +347,10 @@ namespace ZambiaDataManager
         bool loadDbData()
         {
             var toReturn = false;
+            if(ProjectName.Maxzam == PageController.Instance.DefaultProjectName)
+            {
+                return toReturn;
+            }
             //what db data
             var dbconnection = DbFactory.GetDefaultConnection(
                 PageController.Instance.DefaultProjectName);         
@@ -521,15 +525,26 @@ namespace ZambiaDataManager
                     if (latestData != null)
                     {
                         //discontinueIudIndicatorRow
+                        var targetname = DateTime.Now;
+                        var table_name = "";
+
                         if(Constants.ProjectTerms.RECEIVING_IUD== datasetname)
                         {
+                            table_name = string.Format("lng_receive_{0}_{1}_{2}", targetname.Year, targetname.Month, targetname.Day);
                             getVmmcWebData2<receivingIudIndicatorRow>(latestData, dataMerge: 
-                                new McspLngDataMergeCommand() { datasetName = datasetname, projectName = ProjectName.MCSP });
+                                new McspLngDataMergeCommand() {
+                                    TargetView= "receiving",
+                                    DestinationTable = table_name,
+                                    datasetName = datasetname, projectName = ProjectName.MCSP });
                         }
                         else if(Constants.ProjectTerms.DISCONTINUE_IUD == datasetname)
                         {
-                            getVmmcWebData2<discontinueIudIndicatorRow>(latestData, dataMerge: 
-                                new McspLngDataMergeCommand() { datasetName = datasetname, projectName = ProjectName.MCSP });
+                            table_name = string.Format("lng_discontinue_{0}_{1}_{2}",targetname.Year, targetname.Month, targetname.Day);
+                            getVmmcWebData2<discontinueIudIndicatorRow>(latestData, dataMerge:                                
+                                new McspLngDataMergeCommand() {
+                                    TargetView= "discontinuing",
+                                    DestinationTable = table_name,
+                                    datasetName = datasetname, projectName = ProjectName.MCSP });
                         }
                         else
                         {
@@ -555,6 +570,15 @@ namespace ZambiaDataManager
             var targetForm = new Forms.TimesheetImporter()
             {
                 CurrentProjectName = ProjectName.General
+            };
+            stackMain.Content = targetForm;
+        }
+
+        private void addMaxzamData(object sender, RoutedEventArgs e)
+        {
+            var targetForm = new Forms.MaxzamImporter()
+            {
+                CurrentProjectName = ProjectName.Maxzam
             };
             stackMain.Content = targetForm;
         }

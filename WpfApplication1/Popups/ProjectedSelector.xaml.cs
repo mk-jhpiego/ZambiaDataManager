@@ -26,7 +26,7 @@ namespace ZambiaDataManager.Popups
         }
 
         public ProjectName SelectedProjectName { get; set; }
-
+        //bMaxzam_Click
         private void bVmmc_Click(object sender, RoutedEventArgs e)
         {
             var asButton = sender as Button;
@@ -48,6 +48,10 @@ namespace ZambiaDataManager.Popups
             else if (name == "bTraining")
             {
                 SelectedProjectName = ProjectName.IHP_Capacity_Building_and_Training;
+            }
+            else if (name == "bMaxzam")
+            {
+                SelectedProjectName = ProjectName.Maxzam;
             }
             else if (name == "bGeneral")
             {

@@ -243,9 +243,14 @@ namespace ZambiaDataManager.Forms
             try
             {
                 //we start the merge
+                //dataMerge.DestinationTable
                 var dataMerge = mergeHelper;
                 dataMerge.TempTableName = tempTableName;
-                dataMerge.DestinationTable = "FacilityData";
+                if (string.IsNullOrWhiteSpace(dataMerge.DestinationTable))
+                {
+                    dataMerge.DestinationTable = "FacilityData";
+                }
+                
                 dataMerge.Db = contextDb;
                 dataMerge.IsWebData = (webData != null);
 

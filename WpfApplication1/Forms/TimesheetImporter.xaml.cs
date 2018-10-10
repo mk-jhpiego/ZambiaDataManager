@@ -275,6 +275,16 @@ namespace ZambiaDataManager.Forms
         {
         }
 
+        private void showStaffEditor(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void showProjectEditor(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         void saveToAltServer(object sender, RoutedEventArgs e)
         {
             SaveToServer(true);
@@ -284,7 +294,7 @@ namespace ZambiaDataManager.Forms
         {
             SaveToServer(false);
         }
-
+        
         void SaveToServer(bool saveToDevServer)
         {
             //we get valuesDataset

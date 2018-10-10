@@ -45,6 +45,7 @@ namespace ZambiaDataManager
         IHP_Capacity_Building_and_Training,
         General,
         Finance,
+        Maxzam,
         MCSP
     }
 

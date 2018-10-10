@@ -38,11 +38,12 @@
             <Button x:Name="bRefreshDiscontinueLng" Content="Get LNG-Discontinue" Height="30" Click="getDiscontinueLngWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddQuickBooksData" Content="Add QB" Height="30" Click="addQuickBooksData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddTimesheetsData" Content="Timesheets" Height="30" Click="addTimesheetsData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddMaxzamData" Content="Get Maxzam" Height="30" Click="addMaxzamData" d:LayoutOverrides="LeftPosition, RightPosition"/>
 
             <TextBlock x:Name="textBlock_Copy2" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
             <TextBlock x:Name="textBlock_Copy" Height="27.5" TextWrapping="Wrap" Text="MERL Data Upload" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"/>
-            <Button x:Name="bAddVmmcMonthly" Content="" Height="40" Click="addVmmcMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
-            <Button x:Name="bAddVmmcMEDaily" Content="" Height="40" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <!--<Button x:Name="bAddVmmcMonthly" Content="" Height="40" Click="addVmmcMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bAddVmmcMEDaily" Content="" Height="40" d:LayoutOverrides="LeftPosition, RightPosition"/>-->
             <Button x:Name="bReviewUploadedData" Content="Review Uploaded Data" Height="40" Click="reviewUploadedData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddDodData" Content="Add DOD Monthly Data" Height="40" Click="addDodMonthly" d:LayoutOverrides="LeftPosition, RightPosition"/>
         </StackPanel>
