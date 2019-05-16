@@ -33,7 +33,8 @@
             <!--<Button x:Name="bShowMap" Content="AutoRun" Height="40" Click="showMap" d:LayoutOverrides="LeftPosition, RightPosition"/>-->
             <TextBlock x:Name="textBlock" Height="20" Margin="0,0,5,0" TextWrapping="Wrap"/>
             <TextBlock x:Name="textBlock_Copy1" Height="27.5" TextWrapping="Wrap" FontSize="16" Margin="0,0,39,0" RenderTransformOrigin="0.494,0.636" FontWeight="SemiBold" Foreground="#FFF9F8F8"><Run Text="Technical "/><Run Text="Data Upload"/><LineBreak/><Run/></TextBlock>
-            <Button x:Name="bRefreshVmmcMonthly" Content="Get Web Data" Height="30" Click="getVmmcWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bRefreshPpxMonthly" Content="Get Prepex Web Data" Height="30" Click="getPpxWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <Button x:Name="bRefreshVmmcMonthly" Content="Get VMMC Web Data" Height="30" Click="getVmmcWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bRefreshReceivingLng" Content="Get LNG-Receiving" Height="30" Click="getReceivingLngWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bRefreshDiscontinueLng" Content="Get LNG-Discontinue" Height="30" Click="getDiscontinueLngWebData" d:LayoutOverrides="LeftPosition, RightPosition"/>
             <Button x:Name="bAddQuickBooksData" Content="Add QB" Height="30" Click="addQuickBooksData" d:LayoutOverrides="LeftPosition, RightPosition"/>

@@ -53,7 +53,7 @@ namespace ZambiaDataManager
             }
 
             PageController.Instance.DefaultProjectName = defaultProject;
-            Title = "Jhpiego Zambia Data Manager 2018.05: Default project selected is " + defaultProject.ToString();
+            Title = "Jhpiego Zambia Data Manager 2019.05.2: Default project selected is " + defaultProject.ToString();
             var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             tLoggedInUser.Text = user ?? "Not Logged In";
 
@@ -397,10 +397,9 @@ namespace ZambiaDataManager
         //        return null;
         //    }
         //}
-
-        async Task<string> downloadLatest( string baseUrl, string resourcePath)
+        async Task<string> downloadLatest(string baseUrl, string resourcePath, string latestfilelink)
         {
-            var latestfilelink = "latest.json";
+            //var latestfilelink = "ppxlatest.json";
             var currentFileLinkUrl = string.Format(baseUrl, resourcePath, latestfilelink);
             try
             {
@@ -418,6 +417,30 @@ namespace ZambiaDataManager
                 //labelStatus.Content = "Please specify a correct year";
                 return null;
             }
+        }
+
+        async Task<string> downloadLatest( string baseUrl, string resourcePath)
+        {
+            return await downloadLatest(baseUrl, resourcePath, "latest.json");
+
+            //var latestfilelink = "latest.json";
+            //var currentFileLinkUrl = string.Format(baseUrl, resourcePath, latestfilelink);
+            //try
+            //{
+            //    var res1 = await getWebData(currentFileLinkUrl);
+            //    var latestfilename = Encoding.UTF8.GetString(res1);
+            //    var dataFileUrl = string.Format(baseUrl, resourcePath, latestfilename);
+            //    var reportData = await getWebData(dataFileUrl);
+            //    //var reportText = Encoding.UTF8.GetString(reportData);
+            //    File.WriteAllBytes(latestfilename, reportData);
+            //    //Enable review and upload button
+            //    return latestfilename;
+            //}
+            //catch (Exception x)
+            //{
+            //    //labelStatus.Content = "Please specify a correct year";
+            //    return null;
+            //}
         }
 
         async Task<byte[]> getWebData(string url)
@@ -485,19 +508,48 @@ namespace ZambiaDataManager
             {
                 FilterCallBack = async (int year, string monthTxt) => {
                     var baseUrl = "https://firebasestorage.googleapis.com/v0/b/daily-reporting-4ac35.appspot.com/o/monthlyreports%2F{0}%2F{1}?alt=media&token=a201912b-0ff4-4143-a00d-8a0b78791e82";
-
-                    var latestData = await downloadLatest(baseUrl,String.Join("%2F", year, monthTxt));
+                    var webpath = String.Join("%2F", year, monthTxt);
+                    var latestData = await downloadLatest(baseUrl,webpath);
                     if (latestData != null)
                     {
                         getVmmcWebData2<vmmcIndicatorRow>(latestData, 
                             dataMerge: new VmmcDataMergeCommand() {
+                                facilityDataName = "FacilityData",
                                 datasetName = Constants.ProjectTerms.VMMC, projectName = ProjectName.IHP_VMMC });
+                    }
+                    else
+                    {
                     }
                 }
             };
             stackMain.Content = filter;
         }
 
+        private async void getPpxWebData(object sender, RoutedEventArgs e)
+        {
+            var filter = new Forms.pageYearMonthFilter()
+            {
+                FilterCallBack = async (int year, string monthTxt) => {
+                    var baseUrl = "https://firebasestorage.googleapis.com/v0/b/daily-reporting-4ac35.appspot.com/o/monthlyreports%2F{0}%2F{1}?alt=media&token=a201912b-0ff4-4143-a00d-8a0b78791e82";
+                    var webpath = String.Join("%2F", year, monthTxt);
+                    var latestData = await downloadLatest(baseUrl, webpath, "ppxlatest.json");
+                    if (latestData != null)
+                    {
+                        getVmmcWebData2<vmmcIndicatorRow>(latestData,
+                            dataMerge: new VmmcDataMergeCommand()
+                            {
+                                facilityDataName="FacilityDataPpx",
+                                datasetName = Constants.ProjectTerms.VMMC,
+                                projectName = ProjectName.IHP_VMMC
+                            });
+                    }
+                    else
+                    {
+                    }
+                }
+            };
+            stackMain.Content = filter;
+        }
         private async void getReceivingLngWebData(object sender, RoutedEventArgs e)
         {
             var baseUrl =

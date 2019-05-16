@@ -95,7 +95,7 @@ namespace ZambiaDataManager
                     else
                     {
                         DbFactory.ServerName = DbFactory.MachineNameDevOther;
-                        DbFactory.InstanceName = "SQL2014";
+                        DbFactory.InstanceName = "SQLDEV";
                     }
                 }
             }

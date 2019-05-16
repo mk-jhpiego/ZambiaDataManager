@@ -27,6 +27,9 @@ namespace ZambiaDataManager.modules.vmmc
         public int age30to34;
         public int age35to39;
         public int age40to49;
+        public int age40to44;
+        public int age45to49;
+
         public string user;
 
         public DataTable getTable()
@@ -45,6 +48,8 @@ namespace ZambiaDataManager.modules.vmmc
             "age25to29",
             "age30to34",
             "age35to39",
+            "age40to44",
+            "age45to49",
             "age40to49",
             "age50plus",
             "user_name","age30to49"};
@@ -69,6 +74,9 @@ namespace ZambiaDataManager.modules.vmmc
 
             row["age30to34"] = age30to34;
             row["age35to39"] = age35to39;
+
+            row["age40to44"] = age40to44;
+            row["age45to49"] = age45to49;
             row["age40to49"] = age40to49;
 
             row["age50plus"] = age50plus;

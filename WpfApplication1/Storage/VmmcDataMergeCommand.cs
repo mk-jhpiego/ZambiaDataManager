@@ -9,6 +9,8 @@ namespace ZambiaDataManager.Storage
 {
     public class VmmcDataMergeCommand : BaseMergeCommand
     {
+        public string facilityDataName { get; set; }
+
         protected override void DoMerge()
         {
             if (IsWebData)
@@ -43,6 +45,7 @@ namespace ZambiaDataManager.Storage
 
             //step 1. Convert all values into standard strongly referenced values. Save to table temptable_1
             var newTempTableName = TempTableName + "_1";
+            //FacilityDataPpx
             sql = @"
 select f.FacilityIndex, 
 d.FacilityName FacilityId,
@@ -82,7 +85,7 @@ into {1}
             //we check if the data we have is unique or already exists
             sql = @"
 select count(*) as tCount from {0} f 
-join FacilityData t on 
+join " + facilityDataName + @" t on 
 f.facilityindex = t.FacilityIndex and f.YearId = t.ReferenceYear
  and f.ReferenceMonth = t.ReferenceMonth
 where t.IndicatorSerial not in (319, 320)
@@ -110,8 +113,8 @@ where t.IndicatorSerial not in (319, 320)
 
                 //we delete all matching records
                 sql = @"
- delete from FacilityData where IndicatorSerial not in (319, 320) and Id in (
- select distinct Id from FacilityData f 
+ delete from " + facilityDataName + @" where IndicatorSerial not in (319, 320) and Id in (
+ select distinct Id from " + facilityDataName + @" f 
  join
  (select distinct facilityindex, YearId, ReferenceMonth from  {0}) t 
  on f.facilityindex = t.FacilityIndex and f.ReferenceYear = t.YearId
@@ -121,7 +124,7 @@ where t.IndicatorSerial not in (319, 320)
 
             //we import the data
             sql = @"
-INSERT INTO [dbo].[FacilityData]
+INSERT INTO [dbo].[" + facilityDataName + @"]
 ([FacilityIndex],[IndicatorSerial],[ReferenceYear]
 ,[ReferenceMonth],[GenderId],[AgeGroupId],[IndicatorValue])
 SELECT 
@@ -149,7 +152,7 @@ if object_id('{1}') is not null drop table {1};";
 with t as (
 select FacilityIndex, IndicatorSerial, indicator, 
 YearId ReferenceYear,convert(int, reportMonth) ReferenceMonth,2 GenderId, 
-age10to14, age15to19,age20to24, age25to29, age30to49, age30to34, age35to39, age40to49,age50plus
+age10to14, age15to19,age20to24, age25to29, age30to49, age30to34, age35to39, age40to49,age40to44, age45to49, age50plus
 From {0} d
 join dbo.fn_getWebFacilities() wf on d.facilityname = wf.fcleanname
 join FacilityList f on wf.Facility = f.FacilityName
@@ -167,7 +170,12 @@ From t union
 select FacilityIndex, IndicatorSerial, ReferenceYear, ReferenceMonth,
 GenderId, 18 AgeGroupId, age35to39 IndicatorValue
 From t union 
-
+select FacilityIndex, IndicatorSerial, ReferenceYear, ReferenceMonth,
+GenderId, 19 AgeGroupId, age40to44 IndicatorValue
+From t union 
+select FacilityIndex, IndicatorSerial, ReferenceYear, ReferenceMonth,
+GenderId, 20 AgeGroupId, age45to49 IndicatorValue
+From t union 
 select FacilityIndex, IndicatorSerial, ReferenceYear, ReferenceMonth,
 GenderId, 4 AgeGroupId, age10to14 IndicatorValue
 From t union 
@@ -200,9 +208,9 @@ From t)k;
             }
 
             var recCountNewTable = dbHelper.GetScalar(string.Format(sql, newTempTableName));
-            if (recCountNewTable != (recCountOldTable*9))
+            if (recCountNewTable != (recCountOldTable*11))
             {
-                var expcount = recCountOldTable * 9;
+                var expcount = recCountOldTable * 11;
                 var results = MessageBox.Show(
                    string.Format("Count of records about to be imported ({0}) does not match the expected number ({1}). Did you add some new sites? If so, add them to fn_getWebFacilities before proceeding. Do you want to continue?",
                    recCountNewTable, expcount), "Mismatch in records to be imported", MessageBoxButton.YesNo);
@@ -219,7 +227,7 @@ From t)k;
  with db as (select distinct FacilityIndex, ReferenceYear, ReferenceMonth from {0})
  select db.* into {1} From db
  join (
-  select distinct FacilityIndex, ReferenceYear, ReferenceMonth from FacilityData where IndicatorSerial not in (319, 320)
+  select distinct FacilityIndex, ReferenceYear, ReferenceMonth from " + facilityDataName + @" where IndicatorSerial not in (319, 320)
  )dn on  db.FacilityIndex = dn.FacilityIndex and 
  db.ReferenceYear = dn.ReferenceYear and db.ReferenceMonth = dn.ReferenceMonth
 ";
@@ -249,8 +257,8 @@ From t)k;
 
                 //we delete all matching records
                 sql = @"
- delete from FacilityData where IndicatorSerial not in (319, 320) and Id in (
- select distinct Id from FacilityData f 
+ delete from " + facilityDataName + @" where IndicatorSerial not in (319, 320) and Id in (
+ select distinct Id from " + facilityDataName + @" f 
  join {0} t on f.facilityindex = t.FacilityIndex and f.ReferenceYear = t.ReferenceYear
  and f.ReferenceMonth = t.ReferenceMonth)";
                 dbHelper.ExecSql(string.Format(sql, newTempTableName));
@@ -258,7 +266,7 @@ From t)k;
 
             //we import the data
             sql = @"
-INSERT INTO [dbo].[FacilityData]
+INSERT INTO [dbo].[" + facilityDataName + @"]
 ([FacilityIndex],[IndicatorSerial],[ReferenceYear]
 ,[ReferenceMonth],[GenderId],[AgeGroupId],[IndicatorValue])
 SELECT 
