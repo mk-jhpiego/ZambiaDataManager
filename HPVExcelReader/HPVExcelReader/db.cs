@@ -85,6 +85,11 @@ namespace HPVExcelReader
     }
     public static class db
     {
+        public static string checkLength2(this string str)
+        {
+            str = str.Trim().Replace(",", "-").Replace("\"", "").Replace("\t", "").Replace("\n", "").Trim();
+            return str.Length > 235 ? str.Substring(0, 235) : str;
+        }
         public static string checkLength(this string str)
         {
             str = str.Trim().Replace(",", "-").Replace("\"", "").Replace("\t", "").Replace("\n", "").Replace(" ", "");

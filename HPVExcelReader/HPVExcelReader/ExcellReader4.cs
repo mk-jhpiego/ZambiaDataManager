@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -10,32 +11,27 @@ using System.Threading.Tasks;
 
 namespace HPVExcelReader
 {
-    public class GetRegistersHelper : ExcelWorksheetReaderBase, IQueryHelper<Dictionary<string, List<string>>>
-    {       
-        //public Microsoft.Office.Interop.Excel.Application excelApp = null;
-       
+    //GetExcelAsDataTable4
+    public class GetVaccinesHelper : ExcelWorksheetReaderBase, IQueryHelper<Dictionary<string, List<string>>>
+    {        
         //public DbHelper Db { get; set; }
         public List<string> expectedWorksheetNames = new List<string>() {
-            "2a. Primary Schools","2b. Secondary Schools","2a.PRIMARY SCHOOLS",
-            "3. Communities ","4. Vaccine and supplies and M&E"};
+            "4. Vaccine and supplies and M&E"};
 
-        public List<string> firstHeader = new List<string>() {
-            "No.","Name","Village/ Township","Date of Birth","dd/mm/yyyy",
-            "Grade *if in school","Age (Yrs)","Plot / House Number"};
-        public List<string> preferredWorksheetname = new List<string>() {
-            "Primary  School",
-            "Secondary  School",
-            "Community Name","Health facility" };
+        public List<string> firstHeader = new List<string>() { "No.", "Name of Health facility",
+            "Number of schools in catchment area ", "Target for HPV (Total number of girls 14 Primary School + Secondary School + Out of School )",
+            "Vaccines and supplies", "", "", "", "Total number of HPV Vaccine cards", "HPV Summary Sheets",
+            "HPV Registers", "Type of Cold Chain required (Cold box or carrier)", "Cold Chain", "", "" };
+        public List<string> preferredWorksheetname = new List<string>() {"Vaccines" };
         public const int MAX_BLANKROWS = 10;
-        public List<int> maxColumnsExpected = new List<int>() { 7, 2, 3, 3 };
+        public List<int> maxColumnsExpected = new List<int>() { 15 };
 
         public Dictionary<string, List<string>> Execute()
         {
-
             //ProjectName projectName
             Dictionary<string, List<string>> toReturn = null;
             try
-            {                
+            {
                 var res = ImportData();
                 //add location details here
                 if (IsInError)
@@ -90,25 +86,36 @@ namespace HPVExcelReader
             }
             return new RowColmnPair(row, colmn, blankSoFar);
         }
-        
+
+        List<string> getDbfields()
+        {
+            //drow["src_filepath"] = fileName;
+            //drow["src_file"] = Path.GetFileName(fileName);
+            var fieldnames = new List<string>() { "id","src_filepath","src_file","numb", "Health facility",
+                "Number of schools",
+                "Target for HPV",
+                "HPV vaccines doses", "HPV vaccines vials", "AD Syringes", "Safety boxes",
+                "Vaccine cards", "Summary Sheets", "Registers",
+                "CC Type Required", "CC Number available ",
+                "CC Number Required", "CC Gap" };
+            return (from field in fieldnames
+                    let cname = field.ToLowerInvariant().Trim().Replace(" ", "_")
+                    select cname).ToList();
+        }
+
         private Dictionary<string, List<string>> ImportData()
         {
+            var fields = getDbfields();
             var dds = new System.Data.DataSet();
-            var dt = new System.Data.DataTable("hpv_list");
+            var dt = new System.Data.DataTable("vaccines_list");
             dds.Tables.Add(dt);
+            foreach(var field in fields)
+            {
+                dt.Columns.Add(field);
+            }
 
-            dt.Columns.Add("id");
-            dt.Columns.Add("srcfile");
-            dt.Columns.Add("worksheet");
-            dt.Columns.Add("numb");
-            dt.Columns.Add("names");
-            dt.Columns.Add("village_township");
-            dt.Columns.Add("date_of_birth");
-            dt.Columns.Add("grade14");
-            dt.Columns.Add("grade15");
-
-            var unwantedSheetRows = new List<string>();
-            expectedWorksheetNames.ForEach(t=> unwantedSheetRows.Add(t.Trim().ToLowerInvariant()));
+            var expectedSheetRows = new List<string>();
+            expectedWorksheetNames.ForEach(t => expectedSheetRows.Add(t.Trim().ToLowerInvariant()));
 
             var ds = new Dictionary<string, List<string>>();
             //var dataObjects = new List<dataObject>();
@@ -117,42 +124,37 @@ namespace HPVExcelReader
             //we get the other data
             var worksheetCount = workbook.Sheets.Count;
             var worksheetNames = new Dictionary<string, string>();
+            var hasExpectedSheets = false;
             for (var indx = 1; indx <= worksheetCount; indx++)
             {
                 var worksheetName = ((Worksheet)(workbook.Sheets[indx])).Name;
-                
                 var cleanName = worksheetName.Trim().ToLowerInvariant();
-                if (unwantedSheetRows.Contains(cleanName))
+                if (expectedSheetRows.Contains(cleanName))
                 {
-                    fileSkipped = true;
+                    hasExpectedSheets = true;
+                    worksheetNames.Add(cleanName, worksheetName);
                     break;
-                }
-
-                worksheetNames.Add(cleanName, worksheetName);
+                }                
             }
 
-            if (fileSkipped)
+            if (!hasExpectedSheets)
             {
                 return null;
             }
-
             //we open each worksheet and search for the required columns
-
-
-            
             //var sz = expectedWorksheetNames.Count();
             var workbookErrors = new StringBuilder();
 
             var buildr = new StringBuilder();
             var availableRanges = new List<headerIndexes>();
             var ctr = 0;
-            var skipSheets = new List<string>() { "inside cover pg", "cover","instructions" };
+            var skipSheets = new List<string>() { "inside cover pg", "cover", "instructions" };
 
             var includeFilenameInNoMatch = true;
             foreach (var wknames in worksheetNames)//(var ix = 0; ix < sz; ix++)
             {
                 Console.WriteLine(wknames.Key);
-                if(wknames.Key.Contains("cover")|| wknames.Key.Contains(" map ") || wknames.Key.Contains("instructions") || skipSheets.Contains(wknames.Key))//skipSheets.Contains(wknames.Key) || 
+                if (wknames.Key.Contains("cover") || wknames.Key.Contains(" map ") || wknames.Key.Contains("instructions") || skipSheets.Contains(wknames.Key))//skipSheets.Contains(wknames.Key) || 
                 {
                     continue;
                 }
@@ -169,9 +171,9 @@ namespace HPVExcelReader
                     if (includeFilenameInNoMatch)
                     {
                         includeFilenameInNoMatch = false;
-                        File.AppendAllText(@"ds\registers\nomatch.txt", string.Format("{2}{1}{0}{1}{2}{1}", fileName, Environment.NewLine, "**********"));
+                        File.AppendAllText(@"ds\vaccines\nomatch.txt", string.Format("{2}{1}{0}{1}{2}{1}", fileName, Environment.NewLine, "**********"));
                     }
-                    File.AppendAllText(@"ds\registers\nomatch.txt", string.Format("{2}\t{0}{1}", 
+                    File.AppendAllText(@"ds\vaccines\nomatch.txt", string.Format("{2}\t{0}{1}",
                         wknames.Value, Environment.NewLine, matched.Column2 == 1 ? "BLANK" : ""));
                     Console.WriteLine(string.Format("Unmatched sheet {0}", wknames.Value));
                 }
@@ -191,7 +193,7 @@ namespace HPVExcelReader
             }
 
             var rowcounter = 0;
-            File.AppendAllText(@"ds\registers\headermatches.csv", buildr.ToString());
+            File.AppendAllText(@"ds\vaccines\headermatches.csv", buildr.ToString());
             foreach (var rng in availableRanges)
             {
                 var rangename = rng.rangeName;
@@ -205,12 +207,13 @@ namespace HPVExcelReader
                 var rowmax = rng.range.Rows.Count;
 
                 var columnid = rng.firstCellColumnId;
-                var colmax = 7;// maxColumnsExpected[rng.worksheetId] + columnid;
+                var rngColmax = rng.range.Columns.Count;
 
+                var colmax = (columnid + 15)> rngColmax? rngColmax: (columnid + 15);// maxColumnsExpected[rng.worksheetId] + columnid;
                 //first row is for the headers      
                 var blankRowCount = 0;
                 for (var rowindx = rowid; rowindx < rowmax; rowindx++)
-                {                    
+                {
                     //we skip the first row
                     if (rowindx == rowid)
                     {
@@ -220,23 +223,19 @@ namespace HPVExcelReader
 
                     var drow = dt.NewRow();
                     var builder = new StringBuilder();
-                    //var pars = new List<SqlParameter>();
-                    //var pccntr = 1;
-                    //var p1 = new SqlParameter("p1", fileName);
-                    //pars.Add(p1);
-                    //var p2 = new SqlParameter("p2", rng.worksheetName);
-                    //pars.Add(p2);
-
-                    drow[0] = rowcounter++;
-                    drow[1] = fileName.checkLength();
-                    drow[2] = rng.worksheetName.checkLength();
+                    drow["id"] = rowindx;
+                    drow["src_filepath"] = fileName;
+                    drow["src_file"] = Path.GetFileName(fileName);
                     builder.Append(fileName + "\t" + rng.worksheetName);
-                    //string schoolname = string.Empty;
-                    var quitrow = false;                    
-                    for(var colmnindx= columnid; colmnindx < colmax; colmnindx++)
+                    var quitrow = false;
+                    for (var colmnindx = columnid; colmnindx <= colmax; colmnindx++)
                     {
+                        if (colmnindx - columnid + 3 >= fields.Count)
+                        {
+                            break;
+                        }
                         //we check if the column is blank, if so, we break inner loop
-                        var cellValue = getCellValue(rng.range, rowindx, colmnindx, "9999").checkLength();
+                        var cellValue = getCellValue(rng.range, rowindx, colmnindx, "9999").checkLength2();
                         //schoolname = cellValue;
                         //we check the names
                         if (colmnindx == columnid + 1)
@@ -256,7 +255,9 @@ namespace HPVExcelReader
                                 blankRowCount = 0;
                             }
                         }
-                        drow[colmnindx - columnid + 3] = cellValue;
+                        //we added two meta columns to this table ie. id and src_file
+                        var colmnname = fields[colmnindx - columnid + 3];
+                        drow[colmnname] = (cellValue == "9999" || cellValue == "-2146826273" || cellValue == "-2146826265") ? "0" : cellValue;
                         builder.AppendFormat("\t{0}", cellValue);
                     }
                     if (quitrow)
@@ -269,14 +270,16 @@ namespace HPVExcelReader
                     //saveToDB();
                     datavalues.Add(builder.ToString());
                     dt.Rows.Add(drow);
-                }                
+                }
             }
 
             //we save
             dt.AcceptChanges();
-            db.WriteTableToDb(dt,"hpv_list");
+            var columnList = new StringBuilder();
+            dt.Columns.Cast<DataColumn>().ToList().ForEach(c => columnList.AppendFormat("{0},", c));
+
+            db.WriteTableToDb(dt, "vaccines_list");
             return ds;
         }
     }
-
 }

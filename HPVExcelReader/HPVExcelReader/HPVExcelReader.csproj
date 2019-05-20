@@ -52,6 +52,7 @@
     <Compile Include="Class1.cs" />
     <Content Include="Class2.cs" />
     <Compile Include="db.cs" />
+    <Compile Include="ExcellReader4.cs" />
     <Compile Include="ExcellReader3.cs" />
     <Compile Include="ExcellReader.cs" />
     <Compile Include="model.cs" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,6 +12,14 @@ namespace HPVExcelReader
 {
     public class ExcelWorksheetReaderBase
     {
+        public Microsoft.Office.Interop.Excel.Application excelApp = null;
+        public bool IsInError { get; set; }
+        public bool addHeaderRow { get; set; }
+
+        public bool fileSkipped = false;
+        public bool headersMatched = true;
+        public SqlConnection sqlConn;
+
         //public AgegroupsProvider ageGroupsProvider { get; internal set; }
         public Action<string> Alert { get; set; }
         public string fileName { get; set; }
@@ -21,6 +30,31 @@ namespace HPVExcelReader
         {
             get;
             internal set;
+        }
+
+        public class dataObject
+        {
+            public string filename { get; set; }
+            public string worksheet { get; set; }
+            public List<string> values { get; set; }
+            //public int firstCellRowId { get; set; }
+            //public int firstCellColumnId { get; set; }
+            //public Range range { get; set; }
+        }
+        public class headerIndexes
+        {
+            public int worksheetId { get; set; }
+            public string worksheetName { get; set; }
+            public int firstCellRowId { get; set; }
+            public int firstCellColumnId { get; set; }
+            public Range range { get; set; }
+            public string rangeName { get; internal set; }
+        }
+
+        public static string getCellValue(Range xlrange, int rowId, int colmnId, string valueIfNull = "")
+        {
+            var cellvalue = Convert.ToString(xlrange[rowId, colmnId].Value);
+            return cellvalue == null ? (valueIfNull == "" ? string.Empty : valueIfNull) : cellvalue.ToString().Trim();
         }
 
         protected static LocationDetail GetIhpReportLocationDetails(Workbook workbook)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,23 +10,19 @@ using System.Threading.Tasks;
 
 namespace HPVExcelReader
 {
-    public class GetExcelAsDataTable2 : ExcelWorksheetReaderBase, IQueryHelper<Dictionary<string, List<string>>>
+    public class GetMicroplans : ExcelWorksheetReaderBase, IQueryHelper<Dictionary<string, List<string>>>
     {
-        public bool addHeaderRow { get; set; }
-        public Microsoft.Office.Interop.Excel.Application excelApp = null;
-        public bool IsInError { get; set; }
-        //public DbHelper Db { get; set; }
         public List<string> expectedWorksheetNames = new List<string>() {
             "2a. Primary Schools","2b. Secondary Schools",
-            "3. Communities ","4. Vaccine and supplies and M&E"};
+            "3. Communities "};
         public List<string> firstHeader = new List<string>() {
             "Name of Primary  School",
             "Name of Secondary  School",
-            "Name of Village or Township","Name of Health facility" };
+            "Name of Village or Township"};
         public List<string> preferredWorksheetname = new List<string>() {
             "Primary  School",
             "Secondary  School",
-            "Community Name","Health facility" };
+            "Community Name"};
         public List<int> maxColumnsExpected = new List<int>() { 2, 2, 3, 3 };
 
         public Dictionary<string, List<string>> Execute()
@@ -89,30 +86,52 @@ namespace HPVExcelReader
             return new RowColmnPair(row, colmn, colmn2);
         }
 
-        public static string getCellValue(Range xlrange, int rowId, int colmnId, string valueIfNull = "")
+        public enum SchoolType
         {
-            var cellvalue = Convert.ToString(xlrange[rowId, colmnId].Value);
-            return cellvalue == null ? (valueIfNull == "" ? string.Empty : valueIfNull) : cellvalue.ToString().Trim();
-        }
-        public class headerIndexes
-        {
-            public int worksheetId { get; set; }
-            public string worksheetName { get; set; }
-            public int firstCellRowId { get; set; }
-            public int firstCellColumnId { get; set; }
-            public Range range { get; set; }
+            Primary = 0, Secondary = 1, Community = 2
         }
 
-        public class dataObject
+        List<string> getDbfields(SchoolType sctype)
         {
-            public string filename { get; set; }
-            public string worksheet { get; set; }
-            public List<string> values { get; set; }
-            //public int firstCellRowId { get; set; }
-            //public int firstCellColumnId { get; set; }
-            //public Range range { get; set; }
+            List<string> defaultFields = null;
+            switch (sctype)
+            {
+                case SchoolType.Primary:
+                    defaultFields = new List<string>() { "id", "src_filepath", "src_file", "School Name", "Girls Aged 14" };
+                    break;
+                case SchoolType.Secondary:
+                    defaultFields = new List<string>() { "id", "src_filepath", "src_file", "School Name", "Girls Aged 14" };
+                    break;
+                case SchoolType.Community:
+                    defaultFields = new List<string>() { "id", "src_filepath", "src_file", "Village or Township", "Health Facilility Name", "Girls out of School", "Name CHW", "Phone CHW" };
+                    break;
+            }
+            //drow["src_filepath"] = fileName;
+            //drow["src_file"] = Path.GetFileName(fileName);
+            return (from field in defaultFields
+                    let cname = field.ToLowerInvariant().Trim().Replace(" ", "_").Replace(".", "")
+                    select cname).ToList();
+        }
+        string getTableName(SchoolType sctype)
+        {
+            var name = string.Empty;
+
+            switch (sctype)
+            {
+                case SchoolType.Primary:
+                    name = "girls_primary";
+                    break;
+                case SchoolType.Secondary:
+                    name = "girls_secondary";
+                    break;
+                case SchoolType.Community:
+                    name = "girls_community";
+                    break;
+            }
+            return name;
         }
 
+        public const int MAX_BLANKROWS = 5;
         private Dictionary<string, List<string>> ImportData()
         {
             var ds = new Dictionary<string, List<string>>();
@@ -187,11 +206,26 @@ namespace HPVExcelReader
             foreach (var rng in availableRanges)
             {
                 var rangename = expectedWorksheetNames[rng.worksheetId];
+                var sctype = (SchoolType)rng.worksheetId;
+
                 if (!ds.ContainsKey(rangename))
                 {
                     ds[rangename] = new List<string>();
                 }
                 var datavalues = ds[rangename];
+
+                var fields = getDbfields(sctype);
+                var brd = new StringBuilder();
+                brd.AppendFormat("create table [{0}](", getTableName(sctype));
+                fields.ForEach(x => brd.AppendFormat("[{0}] varchar(255),", x));
+                var asString = brd.ToString();
+                var dds = new System.Data.DataSet();
+                var dt = new System.Data.DataTable(getTableName(sctype));
+                dds.Tables.Add(dt);
+                foreach (var field in fields)
+                {
+                    dt.Columns.Add(field);
+                }
 
                 var rowid = rng.firstCellRowId;
                 var rowmax = rng.range.Rows.Count;
@@ -199,8 +233,9 @@ namespace HPVExcelReader
                 var columnid = rng.firstCellColumnId;
                 var colmax = maxColumnsExpected[rng.worksheetId] + columnid;
 
-                //first row is for the headers                
-                for(var rowindx = rowid; rowindx < rowmax; rowindx++)
+                //first row is for the headers      
+                var blankRowCount = 0;
+                for (var rowindx = rowid; rowindx < rowmax; rowindx++)
                 {
                     //we skip the first row
                     if (rowindx == rowid)
@@ -209,28 +244,53 @@ namespace HPVExcelReader
                             continue;
                     }
 
+                    var drow = dt.NewRow();
+                    drow["id"] = rowindx;
+                    drow["src_filepath"] = fileName;
+                    drow["src_file"] = Path.GetFileName(fileName);
+
                     var builder = new StringBuilder();
                     builder.Append(Path.GetFileNameWithoutExtension(fileName));
                     string schoolname = string.Empty;
                     var quitrow = false;
                     for(var colmnindx= columnid; colmnindx < colmax; colmnindx++)
                     {
+                        if (colmnindx - columnid + 3 >= fields.Count)
+                        {
+                            break;
+                        }
                         //we check if the column is blank, if so, we break inner loop
-                        var cellValue = getCellValue(rng.range, rowindx, colmnindx, "9999").Replace(",", "-").Replace("\"", "-");
+                        var cellValue = getCellValue(rng.range, rowindx, colmnindx, "9999").checkLength2();
+                        //var cellValue = getCellValue(rng.range, rowindx, colmnindx, "9999").Replace(",", "-").Replace("\"", "-");
                         schoolname = cellValue;
-                        var specialCase = "4. Vaccine and supplies and M&E";
+                        var specialCase = "4. Vaccine and supplies and M&E----";
                         //rowindx = rowid
                         if (colmnindx == columnid && (specialCase != rangename || (specialCase == rangename && rowindx != rowid + 1)))
                         {
                             if ("9999" == cellValue)
                             {
-                                //we quit here
-                                quitrow = true;
+                                blankRowCount++;
+                                if (blankRowCount >= MAX_BLANKROWS)
+                                {
+                                    //we quit here
+                                    quitrow = true;
+                                }
                                 break;
                             }
-                            //schoolname = cellValue.Replace(",", "-");
-                            //builder.Append(cellValue);
+                            else
+                            {
+                                blankRowCount = 0;
+                            }
+                            //if ("9999" == cellValue)
+                            //{
+                            //    //we quit here
+                            //    quitrow = true;
+                            //    break;
+                            //}
+
                         }
+                        var colmnname = fields[colmnindx - columnid + 3];
+                        drow[colmnname] = (cellValue == "9999" || cellValue == "-2146826273" || cellValue == "-2146826265") ? "0" : cellValue;
                         builder.AppendFormat("\t{0}", cellValue);
                     }
                     if (quitrow)
@@ -239,15 +299,21 @@ namespace HPVExcelReader
                         break;
                     }
                     var str = builder.ToString();
+                    //datavalues.Add(builder.ToString());                    
                     if (!str.Contains("9999,9999,9999"))
+                    {
+                        dt.Rows.Add(drow);
                         datavalues.Add(builder.ToString());
+                    }
                 }
-                
+                //we save
+                dt.AcceptChanges();
+                var columnList = new StringBuilder();
+                dt.Columns.Cast<DataColumn>().ToList().ForEach(c => columnList.AppendFormat("{0},", c));
+
+                db.WriteTableToDb(dt, getTableName(sctype));
             }
-
-
             return ds;
         }
     }
-
 }
