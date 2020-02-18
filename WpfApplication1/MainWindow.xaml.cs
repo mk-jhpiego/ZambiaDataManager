@@ -53,7 +53,7 @@ namespace ZambiaDataManager
             }
 
             PageController.Instance.DefaultProjectName = defaultProject;
-            Title = "Jhpiego Zambia Data Manager 2019.05.2: Default project selected is " + defaultProject.ToString();
+            Title = "Jhpiego Zambia Data Manager 2020.02.18: Default project selected is " + defaultProject.ToString();
             var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             tLoggedInUser.Text = user ?? "Not Logged In";
 
@@ -507,6 +507,7 @@ namespace ZambiaDataManager
             var filter = new Forms.pageYearMonthFilter()
             {
                 FilterCallBack = async (int year, string monthTxt) => {
+                    //gs://daily-reporting-4ac35.appspot.com/monthlyreports/2019/10/monthly-20191118-183737.json
                     var baseUrl = "https://firebasestorage.googleapis.com/v0/b/daily-reporting-4ac35.appspot.com/o/monthlyreports%2F{0}%2F{1}?alt=media&token=a201912b-0ff4-4143-a00d-8a0b78791e82";
                     var webpath = String.Join("%2F", year, monthTxt);
                     var latestData = await downloadLatest(baseUrl,webpath);

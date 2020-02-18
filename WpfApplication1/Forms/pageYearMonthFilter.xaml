@@ -25,7 +25,7 @@
             <Label Content="Specify year e.g. 2017"/>
             <TextBox x:Name="textYearMonth" Height="24" TextWrapping="Wrap"                     
                      TextChanged="textYearMonth_TextChanged"
-                     Text="2019"/>
+                     Text="2020"/>
             
             <RadioButton IsChecked="True" Name="rbJan" Content="Jan" />
             <RadioButton IsChecked="True" Name="rbFebruary" Content="Feb" />
